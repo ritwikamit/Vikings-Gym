@@ -214,3 +214,27 @@ export const TESTIMONIALS = [
     image: "/testimonials/member4.jpg",
   },
 ] as const;
+
+export const BLOG_POSTS = [
+  {
+    title: "5 Essential Tips for Building Muscle Faster",
+    excerpt: "Discover science-backed techniques to maximize muscle growth and accelerate your gains at Vikings Gym.",
+    category: "Training",
+    date: "June 1, 2026",
+    slug: "/blog/muscle-building-tips",
+  },
+  {
+    title: "The Complete Guide to Gym Nutrition",
+    excerpt: "Fuel your body like a warrior with our comprehensive nutrition guide — from pre-workout meals to recovery protocols.",
+    category: "Nutrition",
+    date: "May 25, 2026",
+    slug: "/blog/nutrition-guide",
+  },
+  {
+    title: "Warm-Up Like a Pro: Essential Routine",
+    excerpt: "Prepare your body for peak performance with this coach-approved warm-up sequence used by elite athletes.",
+    category: "Training",
+    date: "May 18, 2026",
+    slug: "/blog/warm-up-routine",
+  },
+] as const;

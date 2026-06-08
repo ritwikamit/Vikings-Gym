@@ -10,7 +10,7 @@ import {
   Zap, Send, Crown, Award,
 } from 'lucide-react';
 import { cn, formatCurrency, calculateBMI, getBMICategory, getInitials } from '@/lib/utils';
-import { MEMBERSHIP_PLANS, TESTIMONIALS, FAQS, GYM_INFO } from '@/lib/constants';
+import { MEMBERSHIP_PLANS, TESTIMONIALS, FAQS, GYM_INFO, BLOG_POSTS } from '@/lib/constants';
 
 /* ─── Animation Wrappers ─── */
 function Reveal({ children, className, delay = 0, direction = 'up' }: {
@@ -190,6 +190,56 @@ function HeroSection() {
           <motion.div className="w-1.5 h-1.5 bg-[#C62828] rounded-full shadow-[0_0_10px_#C62828]" />
         </motion.div>
       </motion.div>
+    </section>
+  );
+}
+
+/* ─── BRAND HERITAGE ─── */
+function BrandHeritage() {
+  return (
+    <section className="section-padding bg-black relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          <Reveal direction="left" className="relative">
+            <div className="relative rounded-[2.5rem] overflow-hidden aspect-[4/3] bg-gradient-to-br from-[#C62828]/10 to-black border border-white/5 flex items-center justify-center">
+              <div className="absolute inset-0 flex items-center justify-center">
+                <Dumbbell className="w-40 h-40 text-[#C62828]/10" />
+              </div>
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 border-2 border-[#C62828]/10 rounded-full" />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 border border-[#C62828]/20 rounded-full" />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 border border-[#C62828]/30 rounded-full" />
+            </div>
+          </Reveal>
+          <Reveal direction="right">
+            <SectionBadge>Our Legacy</SectionBadge>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-6 tracking-tight">
+              Founded in <span className="text-[#C62828]">2024</span> to Forge Warriors
+            </h2>
+            <p className="text-[#A3A3A3] text-base sm:text-lg leading-relaxed mb-6">
+              From a single vision to the most premier fitness destination in the city — Vikings Gym was born from the belief that everyone has a warrior within. Our state-of-the-art facility, expert coaches, and battle-hardened community exist for one purpose: to help you conquer your limits.
+            </p>
+            <p className="text-[#737373] text-sm leading-relaxed mb-8">
+              We have built more than a gym — we have built a brotherhood. A place where iron meets willpower, and ordinary becomes extraordinary. This is your arena.
+            </p>
+            <div className="flex items-center gap-8">
+              <div>
+                <p className="font-podium text-4xl text-white">500+</p>
+                <p className="text-[#737373] text-xs uppercase tracking-widest font-bold">Warriors Trained</p>
+              </div>
+              <div className="w-px h-12 bg-white/10" />
+              <div>
+                <p className="font-podium text-4xl text-white">15+</p>
+                <p className="text-[#737373] text-xs uppercase tracking-widest font-bold">Expert Coaches</p>
+              </div>
+              <div className="w-px h-12 bg-white/10" />
+              <div>
+                <p className="font-podium text-4xl text-white">1</p>
+                <p className="text-[#737373] text-xs uppercase tracking-widest font-bold">Elite Arena</p>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </div>
     </section>
   );
 }
@@ -374,48 +424,64 @@ function TrainerShowcase() {
   );
 }
 
-/* ─── FACILITIES GALLERY ─── */
-function FacilitiesGallery() {
-  const facilities = [
-    { title: 'Strength Zone', desc: 'Power racks, platforms, & Olympic weights.', category: 'Strength', size: 'large' },
-    { title: 'Cardio Arena', desc: 'Smart treadmills & endurance gear.', category: 'Cardio', size: 'small' },
-    { title: 'Functional Area', desc: 'CrossFit rig & battle ropes.', category: 'Functional', size: 'small' },
-    { title: 'Premium Locker', desc: 'Showers, sauna & secure storage.', category: 'Amenities', size: 'small' },
-    { title: 'Recovery Zone', desc: 'Stretch & massage therapy area.', category: 'Recovery', size: 'small' },
+/* ─── SERVICES ─── */
+function ServicesSection() {
+  const services = [
+    {
+      icon: Users,
+      title: 'Personal Training',
+      desc: 'One-on-one coaching with certified experts. Customized workout and diet plans tailored to your goals, backed by progress tracking and form correction.',
+      cta: 'Find a Trainer',
+      href: '/trainers',
+    },
+    {
+      icon: Target,
+      title: 'Group Classes',
+      desc: 'High-energy group sessions from HIIT to yoga. Train alongside fellow warriors, push each other harder, and achieve more together.',
+      cta: 'View Schedule',
+      href: '/about',
+    },
+    {
+      icon: Trophy,
+      title: 'Achieve Your Goals',
+      desc: 'Whether it is weight loss, muscle gain, or athletic performance — our structured programs and expert guidance guarantee results.',
+      cta: 'Start Your Journey',
+      href: '/plans',
+    },
   ];
 
   return (
-    <section className="section-padding bg-[#080808] relative">
+    <section className="section-padding bg-[#080808] relative overflow-hidden">
+      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#C62828]/30 to-transparent" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeading badge="Facilities" title="The Arena" subtitle="10,000 sq ft of world-class training space designed for peak performance." />
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-[240px]">
-          {facilities.map((f, i) => (
-            <Reveal key={f.title} delay={i * 0.1}
-              className={cn(
-                'relative group rounded-3xl overflow-hidden bg-[#0A0A0A] border border-white/5 transition-all duration-700',
-                f.size === 'large' ? 'sm:col-span-2 sm:row-span-2' : ''
-              )}
+        <SectionHeading badge="Services" title="Train Like a Viking" subtitle="World-class training programs designed to forge champions." />
+        <StaggerContainer className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+          {services.map((s) => (
+            <motion.div key={s.title} variants={staggerItem}
+              className="group relative rounded-[2.5rem] overflow-hidden border border-white/5 hover:border-[#C62828]/40 transition-all duration-700 bg-gradient-to-b from-[#0A0A0A] to-black"
             >
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent z-10 opacity-80 group-hover:opacity-60 transition-opacity" />
-              <div className="absolute inset-0 nordic-pattern opacity-10 group-hover:opacity-20 transition-opacity" />
-              <div className="absolute inset-0 bg-[#C62828]/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-              
-              <div className="relative z-20 p-8 flex flex-col justify-end h-full translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                <span className="inline-flex items-center px-3 py-1 rounded-full bg-[#C62828] text-white text-[9px] font-bold uppercase tracking-[0.2em] w-fit mb-3 shadow-lg">
-                  {f.category}
-                </span>
-                <h3 className={cn('font-bold text-white tracking-tight', f.size === 'large' ? 'text-4xl' : 'text-xl')}>{f.title}</h3>
-                <p className="text-[#737373] text-sm mt-2 max-w-xs group-hover:text-white/70 transition-colors">{f.desc}</p>
-              </div>
-              
-              <div className="absolute top-6 right-6 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20">
-                  <ArrowUpRight className="w-5 h-5 text-white" />
+              <div className="relative p-10 pb-0">
+                <div className="absolute top-0 right-0 w-48 h-48 bg-[#C62828]/5 rounded-full blur-3xl -mr-24 -mt-24 group-hover:bg-[#C62828]/10 transition-colors" />
+                <div className="relative mb-8">
+                  <div className="w-16 h-16 rounded-2xl bg-[#C62828]/10 flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-500">
+                    <s.icon className="w-8 h-8 text-[#C62828]" />
+                  </div>
                 </div>
+                <h3 className="text-2xl font-bold text-white mb-4 tracking-tight group-hover:text-[#C62828] transition-colors">{s.title}</h3>
+                <p className="text-[#737373] text-base leading-relaxed">{s.desc}</p>
               </div>
-            </Reveal>
+              <div className="p-10 pt-8">
+                <Link href={s.href}
+                  className="inline-flex items-center gap-2 text-[#C62828] text-xs font-bold tracking-widest uppercase group/link hover:text-white transition-colors"
+                >
+                  {s.cta}
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover/link:translate-x-1" />
+                </Link>
+              </div>
+              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#C62828] via-[#C62828]/50 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-700 origin-left" />
+            </motion.div>
           ))}
-        </div>
+        </StaggerContainer>
       </div>
     </section>
   );
@@ -664,6 +730,57 @@ function FAQSection() {
   );
 }
 
+/* ─── BLOG PREVIEW ─── */
+function BlogPreview() {
+  return (
+    <section className="section-padding bg-[#080808] relative">
+      <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#C62828]/5 rounded-full blur-[120px]" />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <SectionHeading badge="Latest News" title="Vikings Chronicles" subtitle="Training tips, nutrition guides, and stories from the arena." />
+        <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+          {BLOG_POSTS.map((post) => (
+            <motion.div key={post.title} variants={staggerItem}
+              className="group relative rounded-[2rem] overflow-hidden bg-[#0A0A0A] border border-white/5 hover:border-[#C62828]/40 transition-all duration-500"
+            >
+              <div className="relative h-52 bg-gradient-to-br from-[#161616] to-black flex items-center justify-center overflow-hidden">
+                <div className="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity">
+                  <div className="absolute top-5 left-5 w-24 h-24 border-2 border-white/10 rounded-full" />
+                  <div className="absolute bottom-5 right-5 w-32 h-32 border-2 border-[#C62828]/20 rounded-full" />
+                </div>
+                <div className="relative w-16 h-16 rounded-2xl bg-[#C62828]/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500 shadow-lg">
+                  <Trophy className="w-8 h-8 text-[#C62828]" />
+                </div>
+                <span className="absolute top-4 left-4 px-3 py-1 rounded-full bg-[#C62828] text-white text-[9px] font-bold tracking-wider uppercase">
+                  {post.category}
+                </span>
+              </div>
+              <div className="p-6 lg:p-8">
+                <p className="text-[#737373] text-[10px] font-bold uppercase tracking-widest mb-3">{post.date}</p>
+                <h3 className="text-lg font-bold text-white mb-3 tracking-tight leading-snug group-hover:text-[#C62828] transition-colors">{post.title}</h3>
+                <p className="text-[#666] text-sm leading-relaxed mb-6">{post.excerpt}</p>
+                <Link href={post.slug}
+                  className="inline-flex items-center gap-2 text-[#C62828] text-xs font-bold tracking-widest uppercase group/link hover:text-white transition-colors"
+                >
+                  Read More
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover/link:translate-x-1" />
+                </Link>
+              </div>
+            </motion.div>
+          ))}
+        </StaggerContainer>
+        <Reveal className="text-center mt-12">
+          <Link href="/blog"
+            className="inline-flex items-center gap-2 text-[#737373] hover:text-[#C62828] text-sm font-bold tracking-widest uppercase transition-all group"
+          >
+            View All Articles
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
+          </Link>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
 /* ─── CONTACT ─── */
 function ContactSection() {
   const [formState, setFormState] = useState({ name: '', email: '', phone: '', message: '' });
@@ -757,39 +874,37 @@ function ContactSection() {
   );
 }
 
-/* ─── CTA ─── */
-function CTABanner() {
+/* ─── FREE TRIAL CTA ─── */
+function FreeTrialCTA() {
   return (
-    <section className="py-20 lg:py-32 relative overflow-hidden bg-black">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] bg-[#C62828]/10 rounded-full blur-[150px] pointer-events-none" />
-      
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <Reveal>
-          <div className="relative rounded-[3rem] overflow-hidden bg-gradient-to-br from-[#C62828] to-[#8E0000] p-1 shadow-2xl shadow-[#C62828]/20">
-            <div className="relative rounded-[2.9rem] overflow-hidden bg-black/40 backdrop-blur-xl px-8 py-16 sm:py-20 lg:py-24 text-center">
-              <div className="absolute top-0 right-0 p-20 opacity-10 pointer-events-none">
-                <Dumbbell className="w-64 h-64 text-white -rotate-12" />
-              </div>
-              
-              <div className="relative z-10">
-                <h2 className="font-podium text-4xl sm:text-6xl lg:text-7xl text-white mb-6 leading-none">Ready to <span className="text-[#C62828]">Transform?</span></h2>
-                <p className="text-white/70 text-lg sm:text-xl max-w-2xl mx-auto mb-12 font-medium">
-                  The only bad workout is the one that didn&apos;t happen. Join the Vikings tribe today and unleash your potential.
-                </p>
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-                  <Link href="/plans"
-                    className="group w-full sm:w-auto inline-flex items-center justify-center gap-3 px-10 py-5 text-sm font-black tracking-widest uppercase text-black bg-white rounded-2xl hover:bg-[#C62828] hover:text-white transition-all duration-500 shadow-2xl hover:shadow-[#C62828]/40 hover:-translate-y-1">
-                    Join the Tribe
-                    <ArrowRight className="w-5 h-5 transition-transform duration-500 group-hover:translate-x-2" />
-                  </Link>
-                  <a href={`tel:${GYM_INFO.phone}`}
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-10 py-5 text-sm font-black tracking-widest uppercase text-white rounded-2xl border-2 border-white/10 hover:border-white/40 hover:bg-white/5 transition-all duration-500">
-                    <Phone className="w-5 h-5" />
-                    Call Us Now
-                  </a>
-                </div>
-              </div>
-            </div>
+    <section className="py-20 lg:py-24 relative overflow-hidden bg-black">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-4xl bg-[#C62828]/10 rounded-full blur-[150px] pointer-events-none" />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <Reveal className="text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-white/10 text-white text-[10px] font-bold tracking-[0.4em] uppercase mb-6">
+            <Sparkles className="w-3.5 h-3.5 text-[#C62828]" />
+            Not Sure Yet?
+          </div>
+          <h2 className="font-podium text-4xl sm:text-5xl lg:text-6xl text-white mb-6 leading-none">
+            Try Us for{' '}
+            <span className="gradient-text-fire">FREE</span>
+          </h2>
+          <p className="text-[#A3A3A3] text-lg sm:text-xl max-w-2xl mx-auto mb-10 font-medium">
+            Claim your complimentary trial pass and experience the Vikings Gym difference. No commitment, just results.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link href="/contact"
+              className="group inline-flex items-center gap-3 px-10 py-5 bg-[#C62828] text-white text-sm font-black tracking-widest uppercase rounded-2xl hover:bg-[#A32020] transition-all duration-500 shadow-[0_10px_40px_rgba(198,40,40,0.3)] hover:shadow-[0_15px_50px_rgba(198,40,40,0.5)] hover:-translate-y-1"
+            >
+              Claim Free Pass
+              <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+            </Link>
+            <a href={`tel:${GYM_INFO.phone}`}
+              className="inline-flex items-center gap-3 px-10 py-5 text-sm font-bold tracking-widest uppercase text-white rounded-2xl border-2 border-white/10 hover:border-white/30 hover:bg-white/5 transition-all duration-500"
+            >
+              <Phone className="w-5 h-5" />
+              Call to Book
+            </a>
           </div>
         </Reveal>
       </div>
@@ -802,16 +917,18 @@ export default function HomePage() {
   return (
     <>
       <HeroSection />
+      <BrandHeritage />
       <WhyChooseUs />
+      <ServicesSection />
       <MembershipPlans />
       <TrainerShowcase />
-      <FacilitiesGallery />
       <Transformations />
       <TestimonialsSection />
       <BMICalculator />
       <FAQSection />
+      <BlogPreview />
       <ContactSection />
-      <CTABanner />
+      <FreeTrialCTA />
     </>
   );
 }
