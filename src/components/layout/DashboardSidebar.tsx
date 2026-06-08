@@ -73,41 +73,41 @@ export default function DashboardSidebar({ isMobileOpen, onMobileClose }: Dashbo
       {/* Sidebar */}
       <motion.aside
         className={cn(
-          'fixed top-0 left-0 z-50 h-screen bg-[#111111] border-r border-[#262626] flex flex-col transition-all duration-300 ease-in-out',
+          'fixed top-0 left-0 z-50 h-screen bg-[#0A0A0A] border-r border-white/5 flex flex-col transition-all duration-300 ease-in-out',
           'lg:relative lg:translate-x-0',
-          isCollapsed ? 'lg:w-[72px]' : 'lg:w-[280px]',
+          isCollapsed ? 'lg:w-[80px]' : 'lg:w-[280px]',
           isMobileOpen ? 'translate-x-0 w-[280px]' : '-translate-x-full w-[280px]'
         )}
       >
         {/* Logo */}
-        <div className="flex items-center justify-between h-16 px-4 border-b border-[#262626] shrink-0">
+        <div className="flex items-center justify-between h-20 px-6 border-b border-white/5 shrink-0">
           {!isCollapsed && (
-            <Link href="/admin/dashboard" className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#DC2626] to-[#991B1B] flex items-center justify-center">
-                <span className="text-white font-bold text-sm">V</span>
+            <Link href="/admin/dashboard" className="flex items-center gap-3 group">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#C62828] to-[#8E0000] flex items-center justify-center shadow-lg shadow-[#C62828]/20 group-hover:scale-105 transition-transform">
+                <span className="text-white font-black text-lg">V</span>
               </div>
-              <div>
-                <h1 className="text-sm font-bold text-white tracking-wide">{GYM_INFO.name}</h1>
-                <p className="text-[10px] text-[#737373] uppercase tracking-widest">Admin Panel</p>
+              <div className="flex flex-col">
+                <h1 className="text-sm font-black text-white tracking-tighter leading-none">VIKINGS</h1>
+                <p className="text-[10px] text-[#C62828] font-bold uppercase tracking-[0.2em] mt-1 leading-none">ADMIN</p>
               </div>
             </Link>
           )}
           {isCollapsed && (
-            <Link href="/admin/dashboard" className="mx-auto">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#DC2626] to-[#991B1B] flex items-center justify-center">
-                <span className="text-white font-bold text-sm">V</span>
+            <Link href="/admin/dashboard" className="mx-auto group">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#C62828] to-[#8E0000] flex items-center justify-center shadow-lg shadow-[#C62828]/20 group-hover:scale-110 transition-transform">
+                <span className="text-white font-black text-lg">V</span>
               </div>
             </Link>
           )}
 
           {/* Mobile Close */}
-          <button onClick={onMobileClose} className="lg:hidden p-1 text-[#737373] hover:text-white transition-colors">
-            <X size={20} />
+          <button onClick={onMobileClose} className="lg:hidden w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white/5 text-[#737373] hover:text-white transition-colors">
+            <X size={18} />
           </button>
         </div>
 
         {/* Navigation Links */}
-        <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
+        <nav className="flex-1 overflow-y-auto py-6 px-4 space-y-1.5 scrollbar-hide">
           {links.map((link) => {
             const Icon = iconMap[link.icon] || LayoutDashboard;
             const isActive = pathname === link.href || pathname.startsWith(link.href + '/');
@@ -118,19 +118,22 @@ export default function DashboardSidebar({ isMobileOpen, onMobileClose }: Dashbo
                 href={link.href}
                 onClick={onMobileClose}
                 className={cn(
-                  'sidebar-link group relative',
-                  isCollapsed && 'justify-center px-2',
-                  isActive && 'active'
+                  'flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 group relative',
+                  isCollapsed ? 'justify-center px-0 h-11' : '',
+                  isActive 
+                    ? 'bg-[#C62828]/10 text-[#C62828]' 
+                    : 'text-[#737373] hover:text-white hover:bg-white/[0.03]'
                 )}
               >
-                <Icon size={20} className={cn('shrink-0', isActive ? 'text-[#DC2626]' : 'text-[#737373] group-hover:text-white')} />
+                <Icon size={isActive ? 20 : 18} className={cn('shrink-0 transition-transform group-hover:scale-110', isActive ? 'text-[#C62828]' : '')} />
                 {!isCollapsed && (
-                  <span className={cn(isActive ? 'text-[#DC2626] font-semibold' : '')}>
-                    {link.name}
-                  </span>
+                  <span className="truncate">{link.name}</span>
+                )}
+                {isActive && !isCollapsed && (
+                  <motion.div layoutId="sidebar-active" className="absolute left-0 w-1 h-5 bg-[#C62828] rounded-r-full" />
                 )}
                 {isCollapsed && (
-                  <div className="absolute left-full ml-2 px-2 py-1 bg-[#1A1A1A] border border-[#333333] rounded-md text-xs text-white whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity z-50">
+                  <div className="absolute left-full ml-4 px-3 py-2 bg-[#161616] border border-white/10 rounded-xl text-xs font-bold text-white whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 group-hover:translate-x-0 -translate-x-2 transition-all z-50 shadow-2xl">
                     {link.name}
                   </div>
                 )}
@@ -140,37 +143,37 @@ export default function DashboardSidebar({ isMobileOpen, onMobileClose }: Dashbo
         </nav>
 
         {/* Collapse Toggle (Desktop) */}
-        <div className="hidden lg:flex justify-center py-2 border-t border-[#262626]">
+        <div className="hidden lg:flex justify-center py-4 border-t border-white/5">
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className="p-2 rounded-lg text-[#737373] hover:text-white hover:bg-[#1A1A1A] transition-colors"
+            className="w-8 h-8 flex items-center justify-center rounded-lg text-[#737373] hover:text-white hover:bg-white/5 transition-all"
           >
-            {isCollapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+            {isCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
           </button>
         </div>
 
         {/* User Info */}
-        <div className={cn('border-t border-[#262626] p-4 shrink-0', isCollapsed && 'p-2')}>
+        <div className={cn('border-t border-white/5 p-4 bg-[#0D0D0D]', isCollapsed && 'p-2')}>
           {!isCollapsed ? (
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#DC2626] to-[#991B1B] flex items-center justify-center shrink-0">
-                <span className="text-white font-semibold text-sm">NK</span>
+            <div className="flex items-center gap-3 p-2 rounded-2xl bg-white/[0.02] border border-white/5">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#C62828] to-[#8E0000] flex items-center justify-center shrink-0 shadow-lg">
+                <span className="text-white font-bold text-sm">NK</span>
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-white truncate">Nihar Kumar</p>
-                <p className="text-xs text-[#737373]">Admin</p>
+                <p className="text-sm font-bold text-white truncate leading-none mb-1">Nihar Kumar</p>
+                <p className="text-[10px] text-[#737373] font-bold uppercase tracking-wider">Owner</p>
               </div>
-              <button className="p-1.5 rounded-lg text-[#737373] hover:text-[#EF4444] hover:bg-[#1A1A1A] transition-colors">
+              <button className="w-8 h-8 flex items-center justify-center rounded-lg text-[#737373] hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-all">
                 <LogOut size={16} />
               </button>
             </div>
           ) : (
-            <div className="flex flex-col items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#DC2626] to-[#991B1B] flex items-center justify-center">
-                <span className="text-white font-semibold text-xs">NK</span>
+            <div className="flex flex-col items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#C62828] to-[#8E0000] flex items-center justify-center shadow-lg">
+                <span className="text-white font-bold text-sm">NK</span>
               </div>
-              <button className="p-1.5 rounded-lg text-[#737373] hover:text-[#EF4444] hover:bg-[#1A1A1A] transition-colors">
-                <LogOut size={14} />
+              <button className="w-8 h-8 flex items-center justify-center rounded-lg text-[#737373] hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-all">
+                <LogOut size={16} />
               </button>
             </div>
           )}

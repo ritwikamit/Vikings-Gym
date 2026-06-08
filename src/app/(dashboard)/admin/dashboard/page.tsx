@@ -77,27 +77,30 @@ function StatCard({ title, value, change, trend, icon: Icon, color, isCurrency }
   icon: any; color: string; isCurrency?: boolean;
 }) {
   return (
-    <div className="glass rounded-xl p-4 lg:p-5 card-hover">
-      <div className="flex items-start justify-between mb-3">
-        <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: `${color}1a` }}>
-          <Icon size={20} color={color} />
+    <div className="glass rounded-2xl p-5 lg:p-6 card-hover border-white/5 hover:border-white/10 transition-all duration-500 relative overflow-hidden group">
+      <div className="absolute top-0 right-0 w-24 h-24 bg-white/5 rounded-full blur-3xl -mr-12 -mt-12 group-hover:bg-white/10 transition-colors" />
+      <div className="flex items-start justify-between mb-4 relative z-10">
+        <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-white/[0.03] border border-white/5 shadow-inner group-hover:scale-110 transition-transform duration-500">
+          <Icon size={22} style={{ color }} />
         </div>
         {change !== undefined && (
           <div className={cn(
-            'flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full',
+            'flex items-center gap-1 text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-tighter',
             (trend === 'up' || change > 0)
-              ? 'text-[#22C55E] bg-[rgba(34,197,94,0.1)]'
-              : 'text-[#EF4444] bg-[rgba(239,68,68,0.1)]'
+              ? 'text-[#10B981] bg-[#10B981]/10 border border-[#10B981]/20'
+              : 'text-[#EF4444] bg-[#EF4444]/10 border border-[#EF4444]/20'
           )}>
-            {change > 0 ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
+            {change > 0 ? <TrendingUp size={10} /> : <TrendingDown size={10} />}
             {Math.abs(change)}%
           </div>
         )}
       </div>
-      <div className="text-2xl lg:text-3xl font-bold text-white mb-1">
-        {isCurrency ? formatCurrency(value) : value?.toLocaleString('en-IN') ?? '-'}
+      <div className="relative z-10">
+        <div className="text-3xl lg:text-4xl font-black text-white mb-1 tracking-tighter">
+          {isCurrency ? formatCurrency(value) : value?.toLocaleString('en-IN') ?? '-'}
+        </div>
+        <p className="text-[10px] font-bold text-[#737373] uppercase tracking-[0.2em]">{title}</p>
       </div>
-      <p className="text-xs text-[#737373]">{title}</p>
     </div>
   );
 }
@@ -105,12 +108,15 @@ function StatCard({ title, value, change, trend, icon: Icon, color, isCurrency }
 function CustomTooltip({ active, payload, label, isCurrency }: { active?: boolean; payload?: any[]; label?: string; isCurrency?: boolean }) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="bg-[#1A1A1A] border border-[#333333] rounded-lg p-3 shadow-xl">
-      <p className="text-xs text-[#737373] mb-1">{label}</p>
+    <div className="bg-[#0A0A0A] border border-white/10 rounded-xl p-4 shadow-2xl backdrop-blur-md">
+      <p className="text-[10px] font-bold text-[#737373] uppercase tracking-widest mb-2 border-b border-white/5 pb-2">{label}</p>
       {payload.map((entry: any, i: number) => (
-        <p key={i} className="text-sm font-semibold text-white">
-          {isCurrency ? formatCurrency(entry.value) : entry.value?.toLocaleString('en-IN')}
-        </p>
+        <div key={i} className="flex items-center gap-2">
+          <div className="w-2 h-2 rounded-full" style={{ backgroundColor: entry.color }} />
+          <p className="text-sm font-black text-white">
+            {isCurrency ? formatCurrency(entry.value) : entry.value?.toLocaleString('en-IN')}
+          </p>
+        </div>
       ))}
     </div>
   );
@@ -186,48 +192,48 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Charts Row 1 */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <motion.div variants={itemVariants} className="glass rounded-xl p-5">
-          <div className="flex items-center justify-between mb-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <motion.div variants={itemVariants} className="glass rounded-[2rem] p-8 border-white/5 hover:border-white/10 transition-colors">
+          <div className="flex items-center justify-between mb-8">
             <div>
-              <h3 className="text-base font-semibold text-white">Monthly Revenue</h3>
-              <p className="text-xs text-[#737373]">Revenue trend over the year</p>
+              <h3 className="text-xl font-bold text-white tracking-tight">Monthly Revenue</h3>
+              <p className="text-xs font-bold text-[#737373] uppercase tracking-widest mt-1">Growth Overview</p>
             </div>
           </div>
-          <div className="h-[280px]">
+          <div className="h-[300px]">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={monthlyRevenue}>
                 <defs>
                   <linearGradient id="revGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#E11D48" stopOpacity={0.3} />
-                    <stop offset="100%" stopColor="#E11D48" stopOpacity={0} />
+                    <stop offset="0%" stopColor="#C62828" stopOpacity={0.4} />
+                    <stop offset="100%" stopColor="#C62828" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#262626" />
-                <XAxis dataKey="month" stroke="#737373" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis stroke="#737373" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(v) => `₹${(v / 1000).toFixed(0)}k`} />
-                <Tooltip content={<CustomTooltip isCurrency />} />
-                <Area type="monotone" dataKey="revenue" stroke="#E11D48" strokeWidth={2} fill="url(#revGrad)" />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.03)" vertical={false} />
+                <XAxis dataKey="month" stroke="#737373" fontSize={10} fontWeight="bold" tickLine={false} axisLine={false} tick={{ dy: 10 }} />
+                <YAxis stroke="#737373" fontSize={10} fontWeight="bold" tickLine={false} axisLine={false} tickFormatter={(v) => `₹${(v / 1000).toFixed(0)}k`} />
+                <Tooltip content={<CustomTooltip isCurrency />} cursor={{ stroke: '#C62828', strokeWidth: 1, strokeDasharray: '4 4' }} />
+                <Area type="monotone" dataKey="revenue" stroke="#C62828" strokeWidth={3} fill="url(#revGrad)" animationDuration={1500} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
         </motion.div>
 
-        <motion.div variants={itemVariants} className="glass rounded-xl p-5">
-          <div className="flex items-center justify-between mb-4">
+        <motion.div variants={itemVariants} className="glass rounded-[2rem] p-8 border-white/5 hover:border-white/10 transition-colors">
+          <div className="flex items-center justify-between mb-8">
             <div>
-              <h3 className="text-base font-semibold text-white">New Members</h3>
-              <p className="text-xs text-[#737373]">Monthly acquisition</p>
+              <h3 className="text-xl font-bold text-white tracking-tight">New Members</h3>
+              <p className="text-xs font-bold text-[#737373] uppercase tracking-widest mt-1">Acquisition Metrics</p>
             </div>
           </div>
-          <div className="h-[280px]">
+          <div className="h-[300px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={newMembers}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#262626" />
-                <XAxis dataKey="month" stroke="#737373" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis stroke="#737373" fontSize={12} tickLine={false} axisLine={false} />
-                <Tooltip content={<CustomTooltip />} />
-                <Bar dataKey="members" fill="#3B82F6" radius={[4, 4, 0, 0]} />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.03)" vertical={false} />
+                <XAxis dataKey="month" stroke="#737373" fontSize={10} fontWeight="bold" tickLine={false} axisLine={false} tick={{ dy: 10 }} />
+                <YAxis stroke="#737373" fontSize={10} fontWeight="bold" tickLine={false} axisLine={false} />
+                <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.03)' }} />
+                <Bar dataKey="members" fill="#C62828" radius={[6, 6, 0, 0]} barSize={32} animationDuration={1500} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -235,13 +241,13 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Charts Row 2 */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <motion.div variants={itemVariants} className="glass rounded-xl p-5">
-          <h3 className="text-base font-semibold text-white mb-4">Membership Distribution</h3>
-          <div className="h-[280px]">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <motion.div variants={itemVariants} className="glass rounded-[2rem] p-8 border-white/5 hover:border-white/10 transition-colors">
+          <h3 className="text-xl font-bold text-white tracking-tight mb-8">Membership Distribution</h3>
+          <div className="h-[300px]">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
-                <Pie data={distribution} cx="50%" cy="50%" innerRadius={65} outerRadius={100} paddingAngle={4} dataKey="value">
+                <Pie data={distribution} cx="50%" cy="50%" innerRadius={70} outerRadius={110} paddingAngle={8} dataKey="value" stroke="none">
                   {distribution.map((entry, i) => (
                     <Cell key={i} fill={entry.color} />
                   ))}
@@ -250,33 +256,34 @@ export default function AdminDashboardPage() {
                   if (!active || !payload?.length) return null;
                   const d = payload[0].payload;
                   return (
-                    <div className="bg-[#1A1A1A] border border-[#333] rounded-lg p-3 shadow-xl">
-                      <p className="text-sm font-semibold text-white">{d.name}</p>
-                      <p className="text-xs text-[#737373]">{d.value} members</p>
+                    <div className="bg-[#0A0A0A] border border-white/10 rounded-xl p-4 shadow-2xl">
+                      <p className="text-xs font-bold text-white uppercase tracking-widest">{d.name}</p>
+                      <p className="text-xl font-black text-[#C62828] mt-1">{d.value} <span className="text-[10px] text-[#737373] font-bold">WARRIORS</span></p>
                     </div>
                   );
                 }} />
                 <Legend verticalAlign="middle" align="right" layout="vertical" iconType="circle" iconSize={8}
-                  formatter={(value: string) => <span className="text-xs text-[#A3A3A3] ml-1">{value}</span>} />
+                  formatter={(value: string) => <span className="text-xs font-bold text-[#A3A3A3] ml-2 uppercase tracking-widest">{value}</span>} />
               </PieChart>
             </ResponsiveContainer>
           </div>
         </motion.div>
 
-        <motion.div variants={itemVariants} className="glass rounded-xl p-5">
-          <h3 className="text-base font-semibold text-white mb-4">Recent Activity</h3>
-          <div className="space-y-1">
+        <motion.div variants={itemVariants} className="glass rounded-[2rem] p-8 border-white/5 hover:border-white/10 transition-colors">
+          <h3 className="text-xl font-bold text-white tracking-tight mb-8">Recent Pulse</h3>
+          <div className="space-y-2">
             {recentActivities.map((a) => (
-              <div key={a.id} className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/[0.02] transition-colors">
-                <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: `${a.color}15` }}>
-                  <a.icon size={16} color={a.color} />
+              <div key={a.id} className="flex items-center gap-4 p-4 rounded-2xl hover:bg-white/[0.03] border border-transparent hover:border-white/5 transition-all group">
+                <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 shadow-lg group-hover:scale-110 transition-transform" style={{ backgroundColor: `${a.color}15`, border: `1px solid ${a.color}25` }}>
+                  <a.icon size={18} color={a.color} />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm text-white truncate">{a.description}</p>
-                  <p className="text-xs text-[#737373] flex items-center gap-1 mt-0.5">
-                    <Clock size={10} />{a.time}
+                  <p className="text-sm font-bold text-white truncate">{a.description}</p>
+                  <p className="text-[10px] text-[#737373] font-bold uppercase tracking-widest flex items-center gap-2 mt-1">
+                    <Clock size={10} className="text-[#C62828]" />{a.time}
                   </p>
                 </div>
+                <ArrowRight size={14} className="text-[#333] group-hover:text-white transition-colors" />
               </div>
             ))}
           </div>
@@ -284,18 +291,21 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Quick Actions */}
-      <motion.div variants={itemVariants} className="glass rounded-xl p-5">
-        <h3 className="text-base font-semibold text-white mb-4">Quick Actions</h3>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <motion.div variants={itemVariants} className="glass rounded-[2.5rem] p-10 border-white/5 relative overflow-hidden">
+        <div className="absolute top-0 right-0 p-10 opacity-[0.02] pointer-events-none">
+          <Dumbbell size={200} className="rotate-12" />
+        </div>
+        <h3 className="text-xl font-bold text-white tracking-tight mb-8 relative z-10">Strategic Actions</h3>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 relative z-10">
           {quickActions.map((action) => (
-            <button key={action.label}
-              className="flex flex-col items-center gap-2 p-4 rounded-xl bg-white/[0.02] border border-[#262626] hover:border-[#E11D48]/30 hover:bg-white/[0.04] transition-all group"
+            <Link key={action.label} href={action.href}
+              className="flex flex-col items-center gap-4 p-6 rounded-3xl bg-white/[0.02] border border-white/5 hover:border-[#C62828]/40 hover:bg-white/[0.05] transition-all group shadow-xl"
             >
-              <div className="w-10 h-10 rounded-lg flex items-center justify-center transition-transform group-hover:scale-110" style={{ backgroundColor: action.bg }}>
-                <action.icon size={20} color={action.color} />
+              <div className="w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:rotate-3 shadow-2xl" style={{ backgroundColor: action.bg, border: `1px solid ${action.color}30` }}>
+                <action.icon size={24} color={action.color} />
               </div>
-              <span className="text-xs font-medium text-[#A3A3A3] group-hover:text-white transition-colors text-center">{action.label}</span>
-            </button>
+              <span className="text-[10px] font-black text-[#737373] group-hover:text-white transition-colors text-center uppercase tracking-[0.2em]">{action.label}</span>
+            </Link>
           ))}
         </div>
       </motion.div>

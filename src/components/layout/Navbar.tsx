@@ -47,21 +47,22 @@ export default function Navbar() {
           <div className="flex items-center justify-between h-16 lg:h-20">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-3 group">
-              <div className="relative w-10 h-10 sm:w-11 sm:h-11 overflow-hidden rounded-lg border border-white/[0.08] group-hover:border-white/20 transition-all duration-500">
+              <div className="relative w-10 h-10 overflow-hidden rounded-xl border border-white/10 group-hover:border-[#C62828]/50 transition-all duration-500 shadow-2xl">
                 <Image src="/logo.jpeg" alt="Vikings Gym" fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
+                <div className="absolute inset-0 bg-gradient-to-tr from-[#C62828]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               </div>
               <div className="flex flex-col">
-                <span className="text-lg sm:text-xl font-extrabold tracking-tight text-white leading-none">
+                <span className="text-xl font-black tracking-tighter text-white leading-none group-hover:text-[#C62828] transition-colors duration-300">
                   VIKINGS
                 </span>
-                <span className="text-[10px] font-semibold tracking-[0.25em] text-[#C62828] leading-none">
+                <span className="text-[10px] font-bold tracking-[0.3em] text-[#C62828] leading-none mt-1">
                   GYM
                 </span>
               </div>
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center gap-1">
+            <div className="hidden lg:flex items-center gap-1 px-1.5 py-1.5 glass rounded-2xl border border-white/5">
               {NAV_LINKS.map((link) => {
                 const isActive = pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href));
                 return (
@@ -69,17 +70,20 @@ export default function Navbar() {
                     key={link.name}
                     href={link.href}
                     className={cn(
-                      'relative px-3.5 py-2 text-sm font-medium transition-all duration-300 rounded-lg',
-                      isActive ? 'text-[#C62828]' : 'text-white/80 hover:text-white'
+                      'relative px-5 py-2 text-[13px] font-semibold transition-all duration-300 rounded-xl overflow-hidden group/link',
+                      isActive ? 'text-white' : 'text-white/60 hover:text-white'
                     )}
                   >
-                    {link.name}
+                    <span className="relative z-10">{link.name}</span>
                     {isActive && (
                       <motion.div
-                        layoutId="nav-indicator"
-                        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-[#C62828] rounded-full"
-                        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                        layoutId="nav-bg"
+                        className="absolute inset-0 bg-[#C62828] z-0"
+                        transition={{ type: 'spring', stiffness: 350, damping: 30 }}
                       />
+                    )}
+                    {!isActive && (
+                      <div className="absolute inset-0 bg-white/5 opacity-0 group-hover/link:opacity-100 transition-opacity duration-300" />
                     )}
                   </Link>
                 );
@@ -90,21 +94,20 @@ export default function Navbar() {
             <div className="flex items-center gap-3">
               <Link
                 href="/plans"
-                className="hidden lg:inline-flex items-center gap-2 px-6 py-3 text-xs font-semibold tracking-widest uppercase text-white border border-white/30 hover:border-white/60 rounded-xl transition-all duration-300 hover:bg-white/10"
+                className="hidden lg:inline-flex items-center gap-2 px-6 py-3 text-[11px] font-bold tracking-widest uppercase text-white bg-[#C62828] hover:bg-[#A32020] rounded-xl transition-all duration-300 shadow-lg shadow-[#C62828]/20 hover:shadow-[#C62828]/40 hover:-translate-y-0.5"
               >
-                Get Started
+                Join Now
                 <ArrowUpRight className="w-3.5 h-3.5" />
               </Link>
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="lg:hidden relative p-2.5 text-white hover:text-[#C62828] transition-colors"
+                className="lg:hidden relative w-10 h-10 flex items-center justify-center rounded-xl glass border border-white/10 text-white hover:text-[#C62828] transition-all duration-300"
                 aria-label={isOpen ? 'Close menu' : 'Open menu'}
               >
-                <span className="sr-only">{isOpen ? 'Close' : 'Open'} menu</span>
-                <div className="space-y-1.5">
-                  <span className={cn('block w-6 h-0.5 bg-white transition-all duration-300', isOpen && 'rotate-45 translate-y-2')} />
-                  <span className={cn('block w-6 h-0.5 bg-white transition-all duration-300', isOpen && 'opacity-0')} />
-                  <span className={cn('block w-4 h-0.5 bg-white transition-all duration-300', isOpen && 'w-6 -rotate-45 -translate-y-2')} />
+                <div className="w-5 h-4 relative flex flex-col justify-between">
+                  <span className={cn('block w-full h-0.5 bg-current transition-all duration-500 rounded-full', isOpen && 'rotate-45 translate-y-[7px]')} />
+                  <span className={cn('block w-full h-0.5 bg-current transition-all duration-500 rounded-full', isOpen && 'opacity-0 translate-x-2')} />
+                  <span className={cn('block w-full h-0.5 bg-current transition-all duration-500 rounded-full', isOpen && '-rotate-45 -translate-y-[7px]')} />
                 </div>
               </button>
             </div>

@@ -22,56 +22,66 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="relative bg-[#000000] border-t border-white/[0.04]">
+    <footer className="relative bg-[#050505] border-t border-white/5 overflow-hidden">
       {/* Accent line */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#C62828]/50 to-transparent" />
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#C62828] to-transparent opacity-30" />
+      
+      {/* Decorative background element */}
+      <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-[#C62828]/5 rounded-full blur-[100px] pointer-events-none" />
 
       <motion.div
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.1 }}
-        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8"
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-10"
       >
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-16 mb-16">
           {/* Brand */}
           <motion.div variants={itemVariants} className="lg:col-span-1">
-            <Link href="/" className="flex items-center gap-3 mb-5 group">
-              <div className="relative w-10 h-10 overflow-hidden rounded-lg border border-white/[0.08]">
-                <Image src="/logo.jpeg" alt="Vikings Gym" fill className="object-cover" />
+            <Link href="/" className="flex items-center gap-3 mb-6 group">
+              <div className="relative w-10 h-10 overflow-hidden rounded-xl border border-white/10 group-hover:border-[#C62828]/50 transition-all shadow-xl">
+                <Image src="/logo.jpeg" alt="Vikings Gym" fill className="object-cover transition-transform duration-500 group-hover:scale-110" />
               </div>
-              <span className="text-xl font-bold tracking-tight text-white">
-                VIKINGS <span className="text-[#C62828]">GYM</span>
-              </span>
+              <div className="flex flex-col">
+                <span className="text-xl font-black tracking-tighter text-white leading-none">
+                  VIKINGS
+                </span>
+                <span className="text-[10px] font-bold tracking-[0.3em] text-[#C62828] leading-none mt-1">
+                  GYM
+                </span>
+              </div>
             </Link>
-            <p className="text-[#666] text-sm leading-relaxed mb-6 max-w-xs">
+            <p className="text-[#737373] text-sm leading-relaxed mb-8 max-w-xs font-medium">
               {GYM_INFO.description}
             </p>
-            <a
-              href={GYM_INFO.instagram}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/[0.03] border border-white/[0.06] text-[#A3A3A3] hover:text-[#C62828] hover:border-[#C62828]/30 transition-all duration-300 text-sm"
-            >
-              <Instagram className="w-4 h-4" />
-              @vikings_fitness
-            </a>
+            <div className="flex items-center gap-4">
+              <a
+                href={GYM_INFO.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 text-white hover:text-[#C62828] hover:border-[#C62828]/30 hover:bg-[#C62828]/5 transition-all duration-300"
+              >
+                <Instagram className="w-5 h-5" />
+              </a>
+              <p className="text-[10px] font-bold text-[#737373] uppercase tracking-[0.2em]">Follow our journey</p>
+            </div>
           </motion.div>
 
           {/* Quick Links */}
           <motion.div variants={itemVariants}>
-            <h3 className="text-white font-semibold text-xs uppercase tracking-[0.15em] mb-5">
-              Quick Links
+            <h3 className="text-white font-bold text-[10px] uppercase tracking-[0.25em] mb-8 border-b border-white/5 pb-2 w-fit">
+              Navigation
             </h3>
-            <ul className="space-y-3">
+            <ul className="space-y-4">
               {quickLinks.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className="group flex items-center gap-2 text-[#666] hover:text-white transition-all duration-200 text-sm"
+                    className="group flex items-center gap-3 text-[#737373] hover:text-white transition-all duration-300 text-sm font-semibold"
                   >
-                    <ArrowRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 text-[#C62828]" />
-                    <span className="group-hover:translate-x-1 transition-transform duration-200">{link.name}</span>
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#C62828] scale-0 group-hover:scale-100 transition-transform duration-300 shadow-[0_0_8px_#C62828]" />
+                    <span className="group-hover:translate-x-1 transition-transform duration-300">{link.name}</span>
                   </Link>
                 </li>
               ))}
@@ -80,57 +90,68 @@ export default function Footer() {
 
           {/* Contact */}
           <motion.div variants={itemVariants}>
-            <h3 className="text-white font-semibold text-xs uppercase tracking-[0.15em] mb-5">
-              Contact Us
+            <h3 className="text-white font-bold text-[10px] uppercase tracking-[0.25em] mb-8 border-b border-white/5 pb-2 w-fit">
+              Get in Touch
             </h3>
-            <ul className="space-y-4">
-              <li className="flex items-start gap-3">
-                <Phone className="w-4 h-4 text-[#C62828] mt-0.5 shrink-0" />
-                <a href={`tel:${GYM_INFO.phone}`} className="text-[#666] hover:text-white transition-colors text-sm">{GYM_INFO.phone}</a>
+            <ul className="space-y-6">
+              <li className="flex items-start gap-4 group">
+                <div className="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center shrink-0 group-hover:bg-[#C62828]/10 transition-colors">
+                  <Phone className="w-4 h-4 text-[#C62828]" />
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-[10px] font-bold text-[#444] uppercase tracking-widest mb-1">Phone</span>
+                  <a href={`tel:${GYM_INFO.phone}`} className="text-[#A3A3A3] hover:text-white transition-colors text-sm font-bold tracking-tight">{GYM_INFO.phone}</a>
+                </div>
               </li>
-              <li className="flex items-start gap-3">
-                <Mail className="w-4 h-4 text-[#C62828] mt-0.5 shrink-0" />
-                <a href={`mailto:${GYM_INFO.email}`} className="text-[#666] hover:text-white transition-colors text-sm">{GYM_INFO.email}</a>
-              </li>
-              <li className="flex items-start gap-3">
-                <MapPin className="w-4 h-4 text-[#C62828] mt-0.5 shrink-0" />
-                <span className="text-[#666] text-sm leading-relaxed">{GYM_INFO.address}</span>
+              <li className="flex items-start gap-4 group">
+                <div className="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center shrink-0 group-hover:bg-[#C62828]/10 transition-colors">
+                  <Mail className="w-4 h-4 text-[#C62828]" />
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-[10px] font-bold text-[#444] uppercase tracking-widest mb-1">Email</span>
+                  <a href={`mailto:${GYM_INFO.email}`} className="text-[#A3A3A3] hover:text-white transition-colors text-sm font-bold tracking-tight">{GYM_INFO.email}</a>
+                </div>
               </li>
             </ul>
           </motion.div>
 
           {/* Hours */}
           <motion.div variants={itemVariants}>
-            <h3 className="text-white font-semibold text-xs uppercase tracking-[0.15em] mb-5">
-              Hours
+            <h3 className="text-white font-bold text-[10px] uppercase tracking-[0.25em] mb-8 border-b border-white/5 pb-2 w-fit">
+              Operation Hours
             </h3>
-            <ul className="space-y-3 mb-6">
-              <li className="flex items-center gap-3">
-                <Clock className="w-4 h-4 text-[#C62828] shrink-0" />
-                <div>
-                  <p className="text-[#A3A3A3] text-sm font-medium">Weekdays</p>
-                  <p className="text-[#666] text-xs">{GYM_INFO.hours.weekdays}</p>
+            <div className="space-y-6">
+              <div className="flex items-start gap-4">
+                <div className="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center shrink-0">
+                  <Clock className="w-4 h-4 text-[#C62828]" />
                 </div>
-              </li>
-              <li className="flex items-center gap-3">
-                <Clock className="w-4 h-4 text-[#C62828] shrink-0" />
                 <div>
-                  <p className="text-[#A3A3A3] text-sm font-medium">Weekends</p>
-                  <p className="text-[#666] text-xs">{GYM_INFO.hours.weekends}</p>
+                  <p className="text-[#A3A3A3] text-sm font-bold tracking-tight">Weekdays</p>
+                  <p className="text-[#737373] text-xs font-medium mt-1 uppercase tracking-wider">{GYM_INFO.hours.weekdays}</p>
                 </div>
-              </li>
-            </ul>
+              </div>
+              <div className="flex items-start gap-4">
+                <div className="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center shrink-0">
+                  <Clock className="w-4 h-4 text-[#C62828]" />
+                </div>
+                <div>
+                  <p className="text-[#A3A3A3] text-sm font-bold tracking-tight">Weekends</p>
+                  <p className="text-[#737373] text-xs font-medium mt-1 uppercase tracking-wider">{GYM_INFO.hours.weekends}</p>
+                </div>
+              </div>
+            </div>
           </motion.div>
         </div>
 
         {/* Bottom */}
-        <motion.div variants={itemVariants} className="pt-8 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-[#666] text-xs text-center sm:text-left">
-            &copy; {currentYear} Vikings Gym. All rights reserved.
+        <motion.div variants={itemVariants} className="pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-6">
+          <p className="text-[#444] text-[10px] font-black uppercase tracking-[0.2em] text-center sm:text-left">
+            &copy; {currentYear} VIKINGS GYM COLLECTIVE. ALL RIGHTS RESERVED.
           </p>
-          <p className="text-[#666] text-xs">
-            Aurangabad, Bihar
-          </p>
+          <div className="flex items-center gap-6">
+            <span className="text-[#444] text-[10px] font-black uppercase tracking-[0.2em]">Aurangabad, Bihar</span>
+            <div className="w-2 h-2 rounded-full bg-[#C62828] animate-pulse shadow-[0_0_8px_#C62828]" />
+          </div>
         </motion.div>
       </motion.div>
     </footer>
