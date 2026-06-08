@@ -23,13 +23,13 @@ export const metadata: Metadata = {
     siteName: "Vikings Gym",
     type: "website",
     locale: "en_IN",
-    images: [{ url: "/logo.jpeg", width: 800, height: 800, alt: "Vikings Gym" }],
+    images: [{ url: "/logo.png", width: 800, height: 800, alt: "Vikings Gym" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Vikings Gym | Premium Fitness Club",
     description: "Train like a warrior. Transform your body at Vikings Gym.",
-    images: ["/logo.jpeg"],
+    images: ["/logo.png"],
   },
   icons: {
     icon: [

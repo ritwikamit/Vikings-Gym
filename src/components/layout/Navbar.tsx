@@ -48,7 +48,7 @@ export default function Navbar() {
             {/* Logo */}
             <Link href="/" className="flex items-center gap-3 group">
               <div className="relative w-10 h-10 overflow-hidden rounded-xl border border-white/10 group-hover:border-[#C62828]/50 transition-all duration-500 shadow-2xl">
-                <Image src="/logo.jpeg" alt="Vikings Gym" fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
+                <Image src="/logo.png" alt="Vikings Gym" fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
                 <div className="absolute inset-0 bg-gradient-to-tr from-[#C62828]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               </div>
               <div className="flex flex-col">
@@ -130,7 +130,7 @@ export default function Navbar() {
               <div className="flex items-center justify-between">
                 <Link href="/" className="flex items-center gap-2.5" onClick={() => setIsOpen(false)}>
                   <div className="relative w-8 h-8 overflow-hidden rounded-lg">
-                    <Image src="/logo.jpeg" alt="Vikings Gym" fill className="object-cover" />
+                    <Image src="/logo.png" alt="Vikings Gym" fill className="object-cover" />
                   </div>
                   <span className="text-base font-bold tracking-tight text-white">
                     VIKINGS <span className="text-[#C62828]">GYM</span>

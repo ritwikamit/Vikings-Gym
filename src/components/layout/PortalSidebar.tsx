@@ -92,7 +92,7 @@ export default function PortalSidebar({
         <Link href="/" className="flex items-center gap-3">
           <div className="relative w-9 h-9 rounded-lg overflow-hidden border border-white/10 flex-shrink-0">
             <Image
-              src="/logo.jpeg"
+              src="/logo.png"
               alt="Vikings Gym"
               fill
               className="object-cover"
@@ -195,7 +195,7 @@ export default function PortalSidebar({
             <div className="flex items-center gap-2">
               <div className="relative w-7 h-7 rounded-md overflow-hidden border border-white/10">
                 <Image
-                  src="/logo.jpeg"
+                  src="/logo.png"
                   alt="Vikings Gym"
                   fill
                   className="object-cover"

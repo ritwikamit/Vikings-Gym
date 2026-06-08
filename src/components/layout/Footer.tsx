@@ -41,7 +41,7 @@ export default function Footer() {
           <motion.div variants={itemVariants} className="lg:col-span-1">
             <Link href="/" className="flex items-center gap-3 mb-6 group">
               <div className="relative w-10 h-10 overflow-hidden rounded-xl border border-white/10 group-hover:border-[#C62828]/50 transition-all shadow-xl">
-                <Image src="/logo.jpeg" alt="Vikings Gym" fill className="object-cover transition-transform duration-500 group-hover:scale-110" />
+                <Image src="/logo.png" alt="Vikings Gym" fill className="object-cover transition-transform duration-500 group-hover:scale-110" />
               </div>
               <div className="flex flex-col">
                 <span className="text-xl font-black tracking-tighter text-white leading-none">
