@@ -59,7 +59,7 @@ export default function ContactPage() {
             {/* Map */}
             <div className="h-64 rounded-2xl border border-white/[0.04] overflow-hidden relative flex items-center justify-center bg-gradient-to-br from-[#1A1A1A] to-[#0A0A0A]">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3626.7!2d84.3681875!3d24.7517185!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x398d0000000000%3A0x0!2sVIKINGS%20GYM!5e0!3m2!1sen!2sin!4v1700000000000"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3626.7!2d84.3681875!3d24.7517185!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x398cfdda0d754111%3A0xf741105a5bcb783d!2sVIKINGS+GYM!5e0!3m2!1sen!2sin!4v1710000000000"
                 width="100%" height="100%" style={{ border: 0, filter: 'invert(90%) hue-rotate(180deg)' }}
                 allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" title="Vikings Gym Location" />
             </div>
