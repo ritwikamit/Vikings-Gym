@@ -1,9 +1,9 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import {
-  Sword,
   Phone,
   Mail,
   MapPin,
@@ -48,11 +48,17 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12 mb-12">
           {/* Brand Column */}
           <motion.div variants={itemVariants} className="lg:col-span-1">
-            <Link href="/" className="flex items-center gap-2 mb-5 group">
-              <Sword className="w-7 h-7 text-[#DC2626] transition-transform duration-300 group-hover:rotate-12" />
-              <span className="text-2xl font-black tracking-wider">
-                <span className="text-[#DC2626]">V</span>
-                <span className="text-white">IKINGS</span>
+            <Link href="/" className="flex items-center gap-3 mb-5 group">
+              <div className="relative w-10 h-10 overflow-hidden rounded-xl border border-white/10">
+                <Image
+                  src="/logo.jpeg"
+                  alt="Vikings Gym"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <span className="text-2xl font-black tracking-wider text-white">
+                VIKINGS <span className="text-[#DC2626]">GYM</span>
               </span>
             </Link>
             <p className="text-[#A3A3A3] text-sm leading-relaxed mb-6">

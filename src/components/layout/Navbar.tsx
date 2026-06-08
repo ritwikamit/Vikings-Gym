@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Sword } from 'lucide-react';
+import Image from 'next/image';
+import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { NAV_LINKS } from '@/lib/constants';
 
@@ -50,15 +51,23 @@ export default function Navbar() {
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-20">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-2 group">
-              <div className="relative">
-                <Sword className="w-7 h-7 text-[#DC2626] transition-transform duration-300 group-hover:rotate-12" />
-                <div className="absolute inset-0 bg-[#DC2626]/20 blur-lg rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <Link href="/" className="flex items-center gap-3 group">
+              <div className="relative w-10 h-10 sm:w-12 sm:h-12 overflow-hidden rounded-xl border border-white/10">
+                <Image
+                  src="/logo.jpeg"
+                  alt="Vikings Gym Logo"
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-110"
+                />
               </div>
-              <span className="text-xl sm:text-2xl font-black tracking-wider">
-                <span className="text-[#DC2626]">V</span>
-                <span className="text-white">IKINGS</span>
-              </span>
+              <div className="flex flex-col">
+                <span className="text-lg sm:text-xl font-black tracking-tighter text-white leading-none">
+                  VIKINGS
+                </span>
+                <span className="text-[10px] font-bold tracking-[0.2em] text-[#DC2626] leading-none">
+                  GYM
+                </span>
+              </div>
             </Link>
 
             {/* Desktop Navigation */}
@@ -156,10 +165,16 @@ export default function Navbar() {
                 {/* Mobile Header */}
                 <div className="flex items-center justify-between p-4 border-b border-[#262626]">
                   <Link href="/" className="flex items-center gap-2" onClick={() => setIsOpen(false)}>
-                    <Sword className="w-6 h-6 text-[#DC2626]" />
-                    <span className="text-lg font-black tracking-wider">
-                      <span className="text-[#DC2626]">V</span>
-                      <span className="text-white">IKINGS</span>
+                    <div className="relative w-8 h-8 overflow-hidden rounded-lg">
+                      <Image
+                        src="/logo.jpeg"
+                        alt="Vikings Gym Logo"
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    <span className="text-lg font-black tracking-wider text-white">
+                      VIKINGS <span className="text-[#DC2626]">GYM</span>
                     </span>
                   </Link>
                   <button

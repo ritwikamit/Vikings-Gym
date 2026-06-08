@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -89,8 +90,13 @@ export default function PortalSidebar({
       {/* Brand */}
       <div className="p-5 border-b border-white/[0.06]">
         <Link href="/" className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center font-bold text-white text-sm flex-shrink-0">
-            V
+          <div className="relative w-9 h-9 rounded-lg overflow-hidden border border-white/10 flex-shrink-0">
+            <Image
+              src="/logo.jpeg"
+              alt="Vikings Gym"
+              fill
+              className="object-cover"
+            />
           </div>
           {!isCollapsed && (
             <div>
@@ -187,8 +193,13 @@ export default function PortalSidebar({
               <Menu className="w-5 h-5" />
             </button>
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-md bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center font-bold text-white text-xs">
-                V
+              <div className="relative w-7 h-7 rounded-md overflow-hidden border border-white/10">
+                <Image
+                  src="/logo.jpeg"
+                  alt="Vikings Gym"
+                  fill
+                  className="object-cover"
+                />
               </div>
               <span className="font-semibold text-white text-sm">
                 Vikings Gym
