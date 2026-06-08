@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
+import { Inter } from "next/font/google";
+import { cn } from "@/lib/utils";
+
+const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
 export const metadata: Metadata = {
   title: "Vikings Gym — Unleash The Warrior Within | Premium Fitness Center Aurangabad",
@@ -39,8 +43,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className="antialiased">
+    <html lang="en" className={cn("dark", "font-sans", inter.variable)} suppressHydrationWarning>
+      <body className="antialiased" suppressHydrationWarning>
         {children}
         <Toaster
           position="top-right"

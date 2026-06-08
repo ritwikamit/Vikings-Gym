@@ -26,8 +26,8 @@ export async function GET(
           orderBy: { paidAt: "desc" },
         });
 
-        const totalRevenue = payments.reduce((sum, p) => sum + p.amount, 0);
-        const byMethod = payments.reduce((acc: Record<string, number>, p) => {
+        const totalRevenue = payments.reduce((sum: number, p: any) => sum + p.amount, 0);
+        const byMethod = payments.reduce((acc: Record<string, number>, p: any) => {
           acc[p.method] = (acc[p.method] || 0) + p.amount;
           return acc;
         }, {});

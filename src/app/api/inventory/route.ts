@@ -21,7 +21,7 @@ export async function GET(request: Request) {
 
     let result = items;
     if (lowStock === "true") {
-      result = items.filter((item) => item.quantity <= item.minQuantity);
+      result = items.filter((item: any) => item.quantity <= item.minQuantity);
     }
 
     return NextResponse.json({ data: result });

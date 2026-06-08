@@ -20,6 +20,15 @@ import {
   LogOut,
   ChevronLeft,
   LucideIcon,
+  IndianRupee,
+  Target,
+  Package,
+  BarChart3,
+  Ticket,
+  Megaphone,
+  Bell,
+  ScrollText,
+  Settings,
 } from 'lucide-react';
 
 const iconMap: Record<string, LucideIcon> = {
@@ -32,6 +41,15 @@ const iconMap: Record<string, LucideIcon> = {
   CreditCard,
   CalendarCheck,
   TrendingUp,
+  IndianRupee,
+  Target,
+  Package,
+  BarChart3,
+  Ticket,
+  Megaphone,
+  Bell,
+  ScrollText,
+  Settings,
 };
 
 interface NavLink {
