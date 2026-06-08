@@ -4,104 +4,39 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 // ============================================
 // ENUMS
 // ============================================
 
-enum UserRole {
-  SUPER_ADMIN
-  GYM_OWNER
-  RECEPTIONIST
-  TRAINER
-  MEMBER
-}
 
-enum Gender {
-  MALE
-  FEMALE
-  OTHER
-}
 
-enum MembershipStatus {
-  ACTIVE
-  EXPIRED
-  FROZEN
-  CANCELLED
-}
 
-enum PaymentStatus {
-  PENDING
-  COMPLETED
-  FAILED
-  REFUNDED
-}
 
-enum PaymentMethod {
-  CASH
-  UPI
-  CARD
-  NET_BANKING
-  RAZORPAY
-}
 
-enum AttendanceMethod {
-  QR_CODE
-  MANUAL
-}
 
-enum LeadStage {
-  NEW_LEAD
-  CONTACTED
-  TRIAL_SCHEDULED
-  TRIAL_COMPLETED
-  CONVERTED
-  LOST
-}
 
-enum LeadSource {
-  WALK_IN
-  REFERRAL
-  SOCIAL_MEDIA
-  WEBSITE
-  PHONE
-  OTHER
-}
 
-enum NotificationType {
-  MEMBERSHIP_EXPIRY
-  PAYMENT_REMINDER
-  BIRTHDAY
-  ANNOUNCEMENT
-  GENERAL
-}
 
-enum NotificationChannel {
-  EMAIL
-  WHATSAPP
-  IN_APP
-}
 
-enum InventoryCategory {
-  SUPPLEMENT
-  MERCHANDISE
-  ACCESSORY
-  EQUIPMENT
-}
 
-enum DiscountType {
-  PERCENTAGE
-  FIXED
-}
 
-enum ReferralStatus {
-  PENDING
-  COMPLETED
-  EXPIRED
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // ============================================
 // MODELS
@@ -114,7 +49,7 @@ model User {
   name          String
   phone         String?
   avatar        String?
-  role          UserRole  @default(MEMBER)
+  role          String  @default("MEMBER")
   isActive      Boolean   @default(true)
   emailVerified DateTime?
   createdAt     DateTime  @default(now())
@@ -133,7 +68,7 @@ model Member {
   userId           String   @unique
   user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   dateOfBirth      DateTime?
-  gender           Gender?
+  gender           String?
   address          String?
   emergencyContact String?
   emergencyPhone   String?
@@ -165,8 +100,8 @@ model Trainer {
   userId          String   @unique
   user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   experience      Int      @default(0)
-  certifications  String[]
-  specialization  String[]
+  certifications  String
+  specialization  String
   salary          Float?
   bio             String?
   rating          Float    @default(0)
@@ -201,7 +136,7 @@ model MembershipPlan {
   duration    Int      // in months
   price       Float
   description String?
-  features    String[]
+  features    String
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -219,7 +154,7 @@ model Membership {
   plan        MembershipPlan   @relation(fields: [planId], references: [id])
   startDate   DateTime
   endDate     DateTime
-  status      MembershipStatus @default(ACTIVE)
+  status      String @default("ACTIVE")
   freezeStart DateTime?
   freezeEnd   DateTime?
   notes       String?
@@ -238,7 +173,7 @@ model Attendance {
   date     DateTime         @default(now())
   checkIn  DateTime         @default(now())
   checkOut DateTime?
-  method   AttendanceMethod @default(MANUAL)
+  method   String @default("MANUAL")
 
   @@map("attendance")
 }
@@ -255,8 +190,8 @@ model Payment {
   razorpayOrderId   String?
   razorpayPaymentId String?
   razorpaySignature String?
-  method        PaymentMethod @default(CASH)
-  status        PaymentStatus @default(PENDING)
+  method        String @default("CASH")
+  status        String @default("PENDING")
   description   String?
   invoiceNumber String?       @unique
   couponId      String?
@@ -370,8 +305,8 @@ model Notification {
   user      User                @relation(fields: [userId], references: [id], onDelete: Cascade)
   title     String
   message   String
-  type      NotificationType    @default(GENERAL)
-  channel   NotificationChannel @default(IN_APP)
+  type      String    @default("GENERAL")
+  channel   String @default("IN_APP")
   read      Boolean             @default(false)
   sentAt    DateTime?
   createdAt DateTime            @default(now())
@@ -385,8 +320,8 @@ model Lead {
   name      String
   phone     String
   email     String?
-  source    LeadSource @default(WALK_IN)
-  stage     LeadStage  @default(NEW_LEAD)
+  source    String @default("WALK_IN")
+  stage     String  @default("NEW_LEAD")
   notes     String?
   followUpDate DateTime?
   assignedTo   String?
@@ -400,7 +335,7 @@ model Lead {
 model InventoryItem {
   id           String            @id @default(cuid())
   name         String
-  category     InventoryCategory
+  category     String
   description  String?
   quantity     Int               @default(0)
   minQuantity  Int               @default(5)
@@ -456,7 +391,7 @@ model Announcement {
 model Coupon {
   id            String       @id @default(cuid())
   code          String       @unique
-  discountType  DiscountType
+  discountType  String
   discountValue Float
   maxUses       Int?
   usedCount     Int          @default(0)
@@ -480,7 +415,7 @@ model Referral {
   referred     Member?        @relation("Referred", fields: [referredId], references: [id])
   referralCode String
   reward       Float?
-  status       ReferralStatus @default(PENDING)
+  status       String @default("PENDING")
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
 
@@ -495,7 +430,7 @@ model BlogPost {
   excerpt     String?
   coverImage  String?
   author      String
-  tags        String[]
+  tags        String
   isPublished Boolean  @default(false)
   publishedAt DateTime?
   createdAt   DateTime @default(now())

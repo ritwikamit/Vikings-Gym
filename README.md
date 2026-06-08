@@ -1,36 +1,88 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Vikings Gym Management Platform
 
-## Getting Started
+A complete, production-ready full-stack gym management platform built with Next.js 15, TypeScript, TailwindCSS, and Prisma.
 
-First, run the development server:
+## 🚀 Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### 1. Public Marketing Website
+- Stunning, responsive landing pages (Home, About, Plans, Trainers, Contact, Gallery, Transformations, Blog).
+- Built with Framer Motion for smooth, premium animations.
+- Contact form and BMI Calculator.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Roles & Authentication
+- **Role-Based Access Control (RBAC)** powered by NextAuth/Auth.js.
+- Roles: `SUPER_ADMIN`, `GYM_OWNER`, `RECEPTIONIST`, `TRAINER`, `MEMBER`.
+- Secure JWT-based authentication.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Admin ERP Dashboard
+- **Members**: Full CRUD, status tracking, expiration alerts.
+- **Trainers**: Manage staff, salaries, and clients.
+- **Attendance**: Manual and QR Code-based check-ins.
+- **Financials**: Payment records, revenue analytics, Razorpay integration support.
+- **CRM/Leads**: Track leads across the pipeline from New to Converted.
+- **Inventory**: Track supplements, merchandise, and gym equipment with low-stock alerts.
+- **Marketing**: Announcements, discount coupons, and referral system.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 4. Trainer Portal
+- Manage assigned clients.
+- Build and assign detailed **Workout Plans** and **Diet Plans**.
+- Track client progress over time.
 
-## Learn More
+### 5. Member Portal
+- View active membership status and remaining days.
+- Access personalized Workout and Diet plans assigned by trainers.
+- Track weight, BMI, and body measurements via interactive Recharts.
+- View personal QR code for gym check-in.
 
-To learn more about Next.js, take a look at the following resources:
+## 🛠 Tech Stack
+- **Framework**: Next.js 15 (App Router)
+- **Styling**: Tailwind CSS v4, Framer Motion, shadcn/ui components
+- **Database**: SQLite (Development) / PostgreSQL (Production ready via Prisma)
+- **ORM**: Prisma
+- **Icons**: Lucide React
+- **Charts**: Recharts
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## ⚙️ Local Development Setup
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. **Install Dependencies**
+   ```bash
+   npm install
+   ```
 
-## Deploy on Vercel
+2. **Database Setup**
+   The project uses SQLite for fast local development. To apply the schema and seed mock data:
+   ```bash
+   npx prisma db push
+   npx prisma db seed
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3. **Start the Development Server**
+   ```bash
+   npm run dev
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   The app will be available at [http://localhost:3000](http://localhost:3000).
+
+## 🔑 Seed Credentials
+Use these pre-configured accounts to test different roles:
+- **Admin Panel:** `admin@vikingsgym.in` / `password123`
+- **Gym Owner:** `owner@vikingsgym.in` / `password123`
+- **Trainer Portal:** `rahul.trainer@vikingsgym.in` / `password123`
+- **Member Portal:** `arjun@email.com` / `password123`
+
+## 📦 Production Deployment (Vercel)
+
+1. Connect your GitHub repository to Vercel.
+2. In the Vercel project settings, set the `DATABASE_URL` environment variable to a live PostgreSQL database (e.g., Supabase, Neon, or Railway).
+3. Ensure your `prisma/schema.prisma` is updated to use the `postgresql` provider:
+   ```prisma
+   datasource db {
+     provider = "postgresql"
+     url      = env("DATABASE_URL")
+   }
+   ```
+4. Add the `NEXTAUTH_SECRET` environment variable for secure JWT sessions.
+5. Deploy! Vercel will automatically build the Next.js app and run `prisma generate`.
+
+---
+*Built as a premium SaaS solution for modern fitness centers.*
