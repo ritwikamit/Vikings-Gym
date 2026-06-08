@@ -1,24 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { cn, formatCurrency } from '@/lib/utils';
 import {
-  Users,
-  UserCheck,
-  UserX,
-  IndianRupee,
-  TrendingUp,
-  TrendingDown,
-  UserPlus,
-  CreditCard,
-  CalendarCheck,
-  Target,
-  Activity,
-  Clock,
-  ArrowUpRight,
-  ArrowRight,
-  AlertTriangle,
+  Users, UserCheck, UserX, IndianRupee, TrendingUp, TrendingDown,
+  UserPlus, CreditCard, CalendarCheck, Target, Activity, Clock,
+  ArrowUpRight, ArrowRight, AlertTriangle, Dumbbell,
 } from 'lucide-react';
 import {
   AreaChart, Area, BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,

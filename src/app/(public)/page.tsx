@@ -2,11 +2,11 @@
 
 import { useState, useRef } from 'react';
 import Link from 'next/link';
-import { motion, useInView } from 'framer-motion';
+import { motion, useInView, AnimatePresence } from 'framer-motion';
 import {
   Dumbbell, Users, Clock, Sparkles, IndianRupee,
   Star, ChevronDown, ChevronUp, Phone, Mail, MapPin,
-  ArrowRight, Check, Quote, Calculator, Trophy, Target,
+  ArrowRight, ArrowUpRight, Check, Quote, Calculator, Trophy, Target,
   Zap, Send, Crown, Award,
 } from 'lucide-react';
 import { cn, formatCurrency, calculateBMI, getBMICategory, getInitials } from '@/lib/utils';
