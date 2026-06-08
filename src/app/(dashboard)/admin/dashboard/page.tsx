@@ -17,6 +17,7 @@ import {
   Activity,
   Clock,
   ArrowUpRight,
+  ArrowRight,
   AlertTriangle,
 } from 'lucide-react';
 import {
