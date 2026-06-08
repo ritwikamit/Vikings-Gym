@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowRight, Crown } from 'lucide-react';
+import { Parallax } from '@/components/ui/Parallax';
+import { Magnetic } from '@/components/ui/Magnetic';
 
 export function HeroSection() {
   const stats = [
@@ -14,17 +16,21 @@ export function HeroSection() {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
-      {/* Video Background */}
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover scale-[1.02]"
-        poster="/logo.png"
-      >
-        <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260606_154941_df1a96e1-a06f-450c-bd02-d863414cc1a0.mp4" type="video/mp4" />
-      </video>
+      {/* Video Background with Parallax */}
+      <div className="absolute inset-0 w-full h-full">
+        <Parallax speed={-0.3} className="w-full h-full">
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="w-full h-full object-cover scale-[1.1]"
+            poster="/logo.png"
+          >
+            <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260606_154941_df1a96e1-a06f-450c-bd02-d863414cc1a0.mp4" type="video/mp4" />
+          </video>
+        </Parallax>
+      </div>
 
       {/* Overlay layers */}
       <div className="absolute inset-0 video-overlay-top z-[1]" />
@@ -68,21 +74,25 @@ export function HeroSection() {
           {/* CTA Row */}
           <div className="animate-reveal-3 mt-10 lg:mt-12">
             <div className="flex flex-wrap items-center gap-5 sm:gap-6">
-              <Link
-                href="/plans"
-                className="group relative inline-flex items-center gap-3 px-8 sm:px-10 py-4 sm:py-5 bg-[#C62828] text-white text-xs sm:text-sm font-bold tracking-[0.2em] uppercase rounded-2xl transition-all duration-500 shadow-[0_0_40px_rgba(198,40,40,0.3)] hover:shadow-[0_0_60px_rgba(198,40,40,0.5)] hover:-translate-y-1 overflow-hidden"
-              >
-                <span className="relative z-10">Start Your Journey</span>
-                <ArrowRight className="w-4 h-4 relative z-10 transition-transform duration-300 group-hover:translate-x-1" />
-                <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-              </Link>
+              <Magnetic>
+                <Link
+                  href="/plans"
+                  className="group relative inline-flex items-center gap-3 px-8 sm:px-10 py-4 sm:py-5 bg-[#C62828] text-white text-xs sm:text-sm font-bold tracking-[0.2em] uppercase rounded-2xl transition-all duration-500 shadow-[0_0_40px_rgba(198,40,40,0.3)] hover:shadow-[0_0_60px_rgba(198,40,40,0.5)] hover:-translate-y-1 overflow-hidden"
+                >
+                  <span className="relative z-10">Start Your Journey</span>
+                  <ArrowRight className="w-4 h-4 relative z-10 transition-transform duration-300 group-hover:translate-x-1" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+                </Link>
+              </Magnetic>
 
-              <Link
-                href="/about"
-                className="inline-flex items-center gap-3 px-8 py-4 text-white/80 hover:text-white text-xs sm:text-sm font-bold tracking-[0.2em] uppercase transition-colors"
-              >
-                Explore Arena
-              </Link>
+              <Magnetic strength={0.2}>
+                <Link
+                  href="/about"
+                  className="inline-flex items-center gap-3 px-8 py-4 text-white/80 hover:text-white text-xs sm:text-sm font-bold tracking-[0.2em] uppercase transition-colors"
+                >
+                  Explore Arena
+                </Link>
+              </Magnetic>
             </div>
           </div>
 

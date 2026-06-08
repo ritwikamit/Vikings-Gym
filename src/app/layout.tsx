@@ -44,11 +44,13 @@ export const metadata: Metadata = {
 };
 
 import Providers from "@/components/Providers";
+import { CustomCursor } from "@/components/ui/CustomCursor";
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={cn("dark", inter.variable, sora.variable)} suppressHydrationWarning>
       <body className="antialiased" suppressHydrationWarning>
+        <CustomCursor />
         <Providers>
           {children}
         </Providers>

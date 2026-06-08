@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { DASHBOARD_SIDEBAR_LINKS, GYM_INFO } from '@/lib/constants';
+import { Magnetic } from '@/components/ui/Magnetic';
 import {
   LayoutDashboard,
   Users,
@@ -125,7 +126,9 @@ export default function DashboardSidebar({ isMobileOpen, onMobileClose }: Dashbo
                     : 'text-[#737373] hover:text-white hover:bg-white/[0.03]'
                 )}
               >
-                <Icon size={isActive ? 20 : 18} className={cn('shrink-0 transition-transform group-hover:scale-110', isActive ? 'text-[#C62828]' : '')} />
+                <Magnetic strength={0.2}>
+                  <Icon size={isActive ? 20 : 18} className={cn('shrink-0 transition-transform group-hover:scale-110', isActive ? 'text-[#C62828]' : '')} />
+                </Magnetic>
                 {!isCollapsed && (
                   <span className="truncate">{link.name}</span>
                 )}

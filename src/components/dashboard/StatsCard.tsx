@@ -8,6 +8,7 @@ import {
   Minus,
   LucideIcon,
 } from 'lucide-react';
+import { TiltCard } from '@/components/ui/TiltCard';
 
 interface StatsCardProps {
   title: string;
@@ -78,37 +79,44 @@ export default function StatsCard({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.1 }}
-      className={cn(
-        'bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] rounded-xl p-5 hover:border-white/[0.12] transition-all duration-300',
-        className
-      )}
+      className="h-full"
     >
-      <div className="flex items-start justify-between">
-        <div className="flex-1">
-          <p className="text-[#A3A3A3] text-sm font-medium mb-1">{title}</p>
-          <p className="text-2xl font-bold text-white">{value}</p>
-          {change !== undefined && (
-            <div className={cn('flex items-center gap-1 mt-2 text-xs font-medium', trendColor)}>
-              {TrendIcon && <TrendIcon className="w-3.5 h-3.5" />}
-              <span>
-                {change > 0 ? '+' : ''}
-                {change}%
-              </span>
-              {changeLabel && (
-                <span className="text-[#737373] ml-1">{changeLabel}</span>
-              )}
-            </div>
-          )}
-        </div>
+      <TiltCard intensity={8} className="h-full">
         <div
           className={cn(
-            'w-11 h-11 rounded-lg flex items-center justify-center flex-shrink-0',
-            styles.iconBg
+            'bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] rounded-xl p-5 hover:border-[#DC2626]/30 transition-all duration-300 h-full flex flex-col justify-between group',
+            className
           )}
         >
-          <Icon className={cn('w-5 h-5', styles.iconColor)} />
+          <div className="flex items-start justify-between">
+            <div className="flex-1">
+              <p className="text-[#A3A3A3] text-sm font-medium mb-1 group-hover:text-white transition-colors">{title}</p>
+              <p className="text-2xl font-bold text-white">{value}</p>
+              {change !== undefined && (
+                <div className={cn('flex items-center gap-1 mt-2 text-xs font-medium', trendColor)}>
+                  {TrendIcon && <TrendIcon className="w-3.5 h-3.5" />}
+                  <span>
+                    {change > 0 ? '+' : ''}
+                    {change}%
+                  </span>
+                  {changeLabel && (
+                    <span className="text-[#737373] ml-1">{changeLabel}</span>
+                  )}
+                </div>
+              )}
+            </div>
+            <div
+              className={cn(
+                'w-11 h-11 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300',
+                styles.iconBg
+              )}
+            >
+              <Icon className={cn('w-5 h-5', styles.iconColor)} />
+            </div>
+          </div>
         </div>
-      </div>
+      </TiltCard>
     </motion.div>
   );
 }
+
