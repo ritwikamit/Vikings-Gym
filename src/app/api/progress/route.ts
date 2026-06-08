@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { requireTenant } from "@/lib/tenant";
 
 // GET /api/progress
 export async function GET(request: Request) {
@@ -11,8 +12,9 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: "memberId is required" }, { status: 400 });
     }
 
+    const tenantId = await requireTenant();
     const records = await prisma.progressTracking.findMany({
-      where: { memberId },
+      where: { memberId, tenantId },
       orderBy: { date: "asc" },
     });
 
@@ -27,10 +29,12 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { memberId, weight, chest, waist, arms, thighs, hips, bmi, bodyFatPercent, notes } = body;
+    const tenantId = await requireTenant();
 
     const record = await prisma.progressTracking.create({
       data: {
         memberId,
+        tenantId,
         weight,
         chest,
         waist,
@@ -45,8 +49,8 @@ export async function POST(request: Request) {
 
     // Update member's weight if provided
     if (weight) {
-      await prisma.member.update({
-        where: { id: memberId },
+      await prisma.member.updateMany({
+        where: { id: memberId, tenantId },
         data: { weight },
       });
     }

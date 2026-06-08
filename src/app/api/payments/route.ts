@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { requireTenant } from "@/lib/tenant";
 
 // GET /api/payments
 export async function GET(request: Request) {
@@ -12,7 +13,9 @@ export async function GET(request: Request) {
     const page = parseInt(searchParams.get("page") || "1");
     const limit = parseInt(searchParams.get("limit") || "20");
 
-    const where: any = {};
+    const tenantId = await requireTenant();
+
+    const where: any = { tenantId };
 
     if (status) where.status = status;
     if (method) where.method = method;
@@ -41,7 +44,7 @@ export async function GET(request: Request) {
       }),
       prisma.payment.count({ where }),
       prisma.payment.aggregate({
-        where: { ...where, status: "COMPLETED" },
+        where: { ...where, status: "PAID" },
         _sum: { amount: true },
       }),
     ]);
@@ -62,13 +65,14 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { memberId, membershipId, amount, method, description, couponCode } = body;
+    const tenantId = await requireTenant();
 
     let finalAmount = amount;
     let couponId = null;
 
     // Apply coupon if provided
     if (couponCode) {
-      const coupon = await prisma.coupon.findUnique({ where: { code: couponCode } });
+      const coupon = await prisma.coupon.findFirst({ where: { code: couponCode, tenantId } });
       if (coupon && coupon.isActive && coupon.validUntil > new Date()) {
         if (coupon.maxUses && coupon.usedCount >= coupon.maxUses) {
           return NextResponse.json({ error: "Coupon usage limit reached" }, { status: 400 });
@@ -98,9 +102,11 @@ export async function POST(request: Request) {
       data: {
         memberId,
         membershipId: membershipId || null,
+        tenantId,
         amount: finalAmount,
+        totalAmount: finalAmount,
         method: method || "CASH",
-        status: "COMPLETED",
+        status: "PAID",
         description,
         invoiceNumber,
         couponId,

@@ -35,11 +35,11 @@ export async function GET() {
         },
       }),
       prisma.payment.aggregate({
-        where: { status: "COMPLETED", paidAt: { gte: startOfMonth } },
+        where: { status: "PAID", paidAt: { gte: startOfMonth } },
         _sum: { amount: true },
       }),
       prisma.payment.aggregate({
-        where: { status: "COMPLETED", paidAt: { gte: startOfYear } },
+        where: { status: "PAID", paidAt: { gte: startOfYear } },
         _sum: { amount: true },
       }),
       prisma.attendance.count({
@@ -58,7 +58,7 @@ export async function GET() {
       const monthStart = new Date(now.getFullYear(), now.getMonth() - i, 1);
       const monthEnd = new Date(now.getFullYear(), now.getMonth() - i + 1, 0, 23, 59, 59);
       const revenue = await prisma.payment.aggregate({
-        where: { status: "COMPLETED", paidAt: { gte: monthStart, lte: monthEnd } },
+        where: { status: "PAID", paidAt: { gte: monthStart, lte: monthEnd } },
         _sum: { amount: true },
       });
       monthlyRevenue.push({

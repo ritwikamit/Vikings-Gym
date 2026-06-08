@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { requireTenant } from "@/lib/tenant";
 
 // GET /api/inventory
 export async function GET(request: Request) {
@@ -8,7 +9,9 @@ export async function GET(request: Request) {
     const category = searchParams.get("category");
     const lowStock = searchParams.get("lowStock");
 
-    const where: any = {};
+    const tenantId = await requireTenant();
+
+    const where: any = { tenantId };
     if (category) where.category = category;
 
     const items = await prisma.inventoryItem.findMany({
@@ -35,9 +38,10 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { name, category, description, quantity, minQuantity, price, supplier } = body;
+    const tenantId = await requireTenant();
 
     const item = await prisma.inventoryItem.create({
-      data: { name, category, description, quantity: quantity || 0, minQuantity: minQuantity || 5, price, supplier },
+      data: { tenantId, name, category, description, quantity: quantity || 0, minQuantity: minQuantity || 5, unitPrice: price, supplier },
     });
 
     return NextResponse.json({ data: item }, { status: 201 });

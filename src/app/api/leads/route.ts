@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { requireTenant } from "@/lib/tenant";
 
 // GET /api/leads
 export async function GET(request: Request) {
@@ -8,7 +9,9 @@ export async function GET(request: Request) {
     const stage = searchParams.get("stage");
     const source = searchParams.get("source");
 
-    const where: any = {};
+    const tenantId = await requireTenant();
+
+    const where: any = { tenantId };
     if (stage) where.stage = stage;
     if (source) where.source = source;
 
@@ -28,11 +31,13 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { name, phone, email, source, notes } = body;
+    const tenantId = await requireTenant();
 
     const lead = await prisma.lead.create({
       data: {
         name,
         phone,
+        tenantId,
         email: email || null,
         source: source || "WALK_IN",
         stage: "NEW_LEAD",

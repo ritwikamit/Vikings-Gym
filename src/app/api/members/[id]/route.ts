@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { requireTenant } from "@/lib/tenant";
 
 // GET /api/members/[id]
 export async function GET(
@@ -8,8 +9,9 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const member = await prisma.member.findUnique({
-      where: { id },
+    const tenantId = await requireTenant();
+    const member = await prisma.member.findFirst({
+      where: { id, tenantId },
       include: {
         user: { select: { id: true, name: true, email: true, phone: true, avatar: true, role: true, isActive: true, createdAt: true } },
         memberships: { include: { plan: true }, orderBy: { createdAt: "desc" } },
@@ -42,6 +44,13 @@ export async function PUT(
     const { id } = await params;
     const body = await request.json();
     const { name, phone, email, dateOfBirth, gender, address, emergencyContact, emergencyPhone, weight, height, fitnessGoal } = body;
+    const tenantId = await requireTenant();
+
+    // Verify tenant access
+    const existing = await prisma.member.findFirst({ where: { id, tenantId } });
+    if (!existing) {
+      return NextResponse.json({ error: "Member not found" }, { status: 404 });
+    }
 
     const member = await prisma.member.update({
       where: { id },
@@ -79,7 +88,8 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    const member = await prisma.member.findUnique({ where: { id } });
+    const tenantId = await requireTenant();
+    const member = await prisma.member.findFirst({ where: { id, tenantId } });
     
     if (!member) {
       return NextResponse.json({ error: "Member not found" }, { status: 404 });

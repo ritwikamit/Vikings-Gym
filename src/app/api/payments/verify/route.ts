@@ -1,11 +1,19 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { requireTenant } from "@/lib/tenant";
 
 // POST /api/payments/verify - Verify Razorpay payment
 export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { razorpayOrderId, razorpayPaymentId, razorpaySignature, paymentId } = body;
+    const tenantId = await requireTenant();
+
+    // Verify payment belongs to tenant
+    const existing = await prisma.payment.findFirst({ where: { id: paymentId, tenantId } });
+    if (!existing) {
+      return NextResponse.json({ error: "Payment not found" }, { status: 404 });
+    }
 
     // In production, verify signature:
     // const crypto = require('crypto');
@@ -17,7 +25,7 @@ export async function POST(request: Request) {
     const payment = await prisma.payment.update({
       where: { id: paymentId },
       data: {
-        status: "COMPLETED",
+        status: "PAID",
         razorpayPaymentId,
         razorpaySignature,
         paidAt: new Date(),

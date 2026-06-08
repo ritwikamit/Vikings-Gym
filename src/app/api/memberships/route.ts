@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { requireTenant } from "@/lib/tenant";
 
 // GET /api/memberships
 export async function GET(request: Request) {
@@ -8,7 +9,9 @@ export async function GET(request: Request) {
     const status = searchParams.get("status");
     const expiringSoon = searchParams.get("expiringSoon");
 
-    const where: any = {};
+    const tenantId = await requireTenant();
+
+    const where: any = { tenantId };
 
     if (status) {
       where.status = status;
@@ -49,8 +52,9 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { memberId, planId, startDate, paymentMethod } = body;
+    const tenantId = await requireTenant();
 
-    const plan = await prisma.membershipPlan.findUnique({ where: { id: planId } });
+    const plan = await prisma.membershipPlan.findFirst({ where: { id: planId, tenantId } });
     if (!plan) {
       return NextResponse.json({ error: "Plan not found" }, { status: 404 });
     }
@@ -61,7 +65,7 @@ export async function POST(request: Request) {
 
     // Expire any current active membership
     await prisma.membership.updateMany({
-      where: { memberId, status: "ACTIVE" },
+      where: { memberId, status: "ACTIVE", tenantId },
       data: { status: "EXPIRED" },
     });
 
@@ -69,6 +73,7 @@ export async function POST(request: Request) {
       data: {
         memberId,
         planId,
+        tenantId,
         startDate: start,
         endDate: end,
         status: "ACTIVE",
@@ -82,9 +87,11 @@ export async function POST(request: Request) {
       data: {
         memberId,
         membershipId: membership.id,
+        tenantId,
         amount: plan.price,
+        totalAmount: plan.price,
         method: paymentMethod || "CASH",
-        status: "COMPLETED",
+        status: "PAID",
         description: `Membership: ${plan.name}`,
         invoiceNumber,
         paidAt: new Date(),

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { requireTenant } from "@/lib/tenant";
 
 // GET /api/reports/[type]
 export async function GET(
@@ -14,12 +15,14 @@ export async function GET(
 
     const start = startDate ? new Date(startDate) : new Date(new Date().getFullYear(), 0, 1);
     const end = endDate ? new Date(endDate) : new Date();
+    const tenantId = await requireTenant();
 
     switch (type) {
       case "revenue": {
         const payments = await prisma.payment.findMany({
           where: {
-            status: "COMPLETED",
+            status: "PAID",
+            tenantId,
             paidAt: { gte: start, lte: end },
           },
           include: { member: { include: { user: { select: { name: true } } } } },
@@ -37,7 +40,7 @@ export async function GET(
 
       case "attendance": {
         const attendance = await prisma.attendance.findMany({
-          where: { date: { gte: start, lte: end } },
+          where: { date: { gte: start, lte: end }, tenantId },
           include: { member: { include: { user: { select: { name: true } } } } },
           orderBy: { date: "desc" },
         });
@@ -50,16 +53,16 @@ export async function GET(
 
       case "membership": {
         const [active, expired, frozen, cancelled, total] = await Promise.all([
-          prisma.membership.count({ where: { status: "ACTIVE" } }),
-          prisma.membership.count({ where: { status: "EXPIRED" } }),
-          prisma.membership.count({ where: { status: "FROZEN" } }),
-          prisma.membership.count({ where: { status: "CANCELLED" } }),
-          prisma.membership.count(),
+          prisma.membership.count({ where: { status: "ACTIVE", tenantId } }),
+          prisma.membership.count({ where: { status: "EXPIRED", tenantId } }),
+          prisma.membership.count({ where: { status: "FROZEN", tenantId } }),
+          prisma.membership.count({ where: { status: "CANCELLED", tenantId } }),
+          prisma.membership.count({ where: { tenantId } }),
         ]);
 
         const byPlan = await prisma.membership.groupBy({
           by: ["planId"],
-          where: { status: "ACTIVE" },
+          where: { status: "ACTIVE", tenantId },
           _count: true,
         });
 
@@ -70,6 +73,7 @@ export async function GET(
 
       case "trainer": {
         const trainers = await prisma.trainer.findMany({
+          where: { tenantId },
           include: {
             user: { select: { name: true } },
             _count: { select: { clients: true, workoutPlans: true, dietPlans: true } },

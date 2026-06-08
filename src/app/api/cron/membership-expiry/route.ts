@@ -55,6 +55,7 @@ export async function GET(request: Request) {
           const notification = await prisma.notification.create({
             data: {
               userId: membership.member.userId,
+              tenantId: membership.member.tenantId,
               title: interval.days === 0 ? "Membership Expired" : `Membership Expiring in ${interval.days} Day${interval.days > 1 ? "s" : ""}`,
               message: interval.message,
               type: "MEMBERSHIP_EXPIRY",
@@ -111,6 +112,7 @@ export async function GET(request: Request) {
             await prisma.notification.create({
               data: {
                 userId: member.userId,
+                tenantId: member.tenantId,
                 title: "🎂 Happy Birthday!",
                 message: `Happy Birthday, ${member.user.name}! Wishing you a great year ahead. Keep crushing your fitness goals! 💪`,
                 type: "BIRTHDAY",

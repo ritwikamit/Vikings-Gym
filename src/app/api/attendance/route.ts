@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { requireTenant } from "@/lib/tenant";
 
 // GET /api/attendance
 export async function GET(request: Request) {
@@ -10,7 +11,9 @@ export async function GET(request: Request) {
     const page = parseInt(searchParams.get("page") || "1");
     const limit = parseInt(searchParams.get("limit") || "50");
 
-    const where: any = {};
+    const tenantId = await requireTenant();
+
+    const where: any = { tenantId };
 
     if (date) {
       const startOfDay = new Date(date);
@@ -56,6 +59,7 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { memberId, method } = body;
+    const tenantId = await requireTenant();
 
     // Check if already checked in today without checkout
     const today = new Date();
@@ -66,6 +70,7 @@ export async function POST(request: Request) {
     const existingCheckIn = await prisma.attendance.findFirst({
       where: {
         memberId,
+        tenantId,
         date: { gte: today, lte: endToday },
         checkOut: null,
       },
@@ -84,6 +89,7 @@ export async function POST(request: Request) {
     const attendance = await prisma.attendance.create({
       data: {
         memberId,
+        tenantId,
         method: method || "MANUAL",
         date: new Date(),
         checkIn: new Date(),

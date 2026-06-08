@@ -1,10 +1,13 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { requireTenant } from "@/lib/tenant";
 
 // GET /api/trainers
 export async function GET() {
   try {
+    const tenantId = await requireTenant();
     const trainers = await prisma.trainer.findMany({
+      where: { tenantId },
       include: {
         user: { select: { id: true, name: true, email: true, phone: true, avatar: true, isActive: true } },
         clients: {
@@ -34,8 +37,9 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { name, email, phone, password, experience, certifications, specialization, salary, bio } = body;
     const bcrypt = await import("bcryptjs");
+    const tenantId = await requireTenant();
 
-    const existingUser = await prisma.user.findUnique({ where: { email } });
+    const existingUser = await prisma.user.findFirst({ where: { email, tenantId } });
     if (existingUser) {
       return NextResponse.json({ error: "Email already exists" }, { status: 400 });
     }
@@ -49,8 +53,10 @@ export async function POST(request: Request) {
         phone,
         password: hashedPassword,
         role: "TRAINER",
+        tenantId,
         trainer: {
           create: {
+            tenantId,
             experience: experience || 0,
             certifications: certifications || [],
             specialization: specialization || [],

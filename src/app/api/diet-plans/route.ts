@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { requireTenant } from "@/lib/tenant";
 
 // GET /api/diet-plans
 export async function GET(request: Request) {
@@ -9,7 +10,9 @@ export async function GET(request: Request) {
     const memberId = searchParams.get("memberId");
     const activeOnly = searchParams.get("activeOnly") === "true";
 
-    const where: any = {};
+    const tenantId = await requireTenant();
+
+    const where: any = { tenantId };
     if (trainerId) where.trainerId = trainerId;
     if (memberId) where.memberId = memberId;
     if (activeOnly) where.isActive = true;
@@ -35,11 +38,13 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { trainerId, memberId, name, description, startDate, endDate, totalCalories, meals } = body;
+    const tenantId = await requireTenant();
 
     const plan = await prisma.dietPlan.create({
       data: {
         trainerId,
         memberId,
+        tenantId,
         name,
         description,
         startDate: new Date(startDate),

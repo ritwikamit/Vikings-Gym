@@ -1,4 +1,3 @@
-// Vikings Gym Management Platform - Prisma Schema
 generator client {
   provider      = "prisma-client-js"
   binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
@@ -9,63 +8,239 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// ============================================
+// ═══════════════════════════════════════════════════════════════
 // ENUMS
-// ============================================
+// ═══════════════════════════════════════════════════════════════
 
+enum UserRole {
+  SUPER_ADMIN
+  GYM_OWNER
+  RECEPTIONIST
+  TRAINER
+  MEMBER
+}
 
+enum MembershipStatus {
+  ACTIVE
+  FROZEN
+  EXPIRED
+  CANCELLED
+}
 
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
 
+enum PaymentMethod {
+  CASH
+  UPI
+  CARD
+  NET_BANKING
+  RAZORPAY
+}
 
+enum LeadStage {
+  NEW_LEAD
+  CONTACTED
+  TRIAL_SCHEDULED
+  TRIAL_COMPLETED
+  CONVERTED
+  LOST
+}
 
+enum AttendanceMethod {
+  QR
+  MANUAL
+}
 
+enum NotificationChannel {
+  IN_APP
+  EMAIL
+  WHATSAPP
+}
 
+enum NotificationType {
+  GENERAL
+  MEMBERSHIP_EXPIRY
+  RENEWAL_REMINDER
+  BIRTHDAY
+  PAYMENT_SUCCESS
+  PAYMENT_FAILED
+  WORKOUT_ASSIGNED
+  DIET_ASSIGNED
+  WELCOME
+}
 
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
 
+enum TicketPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
 
+enum SubscriptionStatus {
+  ACTIVE
+  PAUSED
+  CANCELLED
+  EXPIRED
+  TRIAL
+}
 
+enum DiscountType {
+  PERCENTAGE
+  FIXED
+}
 
+// ═══════════════════════════════════════════════════════════════
+// SAAS CORE — Multi-Tenant Foundation
+// ═══════════════════════════════════════════════════════════════
 
+model Tenant {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  domain    String?  @unique
+  logo      String?
+  favicon   String?
+  brandColor String  @default("#E11D48")
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
+  subscription   Subscription?
+  organization   Organization?
+  users          User[]
+  members        Member[]
+  trainers       Trainer[]
+  membershipPlans MembershipPlan[]
+  leads          Lead[]
+  inventoryItems InventoryItem[]
+  coupons        Coupon[]
+  announcements  Announcement[]
+  blogPosts      BlogPost[]
+  supportTickets SupportTicket[]
+  auditLogs      AuditLog[]
+  gymSettings    GymSettings?
 
+  @@map("tenants")
+  @@index([slug])
+  @@index([domain])
+}
 
+model Subscription {
+  id             String             @id @default(cuid())
+  tenantId       String             @unique
+  tenant         Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  plan           String             @default("STARTER")
+  status         SubscriptionStatus @default(TRIAL)
+  startDate      DateTime           @default(now())
+  endDate        DateTime?
+  trialEndsAt    DateTime?
+  maxMembers     Int                @default(100)
+  maxTrainers    Int                @default(5)
+  features       String             @default("[]")
+  stripeId       String?
+  stripePriceId  String?
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
 
+  @@map("subscriptions")
+}
 
+model Organization {
+  id          String   @id @default(cuid())
+  tenantId    String   @unique
+  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  name        String
+  email       String?
+  phone       String?
+  address     String?
+  city        String?
+  state       String?
+  pincode     String?
+  gstNumber   String?
+  panNumber   String?
+  website     String?
+  timezone    String   @default("Asia/Kolkata")
+  dateFormat  String   @default("DD/MM/YYYY")
+  weekStart   Int      @default(1) // 0=Sun, 1=Mon
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
+  @@map("organizations")
+}
 
+model GymSettings {
+  id              String   @id @default(cuid())
+  tenantId        String   @unique
+  tenant          Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  checkInMode     String   @default("QR_AND_MANUAL")
+  enableWhatsApp  Boolean  @default(false)
+  enableEmail     Boolean  @default(true)
+  enableReferral  Boolean  @default(true)
+  enableCoupons   Boolean  @default(true)
+  enableBirthdayAlerts Boolean @default(true)
+  autoFreezeDays  Int      @default(30)
+  reminderDays    String   @default("7,3,1")
+  lateFeeAmount   Float?
+  lateFeePeriod   Int?     // days after expiry
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
+  @@map("gym_settings")
+}
 
-
-
-
-
-// ============================================
-// MODELS
-// ============================================
+// ═══════════════════════════════════════════════════════════════
+// AUTH & USERS
+// ═══════════════════════════════════════════════════════════════
 
 model User {
-  id            String    @id @default(cuid())
-  email         String    @unique
+  id            String   @id @default(cuid())
+  tenantId      String
+  tenant        Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  email         String
   password      String
   name          String
   phone         String?
   avatar        String?
-  role          String  @default("MEMBER")
-  isActive      Boolean   @default(true)
+  role          UserRole @default(MEMBER)
+  isActive      Boolean  @default(true)
   emailVerified DateTime?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  lastLoginAt   DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   member        Member?
   trainer       Trainer?
   notifications Notification[]
   auditLogs     AuditLog[]
+  tickets       SupportTicket[]  @relation("TicketCreator")
+  assignedTickets SupportTicket[] @relation("TicketAssignee")
 
+  @@unique([tenantId, email])
   @@map("users")
+  @@index([tenantId])
+  @@index([role])
 }
+
+// ═══════════════════════════════════════════════════════════════
+// MEMBER MANAGEMENT
+// ═══════════════════════════════════════════════════════════════
 
 model Member {
   id               String   @id @default(cuid())
+  tenantId         String
+  tenant           Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   userId           String   @unique
   user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   dateOfBirth      DateTime?
@@ -94,18 +269,29 @@ model Member {
   referralsReceived Referral[] @relation("Referred")
 
   @@map("members")
+  @@index([tenantId])
+  @@index([trainerId])
+  @@index([qrCode])
 }
+
+// ═══════════════════════════════════════════════════════════════
+// TRAINER MANAGEMENT
+// ═══════════════════════════════════════════════════════════════
 
 model Trainer {
   id              String   @id @default(cuid())
+  tenantId        String
+  tenant          Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   userId          String   @unique
   user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   experience      Int      @default(0)
   certifications  String
   specialization  String
   salary          Float?
+  commissionPct   Float?   @default(0)
   bio             String?
   rating          Float    @default(0)
+  isActive        Boolean  @default(true)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
@@ -113,49 +299,86 @@ model Trainer {
   workoutPlans    WorkoutPlan[]
   dietPlans       DietPlan[]
   schedules       TrainerSchedule[]
+  commissionLogs  CommissionLog[]
 
   @@map("trainers")
+  @@index([tenantId])
+  @@index([specialization])
+}
+
+model CommissionLog {
+  id           String   @id @default(cuid())
+  tenantId     String
+  trainerId    String
+  trainer      Trainer  @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+  paymentId    String
+  payment      Payment  @relation(fields: [paymentId], references: [id])
+  amount       Float
+  rate         Float
+  status       String   @default("PENDING")
+  paidAt       DateTime?
+  createdAt    DateTime @default(now())
+
+  @@map("commission_logs")
+  @@index([trainerId])
+  @@index([tenantId])
 }
 
 model TrainerSchedule {
   id        String   @id @default(cuid())
+  tenantId  String
   trainerId String
   trainer   Trainer  @relation(fields: [trainerId], references: [id], onDelete: Cascade)
-  dayOfWeek Int      // 0=Sunday, 6=Saturday
-  startTime String   // "06:00"
-  endTime   String   // "10:00"
+  dayOfWeek Int
+  startTime String
+  endTime   String
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("trainer_schedules")
+  @@index([trainerId])
+  @@index([tenantId])
 }
+
+// ═══════════════════════════════════════════════════════════════
+// MEMBERSHIP PLANS & MEMBERSHIPS
+// ═══════════════════════════════════════════════════════════════
 
 model MembershipPlan {
   id          String   @id @default(cuid())
+  tenantId    String
+  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   name        String
   duration    Int      // in months
   price       Float
+  discountPrice Float?
   description String?
   features    String
   isActive    Boolean  @default(true)
+  isPopular   Boolean  @default(false)
+  sortOrder   Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   memberships Membership[]
 
+  @@unique([tenantId, name])
   @@map("membership_plans")
+  @@index([tenantId])
 }
 
 model Membership {
   id          String           @id @default(cuid())
+  tenantId    String
   memberId    String
   member      Member           @relation(fields: [memberId], references: [id], onDelete: Cascade)
   planId      String
   plan        MembershipPlan   @relation(fields: [planId], references: [id])
   startDate   DateTime
   endDate     DateTime
-  status      String @default("ACTIVE")
+  status      MembershipStatus @default(ACTIVE)
+  autoRenew   Boolean          @default(false)
   freezeStart DateTime?
   freezeEnd   DateTime?
   notes       String?
@@ -165,47 +388,87 @@ model Membership {
   payments    Payment[]
 
   @@map("memberships")
+  @@index([memberId])
+  @@index([tenantId])
+  @@index([status])
+  @@index([endDate])
 }
+
+// ═══════════════════════════════════════════════════════════════
+// ATTENDANCE
+// ═══════════════════════════════════════════════════════════════
 
 model Attendance {
-  id       String           @id @default(cuid())
-  memberId String
-  member   Member           @relation(fields: [memberId], references: [id], onDelete: Cascade)
-  date     DateTime         @default(now())
-  checkIn  DateTime         @default(now())
-  checkOut DateTime?
-  method   String @default("MANUAL")
+  id        String           @id @default(cuid())
+  tenantId  String
+  memberId  String
+  member    Member           @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  date      DateTime         @default(now())
+  checkIn   DateTime         @default(now())
+  checkOut  DateTime?
+  duration  Int?             // minutes
+  method    AttendanceMethod @default(MANUAL)
+  notes     String?
+  createdAt DateTime         @default(now())
 
   @@map("attendance")
+  @@index([memberId])
+  @@index([tenantId])
+  @@index([date])
+  @@index([tenantId, date])
 }
 
+// ═══════════════════════════════════════════════════════════════
+// PAYMENTS
+// ═══════════════════════════════════════════════════════════════
+
 model Payment {
-  id            String        @id @default(cuid())
-  memberId      String
-  member        Member        @relation(fields: [memberId], references: [id], onDelete: Cascade)
-  membershipId  String?
-  membership    Membership?   @relation(fields: [membershipId], references: [id])
-  amount        Float
-  currency      String        @default("INR")
-  transactionId String?       @unique
+  id                String        @id @default(cuid())
+  tenantId          String
+  memberId          String
+  member            Member        @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  membershipId      String?
+  membership        Membership?   @relation(fields: [membershipId], references: [id])
+  amount            Float
+  taxAmount         Float         @default(0)
+  totalAmount       Float
+  currency          String        @default("INR")
+  transactionId     String?       @unique
   razorpayOrderId   String?
   razorpayPaymentId String?
   razorpaySignature String?
-  method        String @default("CASH")
-  status        String @default("PENDING")
-  description   String?
-  invoiceNumber String?       @unique
-  couponId      String?
-  coupon        Coupon?       @relation(fields: [couponId], references: [id])
-  paidAt        DateTime?
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+  method            PaymentMethod @default(CASH)
+  status            PaymentStatus @default(PENDING)
+  description       String?
+  invoiceNumber     String?       @unique
+  invoiceUrl        String?
+  receiptUrl        String?
+  couponId          String?
+  coupon            Coupon?       @relation(fields: [couponId], references: [id])
+  discountAmount    Float         @default(0)
+  paidAt            DateTime?
+  refundedAt        DateTime?
+  refundReason      String?
+  gatewayResponse   String?       // JSON
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  commissionLogs    CommissionLog[]
 
   @@map("payments")
+  @@index([memberId])
+  @@index([tenantId])
+  @@index([status])
+  @@index([createdAt])
 }
+
+// ═══════════════════════════════════════════════════════════════
+// WORKOUT PLANS
+// ═══════════════════════════════════════════════════════════════
 
 model WorkoutPlan {
   id          String   @id @default(cuid())
+  tenantId    String
   trainerId   String
   trainer     Trainer  @relation(fields: [trainerId], references: [id], onDelete: Cascade)
   memberId    String
@@ -221,67 +484,85 @@ model WorkoutPlan {
   exercises   WorkoutExercise[]
 
   @@map("workout_plans")
+  @@index([trainerId])
+  @@index([memberId])
+  @@index([tenantId])
 }
 
 model WorkoutExercise {
-  id           String      @id @default(cuid())
+  id            String      @id @default(cuid())
   workoutPlanId String
-  workoutPlan  WorkoutPlan @relation(fields: [workoutPlanId], references: [id], onDelete: Cascade)
-  name         String
-  sets         Int
-  reps         Int
-  restTime     Int         // seconds
-  weight       Float?      // kg
-  notes        String?
-  dayOfWeek    Int?        // 0-6
-  order        Int         @default(0)
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
+  workoutPlan   WorkoutPlan @relation(fields: [workoutPlanId], references: [id], onDelete: Cascade)
+  name          String
+  sets          Int
+  reps          Int
+  restTime      Int         // seconds
+  weight        Float?      // kg
+  notes         String?
+  dayOfWeek     Int?        // 0-6
+  order         Int         @default(0)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 
   @@map("workout_exercises")
+  @@index([workoutPlanId])
 }
 
-model DietPlan {
-  id          String   @id @default(cuid())
-  trainerId   String
-  trainer     Trainer  @relation(fields: [trainerId], references: [id], onDelete: Cascade)
-  memberId    String
-  member      Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
-  name        String
-  description String?
-  startDate   DateTime
-  endDate     DateTime?
-  isActive    Boolean  @default(true)
-  totalCalories Int?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+// ═══════════════════════════════════════════════════════════════
+// DIET PLANS
+// ═══════════════════════════════════════════════════════════════
 
-  meals       DietMeal[]
+model DietPlan {
+  id            String   @id @default(cuid())
+  tenantId      String
+  trainerId     String
+  trainer       Trainer  @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+  memberId      String
+  member        Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  name          String
+  description   String?
+  startDate     DateTime
+  endDate       DateTime?
+  isActive      Boolean  @default(true)
+  totalCalories Int?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  meals         DietMeal[]
 
   @@map("diet_plans")
+  @@index([trainerId])
+  @@index([memberId])
+  @@index([tenantId])
 }
 
 model DietMeal {
   id         String   @id @default(cuid())
   dietPlanId String
   dietPlan   DietPlan @relation(fields: [dietPlanId], references: [id], onDelete: Cascade)
-  name       String   // Breakfast, Lunch, Snack, Dinner
-  time       String?  // "08:00"
+  name       String
+  time       String?
   foods      String
   calories   Int?
-  protein    Float?   // grams
-  carbs      Float?   // grams
-  fats       Float?   // grams
+  protein    Float?
+  carbs      Float?
+  fats       Float?
   notes      String?
   order      Int      @default(0)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
   @@map("diet_meals")
+  @@index([dietPlanId])
 }
+
+// ═══════════════════════════════════════════════════════════════
+// PROGRESS TRACKING
+// ═══════════════════════════════════════════════════════════════
 
 model ProgressTracking {
   id             String   @id @default(cuid())
+  tenantId       String
   memberId       String
   member         Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
   date           DateTime @default(now())
@@ -294,109 +575,132 @@ model ProgressTracking {
   bmi            Float?
   bodyFatPercent Float?
   notes          String?
+  recordedById   String?  // trainer who recorded
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
   @@map("progress_tracking")
+  @@index([memberId])
+  @@index([tenantId])
+  @@index([date])
 }
+
+// ═══════════════════════════════════════════════════════════════
+// NOTIFICATIONS
+// ═══════════════════════════════════════════════════════════════
 
 model Notification {
-  id        String              @id @default(cuid())
+  id        String             @id @default(cuid())
+  tenantId  String
   userId    String
-  user      User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User               @relation(fields: [userId], references: [id], onDelete: Cascade)
   title     String
   message   String
-  type      String    @default("GENERAL")
-  channel   String @default("IN_APP")
-  read      Boolean             @default(false)
+  type      NotificationType   @default(GENERAL)
+  channel   NotificationChannel @default(IN_APP)
+  referenceId String?           // related entity ID
+  read      Boolean            @default(false)
   sentAt    DateTime?
-  createdAt DateTime            @default(now())
-  updatedAt DateTime            @updatedAt
+  readAt    DateTime?
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
 
   @@map("notifications")
+  @@index([userId])
+  @@index([tenantId])
+  @@index([read])
+  @@index([createdAt])
 }
+
+// ═══════════════════════════════════════════════════════════════
+// CRM — LEADS
+// ═══════════════════════════════════════════════════════════════
 
 model Lead {
-  id        String     @id @default(cuid())
-  name      String
-  phone     String
-  email     String?
-  source    String @default("WALK_IN")
-  stage     String  @default("NEW_LEAD")
-  notes     String?
-  followUpDate DateTime?
-  assignedTo   String?
+  id                String    @id @default(cuid())
+  tenantId          String
+  tenant            Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  name              String
+  phone             String
+  email             String?
+  source            String    @default("WALK_IN")
+  stage             LeadStage @default(NEW_LEAD)
+  notes             String?
+  followUpDate      DateTime?
+  assignedTo        String?
   convertedMemberId String?
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 
   @@map("leads")
+  @@index([tenantId])
+  @@index([stage])
+  @@index([assignedTo])
 }
+
+// ═══════════════════════════════════════════════════════════════
+// INVENTORY
+// ═══════════════════════════════════════════════════════════════
 
 model InventoryItem {
   id           String            @id @default(cuid())
+  tenantId     String
+  tenant       Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   name         String
   category     String
   description  String?
   quantity     Int               @default(0)
   minQuantity  Int               @default(5)
-  price        Float?
+  unitPrice    Float?
+  sellingPrice Float?
   supplier     String?
+  supplierContact String?
   createdAt    DateTime          @default(now())
   updatedAt    DateTime          @updatedAt
 
   transactions InventoryTransaction[]
 
   @@map("inventory_items")
+  @@index([tenantId])
+  @@index([category])
 }
 
 model InventoryTransaction {
   id        String        @id @default(cuid())
+  tenantId  String
   itemId    String
   item      InventoryItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
-  type      String        // "IN" or "OUT"
+  type      String        // IN / OUT / SALE
   quantity  Int
+  unitPrice Float?
+  totalAmount Float?
   notes     String?
+  reference String?       // invoice or order ref
+  createdBy String?
   createdAt DateTime      @default(now())
 
   @@map("inventory_transactions")
+  @@index([itemId])
+  @@index([tenantId])
+  @@index([createdAt])
 }
 
-model AuditLog {
-  id        String   @id @default(cuid())
-  userId    String?
-  user      User?    @relation(fields: [userId], references: [id])
-  action    String
-  entity    String
-  entityId  String?
-  details   String?
-  ipAddress String?
-  createdAt DateTime @default(now())
-
-  @@map("audit_logs")
-}
-
-model Announcement {
-  id        String   @id @default(cuid())
-  title     String
-  content   String
-  isActive  Boolean  @default(true)
-  priority  Int      @default(0)
-  expiresAt DateTime?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("announcements")
-}
+// ═══════════════════════════════════════════════════════════════
+// COUPONS & REFERRALS
+// ═══════════════════════════════════════════════════════════════
 
 model Coupon {
   id            String       @id @default(cuid())
-  code          String       @unique
-  discountType  String
+  tenantId      String
+  tenant        Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  code          String
+  description   String?
+  discountType  DiscountType
   discountValue Float
   maxUses       Int?
   usedCount     Int          @default(0)
   minAmount     Float?
+  maxDiscount   Float?
   isActive      Boolean      @default(true)
   validFrom     DateTime     @default(now())
   validUntil    DateTime
@@ -405,28 +709,64 @@ model Coupon {
 
   payments      Payment[]
 
+  @@unique([tenantId, code])
   @@map("coupons")
+  @@index([tenantId])
 }
 
 model Referral {
-  id           String         @id @default(cuid())
+  id           String   @id @default(cuid())
+  tenantId     String
   referrerId   String
-  referrer     Member         @relation("Referrer", fields: [referrerId], references: [id])
+  referrer     Member   @relation("Referrer", fields: [referrerId], references: [id])
   referredId   String?
-  referred     Member?        @relation("Referred", fields: [referredId], references: [id])
+  referred     Member?  @relation("Referred", fields: [referredId], references: [id])
   referralCode String
   reward       Float?
-  status       String @default("PENDING")
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
+  status       String   @default("PENDING")
+  rewardPaidAt DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   @@map("referrals")
+  @@index([referrerId])
+  @@index([tenantId])
+  @@index([referralCode])
 }
+
+// ═══════════════════════════════════════════════════════════════
+// ANNOUNCEMENTS
+// ═══════════════════════════════════════════════════════════════
+
+model Announcement {
+  id        String      @id @default(cuid())
+  tenantId  String
+  tenant    Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  title     String
+  content   String
+  isActive  Boolean     @default(true)
+  priority  Int         @default(0)
+  targetRole UserRole?  // null = all
+  expiresAt DateTime?
+  createdBy String?
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  @@map("announcements")
+  @@index([tenantId])
+  @@index([isActive])
+}
+
+// ═══════════════════════════════════════════════════════════════
+// BLOG & CONTENT
+// ═══════════════════════════════════════════════════════════════
 
 model BlogPost {
   id          String   @id @default(cuid())
+  tenantId    String
+  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   title       String
-  slug        String   @unique
+  slug        String
   content     String
   excerpt     String?
   coverImage  String?
@@ -437,5 +777,96 @@ model BlogPost {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
+  @@unique([tenantId, slug])
   @@map("blog_posts")
+  @@index([tenantId])
+  @@index([slug])
+  @@index([isPublished])
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SUPPORT TICKETS
+// ═══════════════════════════════════════════════════════════════
+
+model SupportTicket {
+  id          String        @id @default(cuid())
+  tenantId    String
+  tenant      Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  subject     String
+  description String
+  status      TicketStatus  @default(OPEN)
+  priority    TicketPriority @default(MEDIUM)
+  createdById String
+  createdBy   User          @relation("TicketCreator", fields: [createdById], references: [id])
+  assignedToId String?
+  assignedTo  User?         @relation("TicketAssignee", fields: [assignedToId], references: [id])
+  category    String?
+  resolvedAt  DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  messages    TicketMessage[]
+
+  @@map("support_tickets")
+  @@index([tenantId])
+  @@index([status])
+  @@index([assignedToId])
+  @@index([createdById])
+}
+
+model TicketMessage {
+  id         String       @id @default(cuid())
+  ticketId   String
+  ticket     SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  senderId   String
+  message    String
+  attachments String?     // JSON array
+  createdAt  DateTime     @default(now())
+
+  @@map("ticket_messages")
+  @@index([ticketId])
+}
+
+// ═══════════════════════════════════════════════════════════════
+// AUDIT LOGS
+// ═══════════════════════════════════════════════════════════════
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  action    String
+  entity    String
+  entityId  String?
+  details   String?
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  @@map("audit_logs")
+  @@index([tenantId])
+  @@index([userId])
+  @@index([entity])
+  @@index([action])
+  @@index([createdAt])
+}
+
+// ═══════════════════════════════════════════════════════════════
+// FEATURE FLAGS
+// ═══════════════════════════════════════════════════════════════
+
+model FeatureFlag {
+  id          String   @id @default(cuid())
+  tenantId    String
+  key         String
+  enabled     Boolean  @default(false)
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([tenantId, key])
+  @@map("feature_flags")
+  @@index([tenantId])
 }

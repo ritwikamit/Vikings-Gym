@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
+import { requireTenant } from "@/lib/tenant";
 
 // GET /api/members - List all members
 export async function GET(request: Request) {
@@ -12,7 +13,9 @@ export async function GET(request: Request) {
     const limit = parseInt(searchParams.get("limit") || "10");
     const skip = (page - 1) * limit;
 
-    const where: any = {};
+    const tenantId = await requireTenant();
+
+    const where: any = { tenantId };
 
     if (search) {
       where.user = {
@@ -69,9 +72,10 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { name, email, phone, password, dateOfBirth, gender, address, emergencyContact, emergencyPhone, weight, height, fitnessGoal } = body;
+    const tenantId = await requireTenant();
 
     // Check if user already exists
-    const existingUser = await prisma.user.findUnique({ where: { email } });
+    const existingUser = await prisma.user.findFirst({ where: { email, tenantId } });
     if (existingUser) {
       return NextResponse.json({ error: "Email already exists" }, { status: 400 });
     }
@@ -87,8 +91,10 @@ export async function POST(request: Request) {
         phone,
         password: hashedPassword,
         role: "MEMBER",
+        tenantId,
         member: {
           create: {
+            tenantId,
             dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : null,
             gender: gender || null,
             address: address || null,

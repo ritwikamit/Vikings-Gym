@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { requireTenant } from "@/lib/tenant";
 
 // GET /api/notifications
 export async function GET(request: Request) {
@@ -8,7 +9,9 @@ export async function GET(request: Request) {
     const userId = searchParams.get("userId");
     const unreadOnly = searchParams.get("unreadOnly") === "true";
 
-    const where: any = {};
+    const tenantId = await requireTenant();
+
+    const where: any = { tenantId };
     if (userId) where.userId = userId;
     if (unreadOnly) where.read = false;
 
@@ -33,10 +36,12 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { userId, title, message, type, channel } = body;
+    const tenantId = await requireTenant();
 
     const notification = await prisma.notification.create({
       data: {
         userId,
+        tenantId,
         title,
         message,
         type: type || "GENERAL",

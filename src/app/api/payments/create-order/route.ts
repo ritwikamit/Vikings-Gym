@@ -1,11 +1,13 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { requireTenant } from "@/lib/tenant";
 
 // POST /api/payments/create-order - Create Razorpay order
 export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { amount, memberId, membershipId, description } = body;
+    const tenantId = await requireTenant();
 
     // In production, use Razorpay SDK:
     // const Razorpay = require('razorpay');
@@ -19,7 +21,9 @@ export async function POST(request: Request) {
       data: {
         memberId,
         membershipId: membershipId || null,
+        tenantId,
         amount,
+        totalAmount: amount,
         method: "RAZORPAY",
         status: "PENDING",
         description: description || "Membership Payment",
