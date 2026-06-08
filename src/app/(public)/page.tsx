@@ -618,8 +618,6 @@ function BMICalculator() {
     </section>
   );
 }
-  );
-}
 
 /* ─── FAQ ─── */
 function FAQSection() {
