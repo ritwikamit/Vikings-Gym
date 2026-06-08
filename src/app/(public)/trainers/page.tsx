@@ -10,24 +10,17 @@ const TRAINERS = [
   { id: "4", name: "Vikash Kumar", specialization: "Sports Performance", experience: "6 Years", image: "VK", bio: "Expert in athletic conditioning, agility, and explosive power training." },
 ];
 
+const fadeUp = { initial: { opacity: 0, y: 24 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.6, ease: "easeOut" as const } };
+
 export default function TrainersPage() {
   return (
-    <main className="min-h-screen bg-[#0A0A0A] pt-24 pb-12">
-      <div className="container mx-auto px-4">
+    <main className="min-h-screen bg-[#000000] pt-28 pb-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter mb-6"
-          >
-            Our <span className="text-red-600">Trainers</span>
+          <motion.h1 {...fadeUp} className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight mb-6">
+            Our <span className="gradient-text-fire">Trainers</span>
           </motion.h1>
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-gray-400 text-lg"
-          >
+          <motion.p {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.1 }} className="text-[#666] text-lg">
             Meet the experts dedicated to pushing you beyond your limits.
           </motion.p>
         </div>
@@ -38,37 +31,30 @@ export default function TrainersPage() {
               key={trainer.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className="glass rounded-2xl overflow-hidden group border border-white/5 hover:border-red-500/30 transition-all"
+              transition={{ duration: 0.5, delay: index * 0.1, ease: "easeOut" }}
+              className="glass-card rounded-2xl overflow-hidden group hover:border-[#C62828]/20 transition-all duration-500"
             >
-              <div className="h-64 bg-[#1A1A1A] relative flex items-center justify-center">
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-transparent to-transparent z-10 opacity-80 group-hover:opacity-60 transition-opacity" />
-                <span className="text-6xl font-black text-white/10 group-hover:text-red-500/20 transition-colors z-0">
+              <div className="h-64 bg-gradient-to-br from-[#1A1A1A] to-[#0A0A0A] relative flex items-center justify-center">
+                <div className="absolute inset-0 bg-gradient-to-t from-[#000000] via-transparent to-transparent z-10 opacity-80" />
+                <span className="text-6xl font-extrabold text-white/[0.06] group-hover:text-[#C62828]/10 transition-colors z-0">
                   {trainer.image}
                 </span>
-                
-                {/* Social links overlay */}
-                <div className="absolute bottom-4 right-4 z-20 flex gap-2 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all">
-                  <button className="w-8 h-8 rounded-full bg-red-600 text-white flex items-center justify-center hover:bg-red-700">
+                <div className="absolute bottom-4 right-4 z-20 flex gap-2 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+                  <button className="w-8 h-8 rounded-full bg-[#C62828] text-white flex items-center justify-center hover:bg-[#8E0000] transition-colors">
                     <Instagram className="w-4 h-4" />
                   </button>
                 </div>
               </div>
-              
-              <div className="p-6 relative z-20 -mt-8">
+              <div className="p-6 relative z-20 -mt-8 bg-[#0A0A0A] rounded-t-2xl border border-white/[0.04] mx-3">
                 <h3 className="text-xl font-bold text-white mb-1">{trainer.name}</h3>
-                <p className="text-red-500 text-sm font-medium mb-4">{trainer.specialization}</p>
-                
-                <p className="text-gray-400 text-sm mb-6 line-clamp-3">
-                  {trainer.bio}
-                </p>
-                
-                <div className="flex items-center justify-between pt-4 border-t border-white/10">
-                  <div className="flex items-center gap-2 text-gray-300 text-sm">
-                    <Award className="w-4 h-4 text-red-500" />
+                <p className="text-[#C62828] text-sm font-medium mb-4">{trainer.specialization}</p>
+                <p className="text-[#666] text-sm mb-6 leading-relaxed">{trainer.bio}</p>
+                <div className="flex items-center justify-between pt-4 border-t border-white/[0.06]">
+                  <div className="flex items-center gap-2 text-[#A3A3A3] text-sm">
+                    <Award className="w-4 h-4 text-[#C62828]" />
                     <span>{trainer.experience} Exp.</span>
                   </div>
-                  <div className="flex items-center gap-1 text-yellow-500 text-sm font-medium">
+                  <div className="flex items-center gap-1 text-[#C62828] text-sm font-medium">
                     <Star className="w-4 h-4 fill-current" />
                     <span>4.8</span>
                   </div>

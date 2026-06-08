@@ -4,174 +4,106 @@ import { motion } from "framer-motion";
 import { Phone, Mail, MapPin, Clock, Send, Loader2 } from "lucide-react";
 import { useState } from "react";
 
+const fadeLeft = { initial: { opacity: 0, x: -24 }, animate: { opacity: 1, x: 0 }, transition: { duration: 0.6, ease: "easeOut" as const } };
+const fadeRight = { initial: { opacity: 0, x: 24 }, animate: { opacity: 1, x: 0 }, transition: { duration: 0.6, ease: "easeOut" as const } };
+
 export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
-      alert("Message sent successfully! We will get back to you soon.");
-    }, 1500);
+    setTimeout(() => { setIsSubmitting(false); }, 1500);
   };
 
   return (
-    <main className="min-h-screen bg-[#0A0A0A] pt-24 pb-12">
-      <div className="container mx-auto px-4 max-w-6xl">
+    <main className="min-h-screen bg-[#000000] pt-28 pb-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter mb-6"
-          >
-            Contact <span className="text-red-600">Us</span>
+          <motion.h1 {...fadeLeft} className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight mb-6">
+            Contact <span className="gradient-text-fire">Us</span>
           </motion.h1>
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-gray-400 text-lg"
-          >
-            Have questions? We're here to help you start your fitness journey.
+          <motion.p {...fadeLeft} transition={{ ...fadeLeft.transition, delay: 0.1 }} className="text-[#666] text-lg">
+            Have questions? We&apos;re here to help you start your fitness journey.
           </motion.p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Contact Information */}
-          <motion.div 
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-            className="space-y-8"
-          >
-            <div className="glass p-8 rounded-2xl border border-white/5 space-y-8">
-              <h3 className="text-2xl font-bold text-white">Get in Touch</h3>
-              
+          {/* Contact Info */}
+          <motion.div {...fadeLeft} className="space-y-8">
+            <div className="glass-card p-8 rounded-2xl">
+              <h3 className="text-2xl font-bold text-white mb-8">Get in Touch</h3>
               <div className="space-y-6">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-red-600/10 rounded-full flex items-center justify-center shrink-0">
-                    <MapPin className="w-5 h-5 text-red-500" />
+                {[
+                  { icon: MapPin, label: "Location", value: "MG Road, Near Reliance Jewels,\nAurangabad, Bihar - 824101" },
+                  { icon: Phone, label: "Phone", value: "+91 77649 22023", href: "tel:+917764922023" },
+                  { icon: Mail, label: "Email", value: "info@vikingsgym.in", href: "mailto:info@vikingsgym.in" },
+                  { icon: Clock, label: "Hours", value: "Mon - Sat: 5:00 AM - 10:00 PM\nSunday: 6:00 AM - 12:00 PM" },
+                ].map((item) => (
+                  <div key={item.label} className="flex items-start gap-4">
+                    <div className="w-12 h-12 bg-[#C62828]/10 rounded-xl flex items-center justify-center shrink-0">
+                      <item.icon className="w-5 h-5 text-[#C62828]" />
+                    </div>
+                    <div>
+                      <h4 className="text-white font-medium mb-1">{item.label}</h4>
+                      {item.href ? (
+                        <a href={item.href} className="text-[#666] hover:text-white transition-colors whitespace-pre-line">{item.value}</a>
+                      ) : (
+                        <p className="text-[#666] whitespace-pre-line">{item.value}</p>
+                      )}
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="text-white font-medium mb-1">Location</h4>
-                    <p className="text-gray-400">MG Road, Near Reliance Jewels,<br/>Aurangabad, Bihar - 824101</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-red-600/10 rounded-full flex items-center justify-center shrink-0">
-                    <Phone className="w-5 h-5 text-red-500" />
-                  </div>
-                  <div>
-                    <h4 className="text-white font-medium mb-1">Phone</h4>
-                    <p className="text-gray-400">+91 77649 22023</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-red-600/10 rounded-full flex items-center justify-center shrink-0">
-                    <Mail className="w-5 h-5 text-red-500" />
-                  </div>
-                  <div>
-                    <h4 className="text-white font-medium mb-1">Email</h4>
-                    <p className="text-gray-400">info@vikingsgym.in</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-red-600/10 rounded-full flex items-center justify-center shrink-0">
-                    <Clock className="w-5 h-5 text-red-500" />
-                  </div>
-                  <div>
-                    <h4 className="text-white font-medium mb-1">Operating Hours</h4>
-                    <p className="text-gray-400">Mon - Sat: 5:00 AM - 10:00 PM<br/>Sunday: 6:00 AM - 12:00 PM</p>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
-
-            {/* Map Placeholder */}
-            <div className="h-64 glass rounded-2xl border border-white/5 overflow-hidden relative flex items-center justify-center">
-              <div className="absolute inset-0 bg-[#141414] opacity-50 z-0"></div>
-              <p className="relative z-10 text-gray-500 font-medium tracking-widest uppercase">Google Maps Integration</p>
+            {/* Map */}
+            <div className="h-64 rounded-2xl border border-white/[0.04] overflow-hidden relative flex items-center justify-center bg-gradient-to-br from-[#1A1A1A] to-[#0A0A0A]">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3626.7!2d84.3681875!3d24.7517185!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x398d0000000000%3A0x0!2sVIKINGS%20GYM!5e0!3m2!1sen!2sin!4v1700000000000"
+                width="100%" height="100%" style={{ border: 0, filter: 'invert(90%) hue-rotate(180deg)' }}
+                allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" title="Vikings Gym Location" />
             </div>
           </motion.div>
 
-          {/* Contact Form */}
-          <motion.div 
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3 }}
-            className="glass p-8 rounded-2xl border border-white/5"
-          >
-            <h3 className="text-2xl font-bold text-white mb-6">Send us a Message</h3>
-            
+          {/* Form */}
+          <motion.div {...fadeRight} className="glass-card p-8 rounded-2xl">
+            <h3 className="text-2xl font-bold text-white mb-6">Send Us a Message</h3>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-300">First Name</label>
-                  <input
-                    type="text"
-                    required
-                    className="w-full bg-[#141414] border border-[#262626] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500 transition-colors"
-                    placeholder="John"
-                  />
+                  <label className="text-sm font-medium text-[#A3A3A3]">First Name</label>
+                  <input type="text" required
+                    className="w-full bg-white/[0.03] border border-white/[0.06] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#C62828]/50 transition-colors"
+                    placeholder="John" />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-300">Last Name</label>
-                  <input
-                    type="text"
-                    required
-                    className="w-full bg-[#141414] border border-[#262626] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500 transition-colors"
-                    placeholder="Doe"
-                  />
+                  <label className="text-sm font-medium text-[#A3A3A3]">Last Name</label>
+                  <input type="text" required
+                    className="w-full bg-white/[0.03] border border-white/[0.06] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#C62828]/50 transition-colors"
+                    placeholder="Doe" />
                 </div>
               </div>
-
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-300">Email Address</label>
-                <input
-                  type="email"
-                  required
-                  className="w-full bg-[#141414] border border-[#262626] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500 transition-colors"
-                  placeholder="john@example.com"
-                />
+                <label className="text-sm font-medium text-[#A3A3A3]">Email Address</label>
+                <input type="email" required
+                  className="w-full bg-white/[0.03] border border-white/[0.06] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#C62828]/50 transition-colors"
+                  placeholder="john@example.com" />
               </div>
-
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-300">Phone Number</label>
-                <input
-                  type="tel"
-                  required
-                  className="w-full bg-[#141414] border border-[#262626] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500 transition-colors"
-                  placeholder="+91 98765 43210"
-                />
+                <label className="text-sm font-medium text-[#A3A3A3]">Phone Number</label>
+                <input type="tel" required
+                  className="w-full bg-white/[0.03] border border-white/[0.06] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#C62828]/50 transition-colors"
+                  placeholder="+91 98765 43210" />
               </div>
-
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-300">Message</label>
-                <textarea
-                  required
-                  rows={4}
-                  className="w-full bg-[#141414] border border-[#262626] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500 transition-colors resize-none"
-                  placeholder="How can we help you?"
-                ></textarea>
+                <label className="text-sm font-medium text-[#A3A3A3]">Message</label>
+                <textarea required rows={4}
+                  className="w-full bg-white/[0.03] border border-white/[0.06] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#C62828]/50 transition-colors resize-none"
+                  placeholder="How can we help you?" />
               </div>
-
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-4 rounded-xl transition-all flex items-center justify-center gap-2 group disabled:opacity-70 disabled:cursor-not-allowed"
-              >
-                {isSubmitting ? (
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                ) : (
-                  <>
-                    Send Message
-                    <Send className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                  </>
-                )}
+              <button type="submit" disabled={isSubmitting}
+                className="w-full py-4 rounded-xl font-semibold text-sm text-white btn-primary disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+                {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Send className="w-4 h-4" /> Send Message</>}
               </button>
             </form>
           </motion.div>
