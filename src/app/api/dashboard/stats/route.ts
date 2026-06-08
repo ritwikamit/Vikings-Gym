@@ -1,12 +1,45 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { requireTenant } from "@/lib/tenant";
+import { getTenantId } from "@/lib/tenant";
+
+function emptyDashboardData() {
+  const now = new Date();
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const monthlyRevenue = Array.from({length:12},(_,i)=>{
+    const m = (now.getMonth()-11+i+12)%12;
+    return { month: months[m], revenue: 0 };
+  });
+  const newMembersMonthly = Array.from({length:6},(_,i)=>{
+    const m = (now.getMonth()-5+i+12)%12;
+    return { month: months[m], members: 0 };
+  });
+  return {
+    stats: {
+      totalMembers:0, activeMembers:0, expiredMembers:0, expiringMembers:0,
+      revenueThisMonth:0, revenueThisYear:0, attendanceToday:0,
+      trainersCount:0, newMembersThisMonth:0, totalLeads:0,
+    },
+    charts: {
+      monthlyRevenue,
+      newMembersMonthly,
+      membershipDistribution: [
+        { name: "Monthly", value: 0 },
+        { name: "Quarterly", value: 0 },
+        { name: "Half-Yearly", value: 0 },
+        { name: "Annual", value: 0 },
+      ],
+    },
+  };
+}
 
 // GET /api/dashboard/stats
 export async function GET() {
   try {
-    const tenantId = await requireTenant();
+    const tenantId = await getTenantId();
     const now = new Date();
+    if (!tenantId) {
+      return NextResponse.json({ data: emptyDashboardData() });
+    }
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
     const startOfYear = new Date(now.getFullYear(), 0, 1);
     const startOfDay = new Date(now);

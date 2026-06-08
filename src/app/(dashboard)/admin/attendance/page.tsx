@@ -1,17 +1,38 @@
 "use client";
 
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { formatCurrency, formatDate, getStatusColor } from "@/lib/utils";
-import { CalendarCheck, Search, Filter, Camera, CheckCircle, Clock } from "lucide-react";
-
-const MOCK_ATTENDANCE = [
-  { id: "1", member: { name: "Arjun Patel", avatar: "AP" }, checkIn: new Date(), checkOut: null, method: "QR_CODE" },
-  { id: "2", member: { name: "Neha Sharma", avatar: "NS" }, checkIn: new Date(Date.now() - 3600000), checkOut: new Date(), method: "MANUAL" },
-  { id: "3", member: { name: "Ravi Kumar", avatar: "RK" }, checkIn: new Date(Date.now() - 7200000), checkOut: null, method: "QR_CODE" },
-];
+import { CalendarCheck, Search, Filter, Camera, CheckCircle, Clock, ChevronLeft, ChevronRight } from "lucide-react";
+import { QRScannerModal } from "@/features/admin/components/QRScannerModal";
 
 export default function AttendancePage() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isScannerOpen, setIsScannerOpen] = useState(false);
+  const perPage = 20;
+
+  const { data: attendanceData, isLoading } = useQuery({
+    queryKey: ['attendance', searchTerm, currentPage],
+    queryFn: async () => {
+      const params = new URLSearchParams({
+        page: currentPage.toString(),
+        limit: perPage.toString(),
+      });
+      // Note: Backend might not support search yet, but we'll include it if it does
+      const res = await fetch(`/api/attendance?${params.toString()}`);
+      if (!res.ok) throw new Error('Failed to fetch attendance');
+      return res.json();
+    },
+  });
+
+  const records = attendanceData?.data || [];
+  const pagination = attendanceData?.pagination || { totalPages: 1, total: 0 };
+
+  // Filter local if backend doesn't support search
+  const filteredRecords = records.filter((r: any) => 
+    r.member.user.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="space-y-6">
@@ -30,7 +51,7 @@ export default function AttendancePage() {
             </div>
             <div>
               <p className="text-sm text-gray-400">Total Check-ins</p>
-              <h3 className="text-2xl font-bold text-white">42</h3>
+              <h3 className="text-2xl font-bold text-white">{pagination.total}</h3>
             </div>
           </div>
         </div>
@@ -40,16 +61,21 @@ export default function AttendancePage() {
               <Clock className="w-6 h-6 text-blue-500" />
             </div>
             <div>
-              <p className="text-sm text-gray-400">Currently In</p>
-              <h3 className="text-2xl font-bold text-white">15</h3>
+              <p className="text-sm text-gray-400">Records (Current Page)</p>
+              <h3 className="text-2xl font-bold text-white">{records.length}</h3>
             </div>
           </div>
         </div>
-        <div className="glass rounded-xl p-6 flex flex-col justify-center items-center gap-2 cursor-pointer hover:bg-white/5 transition">
+        <div 
+          onClick={() => setIsScannerOpen(true)}
+          className="glass rounded-xl p-6 flex flex-col justify-center items-center gap-2 cursor-pointer hover:bg-white/5 transition border-dashed border-2 border-white/10 hover:border-red-500/50"
+        >
           <Camera className="w-8 h-8 text-red-500" />
           <span className="text-white font-medium">Scan QR Code</span>
         </div>
       </div>
+
+      <QRScannerModal isOpen={isScannerOpen} onClose={() => setIsScannerOpen(false)} />
 
       <div className="glass rounded-xl p-6">
         <div className="flex flex-col sm:flex-row justify-between gap-4 mb-6">
@@ -69,40 +95,80 @@ export default function AttendancePage() {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>Member</th>
-                <th>Check In</th>
-                <th>Check Out</th>
-                <th>Method</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {MOCK_ATTENDANCE.map((record) => (
-                <tr key={record.id}>
-                  <td className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-red-500/20 text-red-500 flex items-center justify-center font-medium text-xs">
-                      {record.member.avatar}
-                    </div>
-                    <span className="text-white">{record.member.name}</span>
-                  </td>
-                  <td className="text-gray-300">{record.checkIn.toLocaleTimeString()}</td>
-                  <td className="text-gray-300">{record.checkOut ? record.checkOut.toLocaleTimeString() : "-"}</td>
-                  <td className="text-gray-300">{record.method}</td>
-                  <td>
-                    {!record.checkOut && (
-                      <button className="text-xs px-3 py-1 bg-red-500/20 text-red-500 rounded hover:bg-red-500/30">
-                        Check Out
-                      </button>
-                    )}
-                  </td>
+          {isLoading ? (
+            <div className="flex flex-col items-center justify-center py-20">
+              <div className="w-10 h-10 border-4 border-[#DC2626] border-t-transparent rounded-full animate-spin mb-4" />
+              <p className="text-[#737373] text-sm">Loading attendance...</p>
+            </div>
+          ) : (
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>Member</th>
+                  <th>Date</th>
+                  <th>Check In</th>
+                  <th>Check Out</th>
+                  <th>Method</th>
+                  <th>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filteredRecords.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="text-center py-8 text-gray-500">No attendance records found.</td>
+                  </tr>
+                ) : (
+                  filteredRecords.map((record: any) => (
+                    <tr key={record.id}>
+                      <td className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-red-500/20 text-red-500 flex items-center justify-center font-medium text-xs">
+                          {record.member.user.avatar || record.member.user.name.charAt(0)}
+                        </div>
+                        <span className="text-white">{record.member.user.name}</span>
+                      </td>
+                      <td className="text-gray-300">{formatDate(record.date)}</td>
+                      <td className="text-gray-300">{new Date(record.checkIn).toLocaleTimeString()}</td>
+                      <td className="text-gray-300">{record.checkOut ? new Date(record.checkOut).toLocaleTimeString() : "-"}</td>
+                      <td className="text-gray-300 text-xs font-mono">{record.method}</td>
+                      <td>
+                        {!record.checkOut && (
+                          <button className="text-xs px-3 py-1 bg-red-500/20 text-red-500 rounded hover:bg-red-500/30 transition-colors">
+                            Check Out
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          )}
         </div>
+
+        {/* Pagination */}
+        {pagination.totalPages > 1 && (
+          <div className="flex items-center justify-between mt-6 px-2">
+            <p className="text-xs text-[#737373]">
+              Page {currentPage} of {pagination.totalPages}
+            </p>
+            <div className="flex items-center gap-2">
+              <button
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage(p => p - 1)}
+                className="p-2 rounded-lg bg-[#1A1A1A] border border-[#333333] text-[#737373] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                <ChevronLeft size={16} />
+              </button>
+              <button
+                disabled={currentPage === pagination.totalPages}
+                onClick={() => setCurrentPage(p => p + 1)}
+                className="p-2 rounded-lg bg-[#1A1A1A] border border-[#333333] text-[#737373] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                <ChevronRight size={16} />
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

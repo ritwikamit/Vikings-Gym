@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useQuery } from '@tanstack/react-query';
 import { cn, formatDate, getInitials } from '@/lib/utils';
 import {
   Search,
@@ -17,20 +18,7 @@ import {
   UserPlus,
   X,
 } from 'lucide-react';
-
-// --- Mock Data ---
-const mockMembers = [
-  { id: '1', name: 'Rahul Kumar', phone: '+91 98765 43210', email: 'rahul.k@email.com', gender: 'Male', status: 'ACTIVE', joinDate: '2025-01-15', plan: 'Quarterly' },
-  { id: '2', name: 'Priya Singh', phone: '+91 87654 32109', email: 'priya.s@email.com', gender: 'Female', status: 'ACTIVE', joinDate: '2025-02-20', plan: 'Annual' },
-  { id: '3', name: 'Amit Verma', phone: '+91 76543 21098', email: 'amit.v@email.com', gender: 'Male', status: 'EXPIRED', joinDate: '2024-08-10', plan: 'Monthly' },
-  { id: '4', name: 'Sneha Gupta', phone: '+91 65432 10987', email: 'sneha.g@email.com', gender: 'Female', status: 'ACTIVE', joinDate: '2025-03-05', plan: 'Half-Yearly' },
-  { id: '5', name: 'Vikash Yadav', phone: '+91 54321 09876', email: 'vikash.y@email.com', gender: 'Male', status: 'FROZEN', joinDate: '2024-11-18', plan: 'Quarterly' },
-  { id: '6', name: 'Anjali Kumari', phone: '+91 43210 98765', email: 'anjali.k@email.com', gender: 'Female', status: 'ACTIVE', joinDate: '2025-04-12', plan: 'Monthly' },
-  { id: '7', name: 'Ravi Shankar', phone: '+91 32109 87654', email: 'ravi.s@email.com', gender: 'Male', status: 'ACTIVE', joinDate: '2024-06-22', plan: 'Annual' },
-  { id: '8', name: 'Deepak Prasad', phone: '+91 21098 76543', email: 'deepak.p@email.com', gender: 'Male', status: 'EXPIRED', joinDate: '2024-09-30', plan: 'Monthly' },
-  { id: '9', name: 'Kavita Devi', phone: '+91 10987 65432', email: 'kavita.d@email.com', gender: 'Female', status: 'ACTIVE', joinDate: '2025-05-01', plan: 'Quarterly' },
-  { id: '10', name: 'Sunil Kumar', phone: '+91 99887 66554', email: 'sunil.k@email.com', gender: 'Male', status: 'ACTIVE', joinDate: '2025-05-20', plan: 'Half-Yearly' },
-];
+import { AddMemberModal } from '@/features/admin/components/AddMemberModal';
 
 const statusColors: Record<string, { bg: string; text: string; border: string }> = {
   ACTIVE: { bg: 'rgba(34,197,94,0.1)', text: '#22C55E', border: 'rgba(34,197,94,0.2)' },
@@ -40,24 +28,30 @@ const statusColors: Record<string, { bg: string; text: string; border: string }>
 };
 
 export default function MembersPage() {
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('ALL');
   const [genderFilter, setGenderFilter] = useState('ALL');
   const [currentPage, setCurrentPage] = useState(1);
-  const perPage = 8;
+  const perPage = 10;
 
-  const filtered = mockMembers.filter((m) => {
-    const matchSearch =
-      m.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      m.phone.includes(searchQuery) ||
-      m.email.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchStatus = statusFilter === 'ALL' || m.status === statusFilter;
-    const matchGender = genderFilter === 'ALL' || m.gender === genderFilter;
-    return matchSearch && matchStatus && matchGender;
+  const { data: membersData, isLoading } = useQuery({
+    queryKey: ['members', searchQuery, statusFilter, genderFilter, currentPage],
+    queryFn: async () => {
+      const params = new URLSearchParams({
+        search: searchQuery,
+        status: statusFilter === 'ALL' ? '' : statusFilter,
+        page: currentPage.toString(),
+        limit: perPage.toString(),
+      });
+      const res = await fetch(`/api/members?${params.toString()}`);
+      if (!res.ok) throw new Error('Failed to fetch members');
+      return res.json();
+    },
   });
 
-  const totalPages = Math.ceil(filtered.length / perPage);
-  const paginated = filtered.slice((currentPage - 1) * perPage, currentPage * perPage);
+  const members = membersData?.data || [];
+  const pagination = membersData?.pagination || { totalPages: 1, total: 0 };
 
   return (
     <motion.div
@@ -70,19 +64,24 @@ export default function MembersPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h2 className="text-2xl font-bold text-white">Member Management</h2>
-          <p className="text-sm text-[#737373]">{filtered.length} members found</p>
+          <p className="text-sm text-[#737373]">{pagination.total} members found</p>
         </div>
         <div className="flex items-center gap-3">
           <button className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#1A1A1A] border border-[#333333] text-sm text-[#A3A3A3] hover:text-white hover:border-[#DC2626]/30 transition-colors">
             <Download size={16} />
             <span className="hidden sm:inline">Export</span>
           </button>
-          <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-[#DC2626] to-[#B91C1C] text-sm font-semibold text-white hover:shadow-lg hover:shadow-red-500/20 transition-all">
+          <button
+            onClick={() => setIsAddModalOpen(true)}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-[#DC2626] to-[#B91C1C] text-sm font-semibold text-white hover:shadow-lg hover:shadow-red-500/20 transition-all"
+          >
             <UserPlus size={16} />
             Add Member
           </button>
         </div>
       </div>
+
+      <AddMemberModal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} />
 
       {/* Filters */}
       <div className="glass rounded-xl p-4">
@@ -103,33 +102,38 @@ export default function MembersPage() {
               </button>
             )}
           </div>
-          {/* Status Filter */}
-          <select
-            value={statusFilter}
-            onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }}
-            className="h-10 px-3 rounded-lg bg-[#1A1A1A] border border-[#333333] text-sm text-white focus:outline-none focus:border-[#DC2626] transition-colors appearance-none cursor-pointer"
-          >
-            <option value="ALL">All Statuses</option>
-            <option value="ACTIVE">Active</option>
-            <option value="EXPIRED">Expired</option>
-            <option value="FROZEN">Frozen</option>
-          </select>
-          {/* Gender Filter */}
-          <select
-            value={genderFilter}
-            onChange={(e) => { setGenderFilter(e.target.value); setCurrentPage(1); }}
-            className="h-10 px-3 rounded-lg bg-[#1A1A1A] border border-[#333333] text-sm text-white focus:outline-none focus:border-[#DC2626] transition-colors appearance-none cursor-pointer"
-          >
-            <option value="ALL">All Genders</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-          </select>
+          <div className="flex items-center gap-3">
+            <select
+              value={statusFilter}
+              onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }}
+              className="h-10 px-3 rounded-lg bg-[#1A1A1A] border border-[#333333] text-sm text-white focus:outline-none focus:border-[#DC2626] transition-colors appearance-none cursor-pointer"
+            >
+              <option value="ALL">All Statuses</option>
+              <option value="ACTIVE">Active</option>
+              <option value="EXPIRED">Expired</option>
+              <option value="FROZEN">Frozen</option>
+            </select>
+            <select
+              value={genderFilter}
+              onChange={(e) => { setGenderFilter(e.target.value); setCurrentPage(1); }}
+              className="h-10 px-3 rounded-lg bg-[#1A1A1A] border border-[#333333] text-sm text-white focus:outline-none focus:border-[#DC2626] transition-colors appearance-none cursor-pointer"
+            >
+              <option value="ALL">All Genders</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </div>
         </div>
       </div>
 
       {/* Table */}
       <div className="glass rounded-xl overflow-hidden">
-        {paginated.length > 0 ? (
+        {isLoading ? (
+          <div className="flex flex-col items-center justify-center py-20">
+            <div className="w-10 h-10 border-4 border-[#DC2626] border-t-transparent rounded-full animate-spin mb-4" />
+            <p className="text-[#737373] text-sm">Loading members...</p>
+          </div>
+        ) : members.length > 0 ? (
           <>
             <div className="overflow-x-auto">
               <table className="data-table">
@@ -145,30 +149,32 @@ export default function MembersPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {paginated.map((member) => {
-                    const sc = statusColors[member.status] || statusColors.CANCELLED;
+                  {members.map((m: any) => {
+                    const activeMembership = m.memberships?.[0];
+                    const status = activeMembership?.status || 'INACTIVE';
+                    const sc = statusColors[status] || statusColors.CANCELLED;
                     return (
-                      <tr key={member.id}>
+                      <tr key={m.id}>
                         <td>
                           <div className="flex items-center gap-3">
                             <div className="w-9 h-9 rounded-full bg-[#1A1A1A] border border-[#333333] flex items-center justify-center shrink-0">
-                              <span className="text-xs font-semibold text-[#A3A3A3]">{getInitials(member.name)}</span>
+                              <span className="text-xs font-semibold text-[#A3A3A3]">{getInitials(m.user.name)}</span>
                             </div>
-                            <span className="font-medium text-white whitespace-nowrap">{member.name}</span>
+                            <span className="font-medium text-white whitespace-nowrap">{m.user.name}</span>
                           </div>
                         </td>
-                        <td className="text-[#A3A3A3] whitespace-nowrap">{member.phone}</td>
-                        <td className="hidden md:table-cell text-[#A3A3A3]">{member.email}</td>
+                        <td className="text-[#A3A3A3] whitespace-nowrap">{m.user.phone}</td>
+                        <td className="hidden md:table-cell text-[#A3A3A3]">{m.user.email}</td>
                         <td>
                           <span
                             className="badge"
                             style={{ backgroundColor: sc.bg, color: sc.text, borderColor: sc.border, border: `1px solid ${sc.border}` }}
                           >
-                            {member.status}
+                            {status}
                           </span>
                         </td>
-                        <td className="hidden lg:table-cell text-[#A3A3A3]">{member.plan}</td>
-                        <td className="hidden sm:table-cell text-[#A3A3A3] whitespace-nowrap">{formatDate(member.joinDate)}</td>
+                        <td className="hidden lg:table-cell text-[#A3A3A3]">{activeMembership?.plan?.name || '-'}</td>
+                        <td className="hidden sm:table-cell text-[#A3A3A3] whitespace-nowrap">{formatDate(m.createdAt)}</td>
                         <td>
                           <div className="flex items-center gap-1">
                             <button className="p-1.5 rounded-lg text-[#737373] hover:text-[#3B82F6] hover:bg-[#3B82F6]/10 transition-colors" title="View">
@@ -190,10 +196,10 @@ export default function MembersPage() {
             </div>
 
             {/* Pagination */}
-            {totalPages > 1 && (
+            {pagination.totalPages > 1 && (
               <div className="flex items-center justify-between px-4 py-3 border-t border-[#262626]">
                 <p className="text-xs text-[#737373]">
-                  Showing {(currentPage - 1) * perPage + 1}–{Math.min(currentPage * perPage, filtered.length)} of {filtered.length}
+                  Page {currentPage} of {pagination.totalPages}
                 </p>
                 <div className="flex items-center gap-1">
                   <button
@@ -203,23 +209,9 @@ export default function MembersPage() {
                   >
                     <ChevronLeft size={16} />
                   </button>
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                    <button
-                      key={page}
-                      onClick={() => setCurrentPage(page)}
-                      className={cn(
-                        'w-8 h-8 rounded-lg text-xs font-medium transition-colors',
-                        page === currentPage
-                          ? 'bg-[#DC2626] text-white'
-                          : 'text-[#737373] hover:text-white hover:bg-[#1A1A1A]'
-                      )}
-                    >
-                      {page}
-                    </button>
-                  ))}
                   <button
-                    onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                    disabled={currentPage === totalPages}
+                    onClick={() => setCurrentPage((p) => Math.min(pagination.totalPages, p + 1))}
+                    disabled={currentPage === pagination.totalPages}
                     className="p-1.5 rounded-lg text-[#737373] hover:text-white hover:bg-[#1A1A1A] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                   >
                     <ChevronRight size={16} />

@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Lock, Mail, ArrowRight, Loader2, Eye, EyeOff, Crown } from "lucide-react";
 import Image from "next/image";
+import { signIn } from "next-auth/react";
+import toast from "react-hot-toast";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -17,7 +19,16 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setTimeout(() => { setIsLoading(false); router.push("/admin/dashboard"); }, 1500);
+    const result = await signIn("credentials", {
+      email, password, redirect: false,
+    });
+    setIsLoading(false);
+    if (result?.ok) {
+      toast.success("Welcome back, warrior!");
+      router.push("/admin/dashboard");
+    } else {
+      toast.error(result?.error || "Invalid credentials");
+    }
   };
 
   return (
@@ -37,10 +48,10 @@ export default function LoginPage() {
       <div className="absolute bottom-1/4 -right-32 w-[400px] h-[400px] bg-[#8E0000]/5 rounded-full blur-[120px]" />
 
       {/* Left - Brand Section */}
-      <div className="hidden lg:flex w-1/2 flex-col justify-between p-12 lg:p-16 relative z-10">
+      <div className="hidden lg:flex w-1/2 flex-col justify-between p-8 lg:p-12 relative z-10">
         <div>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <Link href="/" className="inline-flex items-center gap-3 mb-12">
+            <Link href="/" className="inline-flex items-center gap-3 mb-8">
               <div className="relative w-12 h-12 overflow-hidden rounded-xl border border-white/10">
                 <Image src="/logo.png" alt="Vikings Gym" fill className="object-contain p-0.5" />
               </div>
@@ -56,7 +67,7 @@ export default function LoginPage() {
               <Crown className="w-3.5 h-3.5" />
               Welcome Back
             </div>
-            <h1 className="font-podium text-[clamp(2.8rem,5vw,4rem)] text-white leading-[1.1] mb-6">
+            <h1 className="font-podium text-[clamp(2.2rem,4vw,3.2rem)] text-white leading-[1.1] mb-5">
               Forge Your<br />
               <span className="gradient-text-fire">Next Chapter</span>
             </h1>
@@ -65,7 +76,7 @@ export default function LoginPage() {
             </p>
           </motion.div>
 
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }} className="mt-16">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }} className="mt-8">
             <div className="flex items-center gap-3 text-xs text-[#525252]">
               <div className="flex -space-x-2">
                 {[1, 2, 3].map((i) => (

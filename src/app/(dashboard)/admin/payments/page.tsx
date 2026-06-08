@@ -1,17 +1,38 @@
 "use client";
 
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { formatCurrency, formatDate, getStatusColor } from "@/lib/utils";
-import { Search, Filter, IndianRupee, TrendingUp } from "lucide-react";
-
-const MOCK_PAYMENTS = [
-  { id: "1", member: "Arjun Patel", amount: 4000, date: new Date(), method: "UPI", status: "COMPLETED", invoice: "VGM-1234" },
-  { id: "2", member: "Neha Sharma", amount: 1500, date: new Date(Date.now() - 86400000), method: "CASH", status: "COMPLETED", invoice: "VGM-1235" },
-  { id: "3", member: "Ravi Kumar", amount: 12000, date: new Date(Date.now() - 172800000), method: "CARD", status: "PENDING", invoice: "VGM-1236" },
-];
+import { Search, Filter, IndianRupee, TrendingUp, ChevronLeft, ChevronRight } from "lucide-react";
+import { RecordPaymentModal } from "@/features/admin/components/RecordPaymentModal";
 
 export default function PaymentsPage() {
+  const [isRecordModalOpen, setIsRecordModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const perPage = 20;
+
+  const { data: paymentsData, isLoading } = useQuery({
+    queryKey: ['payments', currentPage],
+    queryFn: async () => {
+      const params = new URLSearchParams({
+        page: currentPage.toString(),
+        limit: perPage.toString(),
+      });
+      const res = await fetch(`/api/payments?${params.toString()}`);
+      if (!res.ok) throw new Error('Failed to fetch payments');
+      return res.json();
+    },
+  });
+
+  const payments = paymentsData?.data || [];
+  const totalRevenue = paymentsData?.totalRevenue || 0;
+  const pagination = paymentsData?.pagination || { totalPages: 1, total: 0 };
+
+  const filteredPayments = payments.filter((p: any) => 
+    p.member.user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    p.invoiceNumber?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="space-y-6">
@@ -20,7 +41,18 @@ export default function PaymentsPage() {
           <h1 className="text-2xl font-bold text-white">Payments</h1>
           <p className="text-sm text-gray-400">Manage transactions and revenues.</p>
         </div>
+        <div className="flex items-center gap-3">
+          <button 
+            onClick={() => setIsRecordModalOpen(true)}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-[#10B981] to-[#059669] text-sm font-semibold text-white hover:shadow-lg hover:shadow-emerald-500/20 transition-all"
+          >
+            <IndianRupee size={16} />
+            Record Payment
+          </button>
+        </div>
       </div>
+
+      <RecordPaymentModal isOpen={isRecordModalOpen} onClose={() => setIsRecordModalOpen(false)} />
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <div className="glass rounded-xl p-6">
@@ -29,8 +61,8 @@ export default function PaymentsPage() {
               <IndianRupee className="w-6 h-6 text-yellow-500" />
             </div>
             <div>
-              <p className="text-sm text-gray-400">Revenue Today</p>
-              <h3 className="text-2xl font-bold text-white">{formatCurrency(4000)}</h3>
+              <p className="text-sm text-gray-400">Total Transactions</p>
+              <h3 className="text-2xl font-bold text-white">{pagination.total}</h3>
             </div>
           </div>
         </div>
@@ -40,8 +72,8 @@ export default function PaymentsPage() {
               <TrendingUp className="w-6 h-6 text-green-500" />
             </div>
             <div>
-              <p className="text-sm text-gray-400">This Month</p>
-              <h3 className="text-2xl font-bold text-white">{formatCurrency(45000)}</h3>
+              <p className="text-sm text-gray-400">Total Revenue (All Time)</p>
+              <h3 className="text-2xl font-bold text-white">{formatCurrency(totalRevenue)}</h3>
             </div>
           </div>
         </div>
@@ -65,41 +97,79 @@ export default function PaymentsPage() {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>Invoice</th>
-                <th>Member</th>
-                <th>Amount</th>
-                <th>Date</th>
-                <th>Method</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {MOCK_PAYMENTS.map((payment) => (
-                <tr key={payment.id}>
-                  <td className="text-white font-mono text-xs">{payment.invoice}</td>
-                  <td className="text-white">{payment.member}</td>
-                  <td className="text-white font-medium">{formatCurrency(payment.amount)}</td>
-                  <td className="text-gray-300">{formatDate(payment.date)}</td>
-                  <td className="text-gray-300">{payment.method}</td>
-                  <td>
-                    <span className={`badge ${payment.status === "COMPLETED" ? "badge-active" : "badge-pending"}`}>
-                      {payment.status}
-                    </span>
-                  </td>
-                  <td>
-                    <button className="text-xs px-3 py-1 bg-blue-500/20 text-blue-500 rounded hover:bg-blue-500/30">
-                      View
-                    </button>
-                  </td>
+          {isLoading ? (
+            <div className="flex flex-col items-center justify-center py-20">
+              <div className="w-10 h-10 border-4 border-[#DC2626] border-t-transparent rounded-full animate-spin mb-4" />
+              <p className="text-[#737373] text-sm">Loading payments...</p>
+            </div>
+          ) : (
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>Invoice</th>
+                  <th>Member</th>
+                  <th>Amount</th>
+                  <th>Date</th>
+                  <th>Method</th>
+                  <th>Status</th>
+                  <th>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filteredPayments.length === 0 ? (
+                  <tr>
+                    <td colSpan={7} className="text-center py-8 text-gray-500">No payments found.</td>
+                  </tr>
+                ) : (
+                  filteredPayments.map((payment: any) => (
+                    <tr key={payment.id}>
+                      <td className="text-white font-mono text-xs">{payment.invoiceNumber}</td>
+                      <td className="text-white">{payment.member.user.name}</td>
+                      <td className="text-white font-medium">{formatCurrency(payment.amount)}</td>
+                      <td className="text-gray-300">{formatDate(payment.createdAt)}</td>
+                      <td className="text-gray-300">{payment.method}</td>
+                      <td>
+                        <span className={`badge ${payment.status === "PAID" || payment.status === "COMPLETED" ? "badge-active" : "badge-pending"}`}>
+                          {payment.status}
+                        </span>
+                      </td>
+                      <td>
+                        <button className="text-xs px-3 py-1 bg-blue-500/20 text-blue-500 rounded hover:bg-blue-500/30 transition-colors">
+                          View
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          )}
         </div>
+
+        {/* Pagination */}
+        {pagination.totalPages > 1 && (
+          <div className="flex items-center justify-between mt-6 px-2">
+            <p className="text-xs text-[#737373]">
+              Page {currentPage} of {pagination.totalPages}
+            </p>
+            <div className="flex items-center gap-2">
+              <button
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage(p => p - 1)}
+                className="p-2 rounded-lg bg-[#1A1A1A] border border-[#333333] text-[#737373] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                <ChevronLeft size={16} />
+              </button>
+              <button
+                disabled={currentPage === pagination.totalPages}
+                onClick={() => setCurrentPage(p => p + 1)}
+                className="p-2 rounded-lg bg-[#1A1A1A] border border-[#333333] text-[#737373] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                <ChevronRight size={16} />
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

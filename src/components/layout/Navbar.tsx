@@ -62,7 +62,7 @@ export default function Navbar() {
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center gap-1 px-1.5 py-1.5 glass rounded-2xl border border-white/5">
+            <div className="hidden lg:flex items-center gap-1.5 px-1.5 py-1.5 glass rounded-2xl border border-white/5">
               {NAV_LINKS.map((link) => {
                 const isActive = pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href));
                 return (
@@ -70,7 +70,7 @@ export default function Navbar() {
                     key={link.name}
                     href={link.href}
                     className={cn(
-                      'relative px-5 py-2 text-[13px] font-semibold transition-all duration-300 rounded-xl overflow-hidden group/link',
+                      'relative px-6 py-2.5 text-[13px] font-semibold transition-all duration-300 rounded-xl overflow-hidden group/link',
                       isActive ? 'text-white' : 'text-white/60 hover:text-white'
                     )}
                   >

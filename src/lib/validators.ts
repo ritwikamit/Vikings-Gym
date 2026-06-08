@@ -162,8 +162,8 @@ export const inventoryItemSchema = z.object({
   name: z.string().min(2, "Item name is required"),
   category: z.enum(["SUPPLEMENT", "MERCHANDISE", "ACCESSORY", "EQUIPMENT"]),
   description: z.string().optional(),
-  quantity: z.number().int().min(0).default(0),
-  minQuantity: z.number().int().min(0).default(5),
+  quantity: z.number().int().min(0),
+  minQuantity: z.number().int().min(0),
   price: z.number().positive().optional(),
   supplier: z.string().optional(),
 });

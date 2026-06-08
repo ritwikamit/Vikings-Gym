@@ -33,21 +33,25 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/favicon.ico", sizes: "any" },
       { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
       { url: "/favicon.png", sizes: "32x32", type: "image/png" },
     ],
     apple: "/apple-touch-icon.png",
+    shortcut: "/favicon.png",
   },
   robots: { index: true, follow: true },
   metadataBase: new URL("https://vikingsgym.in"),
 };
 
+import Providers from "@/components/Providers";
+
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={cn("dark", inter.variable, sora.variable)} suppressHydrationWarning>
       <body className="antialiased" suppressHydrationWarning>
-        {children}
+        <Providers>
+          {children}
+        </Providers>
         <Toaster
           position="top-right"
           toastOptions={{

@@ -6,17 +6,52 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { ArrowRight, Loader2, User, Mail, Phone, Lock, Crown, ChevronLeft, Dumbbell } from "lucide-react";
 import Image from "next/image";
+import { signIn } from "next-auth/react";
+import toast from "react-hot-toast";
 
 export default function RegisterPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState(1);
+  const [formData, setFormData] = useState({
+    name: "", email: "", phone: "", password: "", fitnessGoal: "", referralCode: "",
+  });
+
+  const update = (field: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
+    setFormData(prev => ({ ...prev, [field]: e.target.value }));
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (step < 2) { setStep(2); return; }
     setIsLoading(true);
-    setTimeout(() => { setIsLoading(false); router.push("/member/dashboard"); }, 1500);
+    try {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        toast.error(err.error || "Registration failed");
+        setIsLoading(false);
+        return;
+      }
+      const result = await signIn("credentials", {
+        email: formData.email,
+        password: formData.password,
+        redirect: false,
+      });
+      if (result?.ok) {
+        toast.success("Welcome to the tribe, warrior!");
+        router.push("/member/dashboard");
+      } else {
+        toast.error("Account created, please sign in");
+        router.push("/login");
+      }
+    } catch {
+      toast.error("Something went wrong");
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -34,10 +69,10 @@ export default function RegisterPage() {
       <div className="absolute bottom-1/4 -right-32 w-[400px] h-[400px] bg-[#8E0000]/5 rounded-full blur-[120px]" />
 
       {/* Left Brand */}
-      <div className="hidden lg:flex w-1/2 flex-col justify-between p-12 lg:p-16 relative z-10">
+      <div className="hidden lg:flex w-1/2 flex-col justify-between p-8 lg:p-12 relative z-10">
         <div>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <Link href="/" className="inline-flex items-center gap-3 mb-12">
+            <Link href="/" className="inline-flex items-center gap-3 mb-8">
               <div className="relative w-12 h-12 overflow-hidden rounded-xl border border-white/10">
                 <Image src="/logo.png" alt="Vikings Gym" fill className="object-contain p-0.5" />
               </div>
@@ -53,7 +88,7 @@ export default function RegisterPage() {
               <Dumbbell className="w-3.5 h-3.5" />
               Join the Tribe
             </div>
-            <h1 className="font-podium text-[clamp(2.8rem,5vw,4rem)] text-white leading-[1.1] mb-6">
+            <h1 className="font-podium text-[clamp(2.2rem,4vw,3.2rem)] text-white leading-[1.1] mb-5">
               Begin Your<br />
               <span className="gradient-text-fire">Transformation</span>
             </h1>
@@ -62,7 +97,7 @@ export default function RegisterPage() {
             </p>
           </motion.div>
 
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }} className="mt-16">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }} className="mt-8">
             <div className="flex items-center gap-3 text-xs text-[#525252]">
               <div className="flex -space-x-2">
                 {[1, 2, 3].map((i) => (
@@ -125,7 +160,7 @@ export default function RegisterPage() {
                       <label className="text-xs font-medium text-[#A3A3A3] tracking-wider uppercase">Full Name</label>
                       <div className="relative group">
                         <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#525252] group-focus-within:text-[#E11D48] transition-colors duration-300" />
-                        <input type="text" required
+                        <input type="text" required value={formData.name} onChange={update("name")}
                           className="w-full bg-white/[0.03] border border-white/[0.06] rounded-xl pl-10 pr-4 py-3 text-white text-sm placeholder-[#525252] focus:outline-none focus:border-[#E11D48]/40 focus:bg-white/[0.05] transition-all duration-300"
                           placeholder="John Doe" />
                       </div>
@@ -134,7 +169,7 @@ export default function RegisterPage() {
                       <label className="text-xs font-medium text-[#A3A3A3] tracking-wider uppercase">Email</label>
                       <div className="relative group">
                         <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#525252] group-focus-within:text-[#E11D48] transition-colors duration-300" />
-                        <input type="email" required
+                        <input type="email" required value={formData.email} onChange={update("email")}
                           className="w-full bg-white/[0.03] border border-white/[0.06] rounded-xl pl-10 pr-4 py-3 text-white text-sm placeholder-[#525252] focus:outline-none focus:border-[#E11D48]/40 focus:bg-white/[0.05] transition-all duration-300"
                           placeholder="name@example.com" />
                       </div>
@@ -143,7 +178,7 @@ export default function RegisterPage() {
                       <label className="text-xs font-medium text-[#A3A3A3] tracking-wider uppercase">Phone</label>
                       <div className="relative group">
                         <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#525252] group-focus-within:text-[#E11D48] transition-colors duration-300" />
-                        <input type="tel" required
+                        <input type="tel" required value={formData.phone} onChange={update("phone")}
                           className="w-full bg-white/[0.03] border border-white/[0.06] rounded-xl pl-10 pr-4 py-3 text-white text-sm placeholder-[#525252] focus:outline-none focus:border-[#E11D48]/40 focus:bg-white/[0.05] transition-all duration-300"
                           placeholder="+91 98765 43210" />
                       </div>
@@ -157,14 +192,14 @@ export default function RegisterPage() {
                       <label className="text-xs font-medium text-[#A3A3A3] tracking-wider uppercase">Create Password</label>
                       <div className="relative group">
                         <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#525252] group-focus-within:text-[#E11D48] transition-colors duration-300" />
-                        <input type="password" required
+                        <input type="password" required value={formData.password} onChange={update("password")}
                           className="w-full bg-white/[0.03] border border-white/[0.06] rounded-xl pl-10 pr-4 py-3 text-white text-sm placeholder-[#525252] focus:outline-none focus:border-[#E11D48]/40 focus:bg-white/[0.05] transition-all duration-300"
                           placeholder="••••••••" />
                       </div>
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-medium text-[#A3A3A3] tracking-wider uppercase">Fitness Goal</label>
-                      <select
+                      <select value={formData.fitnessGoal} onChange={update("fitnessGoal")}
                         className="w-full bg-white/[0.03] border border-white/[0.06] rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-[#E11D48]/40 transition-all duration-300 appearance-none cursor-pointer">
                         <option value="" className="bg-[#0A0A0A]">Select your goal</option>
                         <option value="weight_loss" className="bg-[#0A0A0A]">Weight Loss</option>
@@ -176,7 +211,7 @@ export default function RegisterPage() {
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-medium text-[#A3A3A3] tracking-wider uppercase">Referral Code (Optional)</label>
-                      <input type="text"
+                      <input type="text" value={formData.referralCode} onChange={update("referralCode")}
                         className="w-full bg-white/[0.03] border border-white/[0.06] rounded-xl px-4 py-3 text-white text-sm placeholder-[#525252] focus:outline-none focus:border-[#E11D48]/40 transition-all duration-300"
                         placeholder="REF-XXXXXX" />
                     </div>
