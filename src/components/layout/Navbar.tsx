@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
-import { Menu, X, ChevronRight } from 'lucide-react';
+import { Menu, X, ArrowUpRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { NAV_LINKS } from '@/lib/constants';
 
@@ -13,11 +13,6 @@ const navVariants = {
   hidden: { y: -100, opacity: 0 },
   visible: { y: 0, opacity: 1, transition: { duration: 0.6, ease: "easeOut" as const } },
 } as const;
-
-const mobileItemVariants = {
-  hidden: { opacity: 0, x: 24 },
-  visible: (i: number) => ({ opacity: 1, x: 0, transition: { delay: i * 0.06, duration: 0.4, ease: "easeOut" as const } }),
-};
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -75,7 +70,7 @@ export default function Navbar() {
                     href={link.href}
                     className={cn(
                       'relative px-3.5 py-2 text-sm font-medium transition-all duration-300 rounded-lg',
-                      isActive ? 'text-[#C62828]' : 'text-[#A3A3A3] hover:text-white'
+                      isActive ? 'text-[#C62828]' : 'text-white/80 hover:text-white'
                     )}
                   >
                     {link.name}
@@ -93,114 +88,104 @@ export default function Navbar() {
 
             {/* CTA + Mobile Toggle */}
             <div className="flex items-center gap-3">
-              <div className="hidden sm:flex items-center gap-2">
-                <Link
-                  href="/plans"
-                  className="px-5 py-2.5 text-sm font-semibold text-white rounded-lg btn-primary"
-                >
-                  <span>Join Now</span>
-                </Link>
-              </div>
+              <Link
+                href="/plans"
+                className="hidden lg:inline-flex items-center gap-2 px-6 py-3 text-xs font-semibold tracking-widest uppercase text-white border border-white/30 hover:border-white/60 rounded-xl transition-all duration-300 hover:bg-white/10"
+              >
+                Get Started
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </Link>
               <button
                 onClick={() => setIsOpen(!isOpen)}
                 className="lg:hidden relative p-2.5 text-white hover:text-[#C62828] transition-colors"
                 aria-label={isOpen ? 'Close menu' : 'Open menu'}
               >
-                <AnimatePresence mode="wait">
-                  {isOpen ? (
-                    <motion.div key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.2 }}>
-                      <X className="w-5 h-5" />
-                    </motion.div>
-                  ) : (
-                    <motion.div key="menu" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.2 }}>
-                      <Menu className="w-5 h-5" />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                <span className="sr-only">{isOpen ? 'Close' : 'Open'} menu</span>
+                <div className="space-y-1.5">
+                  <span className={cn('block w-6 h-0.5 bg-white transition-all duration-300', isOpen && 'rotate-45 translate-y-2')} />
+                  <span className={cn('block w-6 h-0.5 bg-white transition-all duration-300', isOpen && 'opacity-0')} />
+                  <span className={cn('block w-4 h-0.5 bg-white transition-all duration-300', isOpen && 'w-6 -rotate-45 -translate-y-2')} />
+                </div>
               </button>
             </div>
           </div>
         </nav>
       </motion.header>
 
-      {/* Mobile Drawer */}
+      {/* Fullscreen Mobile Overlay */}
       <AnimatePresence>
         {isOpen && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="fixed inset-0 z-40 bg-black/70 backdrop-blur-md lg:hidden"
-              onClick={() => setIsOpen(false)}
-            />
-            <motion.div
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 28, stiffness: 220 }}
-              className="fixed top-0 right-0 z-50 h-full w-[280px] sm:w-[320px] bg-[#000000] border-l border-white/[0.06] lg:hidden"
-            >
-              <div className="flex flex-col h-full">
-                {/* Header */}
-                <div className="flex items-center justify-between p-5 border-b border-white/[0.06]">
-                  <Link href="/" className="flex items-center gap-2.5" onClick={() => setIsOpen(false)}>
-                    <div className="relative w-8 h-8 overflow-hidden rounded-lg">
-                      <Image src="/logo.jpeg" alt="Vikings Gym" fill className="object-cover" />
-                    </div>
-                    <span className="text-base font-bold tracking-tight text-white">
-                      VIKINGS <span className="text-[#C62828]">GYM</span>
-                    </span>
-                  </Link>
-                  <button onClick={() => setIsOpen(false)} className="p-2 text-[#666] hover:text-white transition-colors">
-                    <X className="w-5 h-5" />
-                  </button>
-                </div>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+            className="fixed inset-0 z-40 bg-black/95 backdrop-blur-sm lg:hidden"
+          >
+            <div className="flex flex-col h-full px-6 sm:px-10 py-5">
+              {/* Header row */}
+              <div className="flex items-center justify-between">
+                <Link href="/" className="flex items-center gap-2.5" onClick={() => setIsOpen(false)}>
+                  <div className="relative w-8 h-8 overflow-hidden rounded-lg">
+                    <Image src="/logo.jpeg" alt="Vikings Gym" fill className="object-cover" />
+                  </div>
+                  <span className="text-base font-bold tracking-tight text-white">
+                    VIKINGS <span className="text-[#C62828]">GYM</span>
+                  </span>
+                </Link>
+                <button onClick={() => setIsOpen(false)} className="p-2 text-white/60 hover:text-white transition-colors">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
 
-                {/* Links */}
-                <div className="flex-1 overflow-y-auto py-6 px-4">
+              {/* Centered nav links */}
+              <div className="flex-1 flex flex-col items-center justify-center -mt-20">
+                <div className="space-y-6 text-center">
                   {NAV_LINKS.map((link, i) => {
                     const isActive = pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href));
                     return (
-                      <motion.div key={link.name} custom={i} variants={mobileItemVariants} initial="hidden" animate="visible">
+                      <motion.div
+                        key={link.name}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 20 }}
+                        transition={{ delay: i * 0.08 + 0.1, duration: 0.5 }}
+                      >
                         <Link
                           href={link.href}
+                          onClick={() => setIsOpen(false)}
                           className={cn(
-                            'flex items-center justify-between px-4 py-3.5 rounded-xl text-sm font-medium transition-all duration-200 mb-1',
-                            isActive
-                              ? 'bg-[#C62828]/10 text-[#C62828]'
-                              : 'text-[#A3A3A3] hover:bg-white/[0.03] hover:text-white'
+                            'block font-podium text-4xl sm:text-5xl text-white uppercase transition-colors duration-300',
+                            isActive ? 'text-[#C62828]' : 'hover:text-white/70'
                           )}
                         >
                           {link.name}
-                          <ChevronRight className={cn('w-4 h-4', isActive ? 'text-[#C62828]' : 'text-[#666]')} />
                         </Link>
                       </motion.div>
                     );
                   })}
                 </div>
 
-                {/* Bottom CTA */}
-                <div className="p-4 border-t border-white/[0.06] space-y-2">
+                {/* CTA */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 20 }}
+                  transition={{ delay: NAV_LINKS.length * 0.08 + 0.2, duration: 0.5 }}
+                  className="mt-12"
+                >
                   <Link
                     href="/plans"
-                    className="flex items-center justify-center w-full px-6 py-3.5 text-sm font-semibold text-white rounded-xl btn-primary"
                     onClick={() => setIsOpen(false)}
+                    className="inline-flex items-center gap-2 px-8 py-4 text-xs font-semibold tracking-widest uppercase text-white border border-white/30 hover:border-white/60 rounded-xl transition-all duration-300 hover:bg-white/10"
                   >
-                    <span>Join Now</span>
+                    Join the Tribe
+                    <ArrowUpRight className="w-4 h-4" />
                   </Link>
-                  <Link
-                    href="/contact"
-                    className="flex items-center justify-center w-full px-6 py-3.5 text-sm font-medium text-[#A3A3A3] rounded-xl border border-white/[0.08] hover:bg-white/[0.03] hover:text-white transition-all duration-300"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    Book Trial
-                  </Link>
-                </div>
+                </motion.div>
               </div>
-            </motion.div>
-          </>
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
     </>

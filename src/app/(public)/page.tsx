@@ -7,7 +7,7 @@ import {
   Dumbbell, Users, Clock, Sparkles, IndianRupee,
   Star, ChevronDown, ChevronUp, Phone, Mail, MapPin,
   ArrowRight, Check, Quote, Calculator, Trophy, Target,
-  Zap, Send,
+  Zap, Send, Crown, Award,
 } from 'lucide-react';
 import { cn, formatCurrency, calculateBMI, getBMICategory, getInitials } from '@/lib/utils';
 import { MEMBERSHIP_PLANS, TESTIMONIALS, FAQS, GYM_INFO } from '@/lib/constants';
@@ -77,121 +77,115 @@ function SectionHeading({ badge, title, subtitle }: { badge: string; title: stri
 /* ─── HERO ─── */
 function HeroSection() {
   const stats = [
-    { value: '500+', label: 'Members' },
-    { value: '15+', label: 'Trainers' },
-    { value: '4.3★', label: 'Rating' },
-    { value: 'Est. 2024', label: '' },
+    { value: '500+', label: 'Warriors Forged' },
+    { value: '95%', label: 'Client Retention' },
+    { value: '15+', label: 'Elite Trainers' },
+    { value: '2024', label: 'Year Established' },
   ];
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 bg-[#000000]" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(198,40,40,0.12),transparent_60%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(198,40,40,0.05),transparent_50%)]" />
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
+      {/* Video Background */}
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover"
+        poster="/logo.jpeg"
+      >
+        <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260606_154941_df1a96e1-a06f-450c-bd02-d863414cc1a0.mp4" type="video/mp4" />
+      </video>
 
-      {/* Nordic grid */}
-      <div className="absolute inset-0 nordic-pattern" />
+      {/* Overlay layers */}
+      <div className="absolute inset-0 video-overlay-top z-[1]" />
+      <div className="absolute inset-0 video-overlay-bottom z-[1]" />
+      <div className="absolute inset-0 video-overlay-center z-[1]" />
+      <div className="absolute inset-0 bg-black/50 z-[1]" />
 
-      {/* Floating orbs */}
-      <motion.div
-        animate={{ y: [-24, 24, -24], x: [-12, 12, -12] }}
-        transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
-        className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#C62828]/8 rounded-full blur-[120px]"
-      />
-      <motion.div
-        animate={{ y: [24, -24, 24], x: [12, -12, 12] }}
-        transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
-        className="absolute bottom-1/3 right-1/4 w-[30rem] h-[30rem] bg-[#8E0000]/5 rounded-full blur-[140px]"
-      />
+      {/* Red ambient glow */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-[#C62828]/10 rounded-full blur-[150px] z-[1]" />
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-gradient-to-t from-[#C62828]/5 to-transparent z-[1]" />
 
       {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-32 pb-16">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
-          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.03] border border-white/[0.06] text-[#A3A3A3] text-xs sm:text-sm font-medium mb-6">
-            <span className="w-1.5 h-1.5 bg-[#22C55E] rounded-full animate-pulse" />
-            Premium Fitness Center — Aurangabad, Bihar
-          </span>
-        </motion.div>
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-32 pb-16">
+        <div className="max-w-5xl">
+          {/* Tagline */}
+          <div className="animate-reveal">
+            <span className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/[0.04] border border-white/[0.06] text-white/70 text-[10px] sm:text-xs font-inter tracking-[0.3em] uppercase mb-6 lg:mb-8">
+              <Crown className="w-3.5 h-3.5 text-white/70" />
+              Premium Fitness Collective — Aurangabad
+            </span>
+          </div>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.4 }}
-          className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold leading-[0.9] tracking-tight mb-6"
-        >
-          <span className="text-white">FORGE YOUR</span>
-          <br />
-          <span className="gradient-text-fire">STRENGTH</span>
-        </motion.h1>
+          {/* Main Heading */}
+          <div className="animate-reveal-1">
+            <h1 className="font-podium text-[clamp(2.8rem,10vw,7.5rem)] text-white mb-2">
+              Forge Your
+            </h1>
+            <h1 className="font-podium text-[clamp(2.8rem,10vw,7.5rem)] gradient-text-fire">
+              Strength
+            </h1>
+          </div>
 
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.6 }}
-          className="text-[#666] text-base sm:text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed"
-        >
-          Transform your body, conquer your limits. Join the warrior tribe at Bihar&apos;s most premium fitness destination.
-        </motion.p>
+          {/* Subtext */}
+          <div className="animate-reveal-2">
+            <p className="text-white/60 text-sm sm:text-base lg:text-lg font-inter leading-relaxed max-w-xl mt-6 lg:mt-8">
+              Transform your body, conquer your limits. Join Bihar&apos;s most{" "}
+              <span className="text-white font-semibold">premier fitness destination</span>.
+            </p>
+          </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.8 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16"
-        >
-          <Link
-            href="/plans"
-            className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-semibold text-white rounded-xl btn-primary"
-          >
-            <span>Join Now</span>
-            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1 relative z-10" />
-          </Link>
-          <Link
-            href="/contact"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-semibold text-white rounded-xl border border-white/[0.12] hover:bg-white/[0.03] hover:border-[#C62828]/40 transition-all duration-300"
-          >
-            Book Trial
-          </Link>
-        </motion.div>
+          {/* CTA Row */}
+          <div className="animate-reveal-3 mt-8 lg:mt-10">
+            <div className="flex flex-wrap items-center gap-4 sm:gap-6">
+              <Link
+                href="/plans"
+                className="group inline-flex items-center gap-2.5 px-6 sm:px-7 py-3.5 sm:py-4 bg-black hover:bg-neutral-900 text-white text-[11px] sm:text-xs font-semibold tracking-widest uppercase rounded-xl transition-all duration-300 border border-white/[0.06]"
+              >
+                Join the Tribe
+                <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </Link>
 
-        {/* Stats */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 1 }}
-          className="inline-flex flex-wrap justify-center gap-0 rounded-2xl glass overflow-hidden"
-        >
-          {stats.map((stat, i) => (
-            <div
-              key={i}
-              className={cn(
-                'px-6 sm:px-8 py-4 sm:py-5 text-center',
-                i !== stats.length - 1 && 'border-r border-white/[0.06]'
-              )}
-            >
-              <p className="text-xl sm:text-2xl font-bold text-white">{stat.value}</p>
-              {stat.label && <p className="text-[#666] text-xs sm:text-sm mt-0.5">{stat.label}</p>}
+              <div className="hidden sm:flex items-center gap-3">
+                <Award className="w-8 h-8 text-white/40" />
+                <div className="leading-tight">
+                  <p className="text-white/60 text-[10px] sm:text-xs font-semibold tracking-widest uppercase">Top-Rated</p>
+                  <p className="text-white/40 text-[10px] tracking-wider uppercase">Fitness Destination</p>
+                </div>
+              </div>
             </div>
-          ))}
-        </motion.div>
+          </div>
+
+          {/* Stats Row */}
+          <div className="animate-reveal-4 mt-8 sm:mt-10 lg:mt-14">
+            <div className="flex flex-wrap gap-6 sm:gap-10 lg:gap-14">
+              {stats.map((stat) => (
+                <div key={stat.label}>
+                  <p className="font-inter text-white text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight">
+                    {stat.value}
+                  </p>
+                  <p className="text-white/40 text-[9px] sm:text-xs tracking-widest uppercase mt-1 font-medium">
+                    {stat.label}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Scroll indicator */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 2 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        transition={{ delay: 2.5 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
       >
         <motion.div
           animate={{ y: [0, 8, 0] }}
           transition={{ duration: 2.5, repeat: Infinity }}
-          className="w-5 h-9 rounded-full border-2 border-white/[0.12] flex items-start justify-center p-1.5"
+          className="w-5 h-9 rounded-full border-2 border-white/10 flex items-start justify-center p-1.5"
         >
           <motion.div className="w-1 h-1 bg-[#C62828] rounded-full" />
         </motion.div>
