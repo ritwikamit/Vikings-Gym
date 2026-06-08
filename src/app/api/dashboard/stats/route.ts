@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { requireTenant } from "@/lib/tenant";
 
 // GET /api/dashboard/stats
 export async function GET() {
   try {
+    const tenantId = await requireTenant();
     const now = new Date();
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
     const startOfYear = new Date(now.getFullYear(), 0, 1);
@@ -25,31 +27,32 @@ export async function GET() {
       newMembersThisMonth,
       totalLeads,
     ] = await Promise.all([
-      prisma.member.count(),
-      prisma.membership.count({ where: { status: "ACTIVE" } }),
-      prisma.membership.count({ where: { status: "EXPIRED" } }),
+      prisma.member.count({ where: { tenantId } }),
+      prisma.membership.count({ where: { tenantId, status: "ACTIVE" } }),
+      prisma.membership.count({ where: { tenantId, status: "EXPIRED" } }),
       prisma.membership.count({
         where: {
+          tenantId,
           status: "ACTIVE",
           endDate: { gte: now, lte: sevenDaysLater },
         },
       }),
       prisma.payment.aggregate({
-        where: { status: "PAID", paidAt: { gte: startOfMonth } },
-        _sum: { amount: true },
+        where: { tenantId, status: "PAID", paidAt: { gte: startOfMonth } },
+        _sum: { totalAmount: true },
       }),
       prisma.payment.aggregate({
-        where: { status: "PAID", paidAt: { gte: startOfYear } },
-        _sum: { amount: true },
+        where: { tenantId, status: "PAID", paidAt: { gte: startOfYear } },
+        _sum: { totalAmount: true },
       }),
       prisma.attendance.count({
-        where: { date: { gte: startOfDay, lte: endOfDay } },
+        where: { tenantId, date: { gte: startOfDay, lte: endOfDay } },
       }),
-      prisma.trainer.count(),
+      prisma.trainer.count({ where: { tenantId } }),
       prisma.member.count({
-        where: { createdAt: { gte: startOfMonth } },
+        where: { tenantId, createdAt: { gte: startOfMonth } },
       }),
-      prisma.lead.count({ where: { stage: "NEW_LEAD" } }),
+      prisma.lead.count({ where: { tenantId, stage: "NEW_LEAD" } }),
     ]);
 
     // Monthly revenue for chart (last 12 months)
@@ -58,12 +61,12 @@ export async function GET() {
       const monthStart = new Date(now.getFullYear(), now.getMonth() - i, 1);
       const monthEnd = new Date(now.getFullYear(), now.getMonth() - i + 1, 0, 23, 59, 59);
       const revenue = await prisma.payment.aggregate({
-        where: { status: "PAID", paidAt: { gte: monthStart, lte: monthEnd } },
-        _sum: { amount: true },
+        where: { tenantId, status: "PAID", paidAt: { gte: monthStart, lte: monthEnd } },
+        _sum: { totalAmount: true },
       });
       monthlyRevenue.push({
         month: monthStart.toLocaleDateString("en-US", { month: "short" }),
-        revenue: revenue._sum.amount || 0,
+        revenue: revenue._sum.totalAmount || 0,
       });
     }
 
@@ -73,7 +76,7 @@ export async function GET() {
       const monthStart = new Date(now.getFullYear(), now.getMonth() - i, 1);
       const monthEnd = new Date(now.getFullYear(), now.getMonth() - i + 1, 0, 23, 59, 59);
       const count = await prisma.member.count({
-        where: { createdAt: { gte: monthStart, lte: monthEnd } },
+        where: { tenantId, createdAt: { gte: monthStart, lte: monthEnd } },
       });
       newMembersMonthly.push({
         month: monthStart.toLocaleDateString("en-US", { month: "short" }),
@@ -83,10 +86,10 @@ export async function GET() {
 
     // Membership distribution
     const [monthly, quarterly, halfYearly, annual] = await Promise.all([
-      prisma.membership.count({ where: { status: "ACTIVE", plan: { duration: 1 } } }),
-      prisma.membership.count({ where: { status: "ACTIVE", plan: { duration: 3 } } }),
-      prisma.membership.count({ where: { status: "ACTIVE", plan: { duration: 6 } } }),
-      prisma.membership.count({ where: { status: "ACTIVE", plan: { duration: 12 } } }),
+      prisma.membership.count({ where: { tenantId, status: "ACTIVE", plan: { duration: 1 } } }),
+      prisma.membership.count({ where: { tenantId, status: "ACTIVE", plan: { duration: 3 } } }),
+      prisma.membership.count({ where: { tenantId, status: "ACTIVE", plan: { duration: 6 } } }),
+      prisma.membership.count({ where: { tenantId, status: "ACTIVE", plan: { duration: 12 } } }),
     ]);
 
     return NextResponse.json({
@@ -96,8 +99,8 @@ export async function GET() {
           activeMembers,
           expiredMembers,
           expiringMembers,
-          revenueThisMonth: revenueThisMonth._sum.amount || 0,
-          revenueThisYear: revenueThisYear._sum.amount || 0,
+          revenueThisMonth: revenueThisMonth._sum.totalAmount || 0,
+          revenueThisYear: revenueThisYear._sum.totalAmount || 0,
           attendanceToday,
           trainersCount,
           newMembersThisMonth,

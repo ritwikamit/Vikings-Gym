@@ -17,241 +17,212 @@ import {
   Activity,
   Clock,
   ArrowUpRight,
+  AlertTriangle,
 } from 'lucide-react';
 import {
-  AreaChart,
-  Area,
-  BarChart,
-  Bar,
-  LineChart,
-  Line,
-  PieChart,
-  Pie,
-  Cell,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Legend,
+  AreaChart, Area, BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
+  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
 } from 'recharts';
 
-// --- Mock Data ---
-const statsData = [
-  { title: 'Total Members', value: 248, change: 12, trend: 'up' as const, icon: Users, color: '#3B82F6', bg: 'rgba(59,130,246,0.1)' },
-  { title: 'Active Members', value: 186, change: 8, trend: 'up' as const, icon: UserCheck, color: '#22C55E', bg: 'rgba(34,197,94,0.1)' },
-  { title: 'Expired Members', value: 34, change: -5, trend: 'down' as const, icon: UserX, color: '#EF4444', bg: 'rgba(239,68,68,0.1)' },
-  { title: 'Revenue This Month', value: 285000, change: 18, trend: 'up' as const, icon: IndianRupee, color: '#F59E0B', bg: 'rgba(245,158,11,0.1)', isCurrency: true },
-];
+// ── Types ──
+type Stats = {
+  totalMembers: number; activeMembers: number; expiredMembers: number;
+  expiringMembers: number; revenueThisMonth: number; revenueThisYear: number;
+  attendanceToday: number; trainersCount: number; newMembersThisMonth: number;
+  totalLeads: number;
+};
 
-const revenueData = [
-  { month: 'Jan', revenue: 185000 },
-  { month: 'Feb', revenue: 210000 },
-  { month: 'Mar', revenue: 195000 },
-  { month: 'Apr', revenue: 240000 },
-  { month: 'May', revenue: 260000 },
-  { month: 'Jun', revenue: 285000 },
-  { month: 'Jul', revenue: 270000 },
-  { month: 'Aug', revenue: 310000 },
-  { month: 'Sep', revenue: 295000 },
-  { month: 'Oct', revenue: 320000 },
-  { month: 'Nov', revenue: 340000 },
-  { month: 'Dec', revenue: 365000 },
-];
+type ChartData = { month: string; revenue: number }[];
+type NewMemberData = { month: string; members: number }[];
+type DistributionItem = { name: string; value: number; color: string };
 
-const newMembersData = [
-  { month: 'Jan', members: 18 },
-  { month: 'Feb', members: 24 },
-  { month: 'Mar', members: 20 },
-  { month: 'Apr', members: 28 },
-  { month: 'May', members: 32 },
-  { month: 'Jun', members: 22 },
-  { month: 'Jul', members: 26 },
-  { month: 'Aug', members: 30 },
-  { month: 'Sep', members: 35 },
-  { month: 'Oct', members: 28 },
-  { month: 'Nov', members: 38 },
-  { month: 'Dec', members: 42 },
-];
-
-const attendanceData = [
-  { day: 'Mon', count: 72 },
-  { day: 'Tue', count: 85 },
-  { day: 'Wed', count: 68 },
-  { day: 'Thu', count: 90 },
-  { day: 'Fri', count: 78 },
-  { day: 'Sat', count: 95 },
-  { day: 'Sun', count: 45 },
-];
-
-const membershipDistribution = [
-  { name: 'Monthly', value: 65, color: '#3B82F6' },
-  { name: 'Quarterly', value: 85, color: '#22C55E' },
-  { name: 'Half-Yearly', value: 52, color: '#F59E0B' },
-  { name: 'Annual', value: 46, color: '#DC2626' },
-];
-
-const recentActivities = [
-  { id: 1, type: 'member_joined', description: 'Rahul Kumar joined as a new member', time: '10 minutes ago', icon: UserPlus, color: '#22C55E' },
-  { id: 2, type: 'payment', description: 'Payment of ₹4,000 received from Priya Singh', time: '25 minutes ago', icon: CreditCard, color: '#3B82F6' },
-  { id: 3, type: 'attendance', description: 'Amit Verma checked in at 7:30 AM', time: '1 hour ago', icon: CalendarCheck, color: '#F59E0B' },
-  { id: 4, type: 'lead', description: 'New lead: Sneha Gupta — Instagram inquiry', time: '2 hours ago', icon: Target, color: '#8B5CF6' },
-  { id: 5, type: 'membership', description: 'Ravi Shankar renewed Quarterly membership', time: '3 hours ago', icon: CreditCard, color: '#22C55E' },
-  { id: 6, type: 'attendance', description: '85 members checked in today', time: '5 hours ago', icon: Activity, color: '#3B82F6' },
-  { id: 7, type: 'payment', description: 'Payment of ₹12,000 received from Vikash Yadav', time: '6 hours ago', icon: CreditCard, color: '#3B82F6' },
-];
-
-const quickActions = [
-  { label: 'Add Member', icon: UserPlus, href: '/admin/members', color: '#22C55E', bg: 'rgba(34,197,94,0.1)' },
-  { label: 'Record Payment', icon: CreditCard, href: '/admin/payments', color: '#3B82F6', bg: 'rgba(59,130,246,0.1)' },
-  { label: 'Mark Attendance', icon: CalendarCheck, href: '/admin/attendance', color: '#F59E0B', bg: 'rgba(245,158,11,0.1)' },
-  { label: 'Create Lead', icon: Target, href: '/admin/leads', color: '#8B5CF6', bg: 'rgba(139,92,246,0.1)' },
-];
-
-// --- Animated Counter ---
-function AnimatedCounter({ target, isCurrency = false }: { target: number; isCurrency?: boolean }) {
-  const [count, setCount] = useState(0);
+// ── Custom Hooks ──
+function useDashboardStats() {
+  const [data, setData] = useState<{
+    stats: Stats; monthlyRevenue: ChartData; newMembers: NewMemberData;
+    distribution: DistributionItem[];
+  } | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const duration = 1200;
-    const steps = 40;
-    const increment = target / steps;
-    let current = 0;
-    const timer = setInterval(() => {
-      current += increment;
-      if (current >= target) {
-        setCount(target);
-        clearInterval(timer);
-      } else {
-        setCount(Math.floor(current));
-      }
-    }, duration / steps);
-    return () => clearInterval(timer);
-  }, [target]);
+    fetch('/api/dashboard/stats')
+      .then(r => r.json())
+      .then(res => {
+        if (res.data) {
+          const d = res.data;
+          const colors = ['#3B82F6', '#22C55E', '#F59E0B', '#E11D48'];
+          setData({
+            stats: d.stats,
+            monthlyRevenue: d.charts.monthlyRevenue,
+            newMembers: d.charts.newMembersMonthly,
+            distribution: d.charts.membershipDistribution.map((item: any, i: number) => ({
+              ...item, color: colors[i % colors.length],
+            })),
+          });
+        } else {
+          setError('Failed to load dashboard data');
+        }
+      })
+      .catch(() => setError('Failed to connect to server'))
+      .finally(() => setLoading(false));
+  }, []);
 
-  return <span>{isCurrency ? formatCurrency(count) : count.toLocaleString('en-IN')}</span>;
+  return { data, loading, error };
 }
 
-// --- Custom Tooltip ---
-function CustomTooltip({ active, payload, label }: { active?: boolean; payload?: Array<{ value: number; name: string }>; label?: string }) {
+// ── Stat Card ──
+function StatCard({ title, value, change, trend, icon: Icon, color, isCurrency }: {
+  title: string; value: number; change?: number; trend?: 'up' | 'down';
+  icon: any; color: string; isCurrency?: boolean;
+}) {
+  return (
+    <div className="glass rounded-xl p-4 lg:p-5 card-hover">
+      <div className="flex items-start justify-between mb-3">
+        <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: `${color}1a` }}>
+          <Icon size={20} color={color} />
+        </div>
+        {change !== undefined && (
+          <div className={cn(
+            'flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full',
+            (trend === 'up' || change > 0)
+              ? 'text-[#22C55E] bg-[rgba(34,197,94,0.1)]'
+              : 'text-[#EF4444] bg-[rgba(239,68,68,0.1)]'
+          )}>
+            {change > 0 ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
+            {Math.abs(change)}%
+          </div>
+        )}
+      </div>
+      <div className="text-2xl lg:text-3xl font-bold text-white mb-1">
+        {isCurrency ? formatCurrency(value) : value?.toLocaleString('en-IN') ?? '-'}
+      </div>
+      <p className="text-xs text-[#737373]">{title}</p>
+    </div>
+  );
+}
+
+function CustomTooltip({ active, payload, label, isCurrency }: { active?: boolean; payload?: any[]; label?: string; isCurrency?: boolean }) {
   if (!active || !payload?.length) return null;
   return (
     <div className="bg-[#1A1A1A] border border-[#333333] rounded-lg p-3 shadow-xl">
       <p className="text-xs text-[#737373] mb-1">{label}</p>
-      {payload.map((entry, i) => (
+      {payload.map((entry: any, i: number) => (
         <p key={i} className="text-sm font-semibold text-white">
-          {entry.name === 'revenue' ? formatCurrency(entry.value) : entry.value.toLocaleString('en-IN')}
+          {isCurrency ? formatCurrency(entry.value) : entry.value?.toLocaleString('en-IN')}
         </p>
       ))}
     </div>
   );
 }
 
-// --- Container Animation ---
 const containerVariants = {
   hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.06 },
-  },
+  visible: { transition: { staggerChildren: 0.06 } },
 };
-
 const itemVariants: any = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' } },
 };
 
+// ── Page ──
 export default function AdminDashboardPage() {
+  const { data, loading, error } = useDashboardStats();
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="w-8 h-8 border-2 border-[#E11D48] border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (error || !data) {
+    return (
+      <div className="flex flex-col items-center justify-center h-64 text-[#737373]">
+        <AlertTriangle className="w-10 h-10 mb-3 text-[#EF4444]" />
+        <p className="text-sm">{error || 'Failed to load'}</p>
+      </div>
+    );
+  }
+
+  const { stats, monthlyRevenue, newMembers, distribution } = data;
+
+  const statCards = [
+    { title: 'Total Members', value: stats.totalMembers, change: 12, trend: 'up' as const, icon: Users, color: '#3B82F6' },
+    { title: 'Active Members', value: stats.activeMembers, change: 8, trend: 'up' as const, icon: UserCheck, color: '#22C55E' },
+    { title: 'Expired Members', value: stats.expiredMembers, change: -5, trend: 'down' as const, icon: UserX, color: '#EF4444' },
+    { title: 'Revenue This Month', value: stats.revenueThisMonth, change: 18, trend: 'up' as const, icon: IndianRupee, color: '#F59E0B', isCurrency: true },
+    { title: 'Expiring Soon', value: stats.expiringMembers, icon: AlertTriangle, color: '#E11D48' },
+    { title: 'Attendance Today', value: stats.attendanceToday, icon: CalendarCheck, color: '#8B5CF6' },
+    { title: 'New Members', value: stats.newMembersThisMonth, icon: UserPlus, color: '#06B6D4' },
+    { title: 'Total Leads', value: stats.totalLeads, icon: Target, color: '#EC4899' },
+  ];
+
+  const recentActivities = [
+    { id: 1, type: 'member_joined', description: `${stats.newMembersThisMonth} new members this month`, time: 'This month', icon: UserPlus, color: '#22C55E' },
+    { id: 2, type: 'payment', description: `₹${(stats.revenueThisMonth / 1000).toFixed(1)}k revenue generated`, time: 'This month', icon: IndianRupee, color: '#F59E0B' },
+    { id: 3, type: 'attendance', description: `${stats.attendanceToday} members checked in today`, time: 'Today', icon: CalendarCheck, color: '#8B5CF6' },
+    { id: 4, type: 'membership', description: `${stats.expiringMembers} memberships expiring in 7 days`, time: 'Urgent', icon: AlertTriangle, color: '#E11D48' },
+    { id: 5, type: 'trainer', description: `${stats.trainersCount} active trainers on staff`, time: 'Active', icon: Users, color: '#3B82F6' },
+  ];
+
+  const quickActions = [
+    { label: 'Add Member', icon: UserPlus, href: '/admin/members', color: '#22C55E', bg: 'rgba(34,197,94,0.1)' },
+    { label: 'Record Payment', icon: IndianRupee, href: '/admin/payments', color: '#F59E0B', bg: 'rgba(245,158,11,0.1)' },
+    { label: 'Mark Attendance', icon: CalendarCheck, href: '/admin/attendance', color: '#8B5CF6', bg: 'rgba(139,92,246,0.1)' },
+    { label: 'View Reports', icon: Activity, href: '/admin/reports', color: '#E11D48', bg: 'rgba(225,29,72,0.1)' },
+  ];
+
   return (
-    <motion.div
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-      className="space-y-6"
-    >
-      {/* Stats Cards */}
+    <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-6">
+      {/* Stats Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {statsData.map((stat) => (
-          <motion.div
-            key={stat.title}
-            variants={itemVariants}
-            className="glass rounded-xl p-4 lg:p-5 card-hover"
-          >
-            <div className="flex items-start justify-between mb-3">
-              <div
-                className="w-10 h-10 rounded-lg flex items-center justify-center"
-                style={{ backgroundColor: stat.bg }}
-              >
-                <stat.icon size={20} style={{ color: stat.color }} />
-              </div>
-              <div
-                className={cn(
-                  'flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full',
-                  stat.trend === 'up'
-                    ? 'text-[#22C55E] bg-[rgba(34,197,94,0.1)]'
-                    : 'text-[#EF4444] bg-[rgba(239,68,68,0.1)]'
-                )}
-              >
-                {stat.trend === 'up' ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
-                {Math.abs(stat.change)}%
-              </div>
-            </div>
-            <div className="text-2xl lg:text-3xl font-bold text-white mb-1">
-              <AnimatedCounter target={stat.value} isCurrency={stat.isCurrency} />
-            </div>
-            <p className="text-xs text-[#737373]">{stat.title}</p>
+        {statCards.map((s) => (
+          <motion.div key={s.title} variants={itemVariants}>
+            <StatCard {...s} />
           </motion.div>
         ))}
       </div>
 
       {/* Charts Row 1 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {/* Monthly Revenue */}
         <motion.div variants={itemVariants} className="glass rounded-xl p-5">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h3 className="text-base font-semibold text-white">Monthly Revenue</h3>
               <p className="text-xs text-[#737373]">Revenue trend over the year</p>
             </div>
-            <div className="flex items-center gap-1 text-xs text-[#22C55E] font-medium">
-              <TrendingUp size={14} />
-              +18% vs last year
-            </div>
           </div>
           <div className="h-[280px]">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={revenueData}>
+              <AreaChart data={monthlyRevenue}>
                 <defs>
-                  <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#DC2626" stopOpacity={0.3} />
-                    <stop offset="100%" stopColor="#DC2626" stopOpacity={0} />
+                  <linearGradient id="revGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#E11D48" stopOpacity={0.3} />
+                    <stop offset="100%" stopColor="#E11D48" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#262626" />
                 <XAxis dataKey="month" stroke="#737373" fontSize={12} tickLine={false} axisLine={false} />
                 <YAxis stroke="#737373" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(v) => `₹${(v / 1000).toFixed(0)}k`} />
-                <Tooltip content={<CustomTooltip />} />
-                <Area type="monotone" dataKey="revenue" stroke="#DC2626" strokeWidth={2} fill="url(#revenueGradient)" />
+                <Tooltip content={<CustomTooltip isCurrency />} />
+                <Area type="monotone" dataKey="revenue" stroke="#E11D48" strokeWidth={2} fill="url(#revGrad)" />
               </AreaChart>
             </ResponsiveContainer>
           </div>
         </motion.div>
 
-        {/* New Members Trend */}
         <motion.div variants={itemVariants} className="glass rounded-xl p-5">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h3 className="text-base font-semibold text-white">New Members</h3>
-              <p className="text-xs text-[#737373]">Monthly acquisition trend</p>
-            </div>
-            <div className="flex items-center gap-1 text-xs text-[#22C55E] font-medium">
-              <TrendingUp size={14} />
-              +24% vs last year
+              <p className="text-xs text-[#737373]">Monthly acquisition</p>
             </div>
           </div>
           <div className="h-[280px]">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={newMembersData}>
+              <BarChart data={newMembers}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#262626" />
                 <XAxis dataKey="month" stroke="#737373" fontSize={12} tickLine={false} axisLine={false} />
                 <YAxis stroke="#737373" fontSize={12} tickLine={false} axisLine={false} />
@@ -265,135 +236,69 @@ export default function AdminDashboardPage() {
 
       {/* Charts Row 2 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {/* Attendance Trends */}
         <motion.div variants={itemVariants} className="glass rounded-xl p-5">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h3 className="text-base font-semibold text-white">Weekly Attendance</h3>
-              <p className="text-xs text-[#737373]">This week&apos;s check-in pattern</p>
-            </div>
-          </div>
+          <h3 className="text-base font-semibold text-white mb-4">Membership Distribution</h3>
           <div className="h-[280px]">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={attendanceData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#262626" />
-                <XAxis dataKey="day" stroke="#737373" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis stroke="#737373" fontSize={12} tickLine={false} axisLine={false} />
-                <Tooltip content={<CustomTooltip />} />
-                <Line type="monotone" dataKey="count" stroke="#22C55E" strokeWidth={2} dot={{ fill: '#22C55E', r: 4 }} activeDot={{ r: 6 }} />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-        </motion.div>
-
-        {/* Membership Distribution */}
-        <motion.div variants={itemVariants} className="glass rounded-xl p-5">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h3 className="text-base font-semibold text-white">Membership Distribution</h3>
-              <p className="text-xs text-[#737373]">Active members by plan type</p>
-            </div>
-          </div>
-          <div className="h-[280px] flex items-center">
-            <ResponsiveContainer width="100%" height="100%">
               <PieChart>
-                <Pie
-                  data={membershipDistribution}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={65}
-                  outerRadius={100}
-                  paddingAngle={4}
-                  dataKey="value"
-                >
-                  {membershipDistribution.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
+                <Pie data={distribution} cx="50%" cy="50%" innerRadius={65} outerRadius={100} paddingAngle={4} dataKey="value">
+                  {distribution.map((entry, i) => (
+                    <Cell key={i} fill={entry.color} />
                   ))}
                 </Pie>
-                <Tooltip
-                  content={({ active, payload }) => {
-                    if (!active || !payload?.length) return null;
-                    const d = payload[0].payload;
-                    return (
-                      <div className="bg-[#1A1A1A] border border-[#333333] rounded-lg p-3 shadow-xl">
-                        <p className="text-sm font-semibold text-white">{d.name}</p>
-                        <p className="text-xs text-[#737373]">{d.value} members</p>
-                      </div>
-                    );
-                  }}
-                />
-                <Legend
-                  verticalAlign="middle"
-                  align="right"
-                  layout="vertical"
-                  iconType="circle"
-                  iconSize={8}
-                  formatter={(value: string) => <span className="text-xs text-[#A3A3A3] ml-1">{value}</span>}
-                />
+                <Tooltip content={({ active, payload }) => {
+                  if (!active || !payload?.length) return null;
+                  const d = payload[0].payload;
+                  return (
+                    <div className="bg-[#1A1A1A] border border-[#333] rounded-lg p-3 shadow-xl">
+                      <p className="text-sm font-semibold text-white">{d.name}</p>
+                      <p className="text-xs text-[#737373]">{d.value} members</p>
+                    </div>
+                  );
+                }} />
+                <Legend verticalAlign="middle" align="right" layout="vertical" iconType="circle" iconSize={8}
+                  formatter={(value: string) => <span className="text-xs text-[#A3A3A3] ml-1">{value}</span>} />
               </PieChart>
             </ResponsiveContainer>
           </div>
         </motion.div>
-      </div>
 
-      {/* Recent Activity + Quick Actions */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Recent Activity */}
-        <motion.div variants={itemVariants} className="lg:col-span-2 glass rounded-xl p-5">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-base font-semibold text-white">Recent Activity</h3>
-            <button className="text-xs text-[#DC2626] hover:text-[#EF4444] transition-colors font-medium">
-              View All
-            </button>
-          </div>
+        <motion.div variants={itemVariants} className="glass rounded-xl p-5">
+          <h3 className="text-base font-semibold text-white mb-4">Recent Activity</h3>
           <div className="space-y-1">
-            {recentActivities.map((activity) => (
-              <div
-                key={activity.id}
-                className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/[0.02] transition-colors"
-              >
-                <div
-                  className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
-                  style={{ backgroundColor: `${activity.color}15` }}
-                >
-                  <activity.icon size={16} style={{ color: activity.color }} />
+            {recentActivities.map((a) => (
+              <div key={a.id} className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/[0.02] transition-colors">
+                <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: `${a.color}15` }}>
+                  <a.icon size={16} color={a.color} />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm text-white truncate">{activity.description}</p>
+                  <p className="text-sm text-white truncate">{a.description}</p>
                   <p className="text-xs text-[#737373] flex items-center gap-1 mt-0.5">
-                    <Clock size={10} />
-                    {activity.time}
+                    <Clock size={10} />{a.time}
                   </p>
                 </div>
-                <ArrowUpRight size={14} className="text-[#737373] shrink-0" />
               </div>
             ))}
           </div>
         </motion.div>
-
-        {/* Quick Actions */}
-        <motion.div variants={itemVariants} className="glass rounded-xl p-5">
-          <h3 className="text-base font-semibold text-white mb-4">Quick Actions</h3>
-          <div className="grid grid-cols-2 gap-3">
-            {quickActions.map((action) => (
-              <button
-                key={action.label}
-                className="flex flex-col items-center gap-2 p-4 rounded-xl bg-white/[0.02] border border-[#262626] hover:border-[#DC2626]/30 hover:bg-white/[0.04] transition-all group"
-              >
-                <div
-                  className="w-10 h-10 rounded-lg flex items-center justify-center transition-transform group-hover:scale-110"
-                  style={{ backgroundColor: action.bg }}
-                >
-                  <action.icon size={20} style={{ color: action.color }} />
-                </div>
-                <span className="text-xs font-medium text-[#A3A3A3] group-hover:text-white transition-colors text-center">
-                  {action.label}
-                </span>
-              </button>
-            ))}
-          </div>
-        </motion.div>
       </div>
+
+      {/* Quick Actions */}
+      <motion.div variants={itemVariants} className="glass rounded-xl p-5">
+        <h3 className="text-base font-semibold text-white mb-4">Quick Actions</h3>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          {quickActions.map((action) => (
+            <button key={action.label}
+              className="flex flex-col items-center gap-2 p-4 rounded-xl bg-white/[0.02] border border-[#262626] hover:border-[#E11D48]/30 hover:bg-white/[0.04] transition-all group"
+            >
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center transition-transform group-hover:scale-110" style={{ backgroundColor: action.bg }}>
+                <action.icon size={20} color={action.color} />
+              </div>
+              <span className="text-xs font-medium text-[#A3A3A3] group-hover:text-white transition-colors text-center">{action.label}</span>
+            </button>
+          ))}
+        </div>
+      </motion.div>
     </motion.div>
   );
 }
