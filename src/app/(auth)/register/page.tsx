@@ -39,7 +39,7 @@ export default function RegisterPage() {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
             <Link href="/" className="inline-flex items-center gap-3 mb-12">
               <div className="relative w-12 h-12 overflow-hidden rounded-xl border border-white/10">
-                <Image src="/logo.png" alt="Vikings Gym" fill className="object-cover" />
+                <Image src="/logo.png" alt="Vikings Gym" fill className="object-contain p-0.5" />
               </div>
               <div>
                 <span className="text-xl font-extrabold text-white tracking-tight">VIKINGS</span>
@@ -91,7 +91,7 @@ export default function RegisterPage() {
           <div className="lg:hidden text-center mb-8">
             <Link href="/" className="inline-flex items-center gap-2 mb-2">
               <div className="relative w-10 h-10 overflow-hidden rounded-lg">
-                <Image src="/logo.png" alt="Vikings Gym" width={40} height={40} className="object-cover" />
+                <Image src="/logo.png" alt="Vikings Gym" width={40} height={40} className="object-contain p-0.5" />
               </div>
               <span className="text-xl font-extrabold text-white tracking-tight">VIKINGS <span className="text-[#E11D48]">GYM</span></span>
             </Link>

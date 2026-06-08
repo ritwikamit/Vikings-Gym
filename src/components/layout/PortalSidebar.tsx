@@ -95,7 +95,7 @@ export default function PortalSidebar({
               src="/logo.png"
               alt="Vikings Gym"
               fill
-              className="object-cover"
+              className="object-contain p-0.5"
             />
           </div>
           {!isCollapsed && (
@@ -197,13 +197,13 @@ export default function PortalSidebar({
                 <Image
                   src="/logo.png"
                   alt="Vikings Gym"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <span className="font-semibold text-white text-sm">
-                Vikings Gym
-              </span>
+              fill
+              className="object-contain p-0.5"
+            />
+          </div>
+          <span className="font-semibold text-white text-sm">
+            Vikings Gym
+          </span>
             </div>
           </div>
           <div className="w-8 h-8 rounded-full bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center text-white text-xs font-bold">
