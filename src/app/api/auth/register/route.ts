@@ -25,6 +25,9 @@ export async function POST(req: Request) {
     }
 
     const hashed = await bcrypt.hash(password, 12);
+    
+    // Generate a unique referral code for the NEW member
+    const newMemberReferralCode = `REF-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
 
     const user = await prisma.user.create({
       data: {
@@ -38,12 +41,31 @@ export async function POST(req: Request) {
           create: {
             tenantId,
             fitnessGoal: fitnessGoal || null,
-            referralCode: referralCode || `REF-${Math.random().toString(36).substring(2, 8).toUpperCase()}`,
+            referralCode: newMemberReferralCode,
           },
         },
       },
       include: { member: true },
     });
+
+    // If a referral code was provided, create a Referral record
+    if (referralCode && referralCode.trim() !== "") {
+      const referrerMember = await prisma.member.findUnique({
+        where: { referralCode: referralCode.trim() },
+      });
+
+      if (referrerMember) {
+        await prisma.referral.create({
+          data: {
+            tenantId,
+            referrerId: referrerMember.id,
+            referredId: user.member!.id,
+            referralCode: referralCode.trim(),
+            status: "PENDING",
+          },
+        });
+      }
+    }
 
     return NextResponse.json({
       data: {

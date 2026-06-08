@@ -25,8 +25,19 @@ export const getTenantId = cache(async (): Promise<string | null> => {
 
     // Fallback: single-tenant mode — return the first tenant
     const first = await prisma.tenant.findFirst({ select: { id: true } })
-    return first?.id || null
-  } catch {
+    if (first?.id) return first.id
+
+    // Auto-create a default tenant for initial deployments (e.g. Vercel)
+    const newTenant = await prisma.tenant.create({
+      data: {
+        name: "Vikings Gym",
+        slug: "vikings-gym",
+      },
+      select: { id: true },
+    })
+    return newTenant.id
+  } catch (error) {
+    console.error("Tenant resolution error:", error)
     return null
   }
 })
