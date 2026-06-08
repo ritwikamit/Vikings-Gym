@@ -31,6 +31,10 @@ export const metadata: Metadata = {
     description: "Train like a warrior. Transform your body at Vikings Gym.",
     images: ["/logo.jpeg"],
   },
+  icons: {
+    icon: "/logo.jpeg",
+    apple: "/logo.jpeg",
+  },
   robots: { index: true, follow: true },
   metadataBase: new URL("https://vikingsgym.in"),
 };
