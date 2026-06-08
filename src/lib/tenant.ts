@@ -21,7 +21,11 @@ export const getTenantId = cache(async (): Promise<string | null> => {
       select: { id: true },
     })
 
-    return tenant?.id || null
+    if (tenant?.id) return tenant.id
+
+    // Fallback: single-tenant mode — return the first tenant
+    const first = await prisma.tenant.findFirst({ select: { id: true } })
+    return first?.id || null
   } catch {
     return null
   }
