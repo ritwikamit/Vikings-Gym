@@ -54,7 +54,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if (!user.email) return false;
 
         // Ensure tenant context (or default tenant)
-        const tenant = await prisma.tenant.findFirst();
+        let tenant = await prisma.tenant.findFirst();
+        if (!tenant) {
+          tenant = await prisma.tenant.create({
+            data: {
+              name: "Vikings Gym",
+              slug: "vikings-gym-fallback-" + Math.random().toString(36).substring(2, 6),
+            }
+          });
+        }
         if (!tenant) return false;
 
         let dbUser = await prisma.user.findFirst({
