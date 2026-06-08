@@ -1,10 +1,9 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Public routes — no auth needed
   const publicRoutes = ["/", "/about", "/plans", "/trainers", "/transformations", "/gallery", "/blog", "/contact", "/join", "/login", "/register"];
   const isPublicRoute = publicRoutes.some(
     (route) => pathname === route || pathname.startsWith("/blog/")
@@ -17,7 +16,6 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Check for auth token
   const token = request.cookies.get("authjs.session-token")?.value ||
     request.cookies.get("__Secure-authjs.session-token")?.value;
 
