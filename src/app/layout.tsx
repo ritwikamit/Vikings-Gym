@@ -32,8 +32,11 @@ export const metadata: Metadata = {
     images: ["/logo.jpeg"],
   },
   icons: {
-    icon: "/logo.jpeg",
-    apple: "/logo.jpeg",
+    icon: [
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
   },
   robots: { index: true, follow: true },
   metadataBase: new URL("https://vikingsgym.in"),
