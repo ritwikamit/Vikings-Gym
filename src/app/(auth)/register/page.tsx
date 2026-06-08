@@ -53,7 +53,7 @@ export default function RegisterPage() {
               <Dumbbell className="w-3.5 h-3.5" />
               Join the Tribe
             </div>
-            <h1 className="font-podium text-[clamp(2.5rem,5vw,4rem)] text-white leading-[0.92] mb-4">
+            <h1 className="font-podium text-[clamp(2.8rem,5vw,4rem)] text-white leading-[1.1] mb-6">
               Begin Your<br />
               <span className="gradient-text-fire">Transformation</span>
             </h1>
