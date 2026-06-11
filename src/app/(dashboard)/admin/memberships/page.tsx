@@ -57,9 +57,9 @@ export default function MembershipsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h2 className="text-2xl font-bold text-white">Memberships</h2>
-          <p className="text-sm text-[#737373]">Manage plans, memberships, and renewals</p>
+          <p className="text-sm text-[slate-400]">Manage plans, memberships, and renewals</p>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-[#DC2626] to-[#B91C1C] text-sm font-semibold text-white hover:shadow-lg hover:shadow-red-500/20 transition-all w-fit">
+        <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-[#DC2626] to-[#B91C1C] text-sm font-semibold text-white hover:shadow-lg hover:shadow-sky-500/20 transition-all w-fit">
           <Plus size={16} />
           Add Plan
         </button>
@@ -74,8 +74,8 @@ export default function MembershipsPage() {
             className={cn(
               'px-4 py-2 rounded-md text-sm font-medium transition-all',
               activeTab === tab
-                ? 'bg-[#DC2626] text-white shadow-lg shadow-red-500/20'
-                : 'text-[#737373] hover:text-white hover:bg-[#1A1A1A]'
+                ? 'bg-[#DC2626] text-white shadow-lg shadow-sky-500/20'
+                : 'text-[slate-400] hover:text-white hover:bg-[slate-800]'
             )}
           >
             {tab}
@@ -103,10 +103,10 @@ export default function MembershipsPage() {
                   <CreditCard size={20} className="text-[#DC2626]" />
                 </div>
                 <div className="flex gap-1">
-                  <button className="p-1.5 rounded-lg text-[#737373] hover:text-[#F59E0B] hover:bg-[#F59E0B]/10 transition-colors">
+                  <button className="p-1.5 rounded-lg text-[slate-400] hover:text-[#F59E0B] hover:bg-[#F59E0B]/10 transition-colors">
                     <Pencil size={14} />
                   </button>
-                  <button className="p-1.5 rounded-lg text-[#737373] hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors">
+                  <button className="p-1.5 rounded-lg text-[slate-400] hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors">
                     <Trash2 size={14} />
                   </button>
                 </div>
@@ -114,12 +114,12 @@ export default function MembershipsPage() {
               <h3 className="text-lg font-semibold text-white mb-1">{plan.name}</h3>
               <p className="text-2xl font-bold text-white mb-1">
                 {formatCurrency(plan.price)}
-                <span className="text-sm font-normal text-[#737373]">
+                <span className="text-sm font-normal text-[slate-400]">
                   /{plan.duration === 1 ? 'mo' : `${plan.duration}mo`}
                 </span>
               </p>
               <div className="flex items-center justify-between mt-4 pt-4 border-t border-[#262626]">
-                <span className="text-xs text-[#737373]">{plan.members} active members</span>
+                <span className="text-xs text-[slate-400]">{plan.members} active members</span>
                 <span className="badge badge-active text-[10px]">{plan.status}</span>
               </div>
             </motion.div>
@@ -158,10 +158,10 @@ export default function MembershipsPage() {
                     </td>
                     <td>
                       <div className="flex items-center gap-1">
-                        <button className="p-1.5 rounded-lg text-[#737373] hover:text-[#3B82F6] hover:bg-[#3B82F6]/10 transition-colors">
+                        <button className="p-1.5 rounded-lg text-[slate-400] hover:text-[#3B82F6] hover:bg-[#3B82F6]/10 transition-colors">
                           <Eye size={15} />
                         </button>
-                        <button className="p-1.5 rounded-lg text-[#737373] hover:text-[#F59E0B] hover:bg-[#F59E0B]/10 transition-colors">
+                        <button className="p-1.5 rounded-lg text-[slate-400] hover:text-[#F59E0B] hover:bg-[#F59E0B]/10 transition-colors">
                           <Pencil size={15} />
                         </button>
                       </div>
@@ -181,7 +181,7 @@ export default function MembershipsPage() {
             <div className="glass rounded-xl p-12 flex flex-col items-center justify-center">
               <CheckCircle size={40} className="text-[#22C55E] mb-3" />
               <h3 className="text-lg font-semibold text-white mb-1">All Clear!</h3>
-              <p className="text-sm text-[#737373]">No memberships expiring within 7 days.</p>
+              <p className="text-sm text-[slate-400]">No memberships expiring within 7 days.</p>
             </div>
           ) : (
             expiringSoon.map((m) => (
@@ -197,8 +197,8 @@ export default function MembershipsPage() {
                   </div>
                   <div>
                     <p className="text-sm font-semibold text-white">{m.member}</p>
-                    <p className="text-xs text-[#737373]">{m.plan} · Expires {formatDate(m.endDate)}</p>
-                    <p className="text-xs text-[#737373]">{m.phone}</p>
+                    <p className="text-xs text-[slate-400]">{m.plan} · Expires {formatDate(m.endDate)}</p>
+                    <p className="text-xs text-[slate-400]">{m.phone}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -206,7 +206,7 @@ export default function MembershipsPage() {
                     <Clock size={12} />
                     {m.daysLeft} days left
                   </span>
-                  <button className="px-4 py-2 rounded-lg bg-gradient-to-r from-[#DC2626] to-[#B91C1C] text-xs font-semibold text-white hover:shadow-lg hover:shadow-red-500/20 transition-all">
+                  <button className="px-4 py-2 rounded-lg bg-gradient-to-r from-[#DC2626] to-[#B91C1C] text-xs font-semibold text-white hover:shadow-lg hover:shadow-sky-500/20 transition-all">
                     Renew
                   </button>
                 </div>

@@ -43,7 +43,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="h-screen w-full flex relative overflow-hidden bg-black selection:bg-[#E11D48]/30">
+    <div className="h-screen w-full flex relative overflow-hidden bg-slate-900 selection:bg-[#0EA5E9]/30">
       {/* Background layers */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(225,29,72,0.08),transparent_60%)]" />
@@ -55,8 +55,8 @@ export default function LoginPage() {
       </div>
 
       {/* Red ambient glow */}
-      <div className="absolute top-1/4 -left-32 w-[500px] h-[500px] bg-[#E11D48]/8 rounded-full blur-[150px] pointer-events-none" />
-      <div className="absolute bottom-1/4 -right-32 w-[400px] h-[400px] bg-[#8E0000]/5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-1/4 -left-32 w-[500px] h-[500px] bg-[#0EA5E9]/8 rounded-full blur-[150px] pointer-events-none" />
+      <div className="absolute bottom-1/4 -right-32 w-[400px] h-[400px] bg-[#0284C7]/5 rounded-full blur-[120px] pointer-events-none" />
 
       {/* Left - Brand Section */}
       <div className="hidden lg:flex w-1/2 flex-col justify-between p-8 lg:p-12 relative z-10 h-full">
@@ -68,7 +68,7 @@ export default function LoginPage() {
               </div>
               <div>
                 <span className="text-xl font-extrabold text-white tracking-tight">VIKINGS</span>
-                <span className="block text-[10px] font-semibold tracking-[0.25em] text-[#E11D48]">GYM</span>
+                <span className="block text-[10px] font-semibold tracking-[0.25em] text-[#0EA5E9]">GYM</span>
               </div>
             </Link>
           </motion.div>
@@ -80,7 +80,7 @@ export default function LoginPage() {
             </div>
             <h1 className="font-podium text-[clamp(2.2rem,4vw,3.2rem)] text-white leading-[1.1] mb-5">
               Forge Your<br />
-              <span className="gradient-text-fire">Next Chapter</span>
+              <span className="gradient-text-violet">Next Chapter</span>
             </h1>
             <p className="text-[#737373] text-sm leading-relaxed">
               Step back into the arena. Your journey, your progress, your legacy — all waiting for you.
@@ -91,7 +91,7 @@ export default function LoginPage() {
             <div className="flex items-center gap-3 text-xs text-[#525252]">
               <div className="flex -space-x-2">
                 {[1, 2, 3].map((i) => (
-                  <div key={i} className="w-8 h-8 rounded-full border-2 border-black bg-gradient-to-br from-[#E11D48] to-[#8E0000] flex items-center justify-center text-[9px] font-bold text-white">
+                  <div key={i} className="w-8 h-8 rounded-full border-2 border-black bg-gradient-to-br from-[#0EA5E9] to-[#0284C7] flex items-center justify-center text-[9px] font-bold text-white">
                     {['AK', 'PS', 'RV'][i - 1]}
                   </div>
                 ))}
@@ -120,7 +120,7 @@ export default function LoginPage() {
               <div className="relative w-10 h-10 overflow-hidden rounded-lg">
                 <Image src="/logo.png" alt="Vikings Gym" width={40} height={40} className="object-contain p-0.5" />
               </div>
-              <span className="text-xl font-extrabold text-white tracking-tight flex items-center gap-1">VIKINGS <span className="text-[#E11D48] block text-[10px] tracking-[0.25em] mt-1.5">GYM</span></span>
+              <span className="text-xl font-extrabold text-white tracking-tight flex items-center gap-1">VIKINGS <span className="text-[#0EA5E9] block text-[10px] tracking-[0.25em] mt-1.5">GYM</span></span>
             </Link>
           </div>
 
@@ -136,9 +136,9 @@ export default function LoginPage() {
                 <div className="space-y-2">
                   <label className="text-[10px] font-bold text-[#A3A3A3] tracking-widest uppercase ml-1">Email</label>
                   <div className="relative group">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#525252] group-focus-within:text-[#E11D48] transition-colors duration-300" />
+                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#525252] group-focus-within:text-[#0EA5E9] transition-colors duration-300" />
                     <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)}
-                      className="w-full bg-white/[0.02] border border-white/[0.05] rounded-xl pl-12 pr-4 py-3.5 text-white text-sm placeholder-[#525252] focus:outline-none focus:border-[#E11D48]/50 focus:bg-white/[0.04] transition-all duration-300"
+                      className="w-full bg-white/[0.02] border border-white/[0.05] rounded-xl pl-12 pr-4 py-3.5 text-white text-sm placeholder-[#525252] focus:outline-none focus:border-[#0EA5E9]/50 focus:bg-white/[0.04] transition-all duration-300"
                       placeholder="name@example.com" />
                   </div>
                 </div>
@@ -146,12 +146,12 @@ export default function LoginPage() {
                 <div className="space-y-2">
                   <div className="flex items-center justify-between ml-1 pr-1">
                     <label className="text-[10px] font-bold text-[#A3A3A3] tracking-widest uppercase">Password</label>
-                    <Link href="/forgot-password" className="text-[10px] text-[#525252] hover:text-[#E11D48] transition-colors tracking-widest uppercase font-bold">Forgot?</Link>
+                    <Link href="/forgot-password" className="text-[10px] text-[#525252] hover:text-[#0EA5E9] transition-colors tracking-widest uppercase font-bold">Forgot?</Link>
                   </div>
                   <div className="relative group">
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#525252] group-focus-within:text-[#E11D48] transition-colors duration-300" />
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#525252] group-focus-within:text-[#0EA5E9] transition-colors duration-300" />
                     <input type={showPw ? "text" : "password"} required value={password} onChange={(e) => setPassword(e.target.value)}
-                      className="w-full bg-white/[0.02] border border-white/[0.05] rounded-xl pl-12 pr-12 py-3.5 text-white text-sm placeholder-[#525252] focus:outline-none focus:border-[#E11D48]/50 focus:bg-white/[0.04] transition-all duration-300"
+                      className="w-full bg-white/[0.02] border border-white/[0.05] rounded-xl pl-12 pr-12 py-3.5 text-white text-sm placeholder-[#525252] focus:outline-none focus:border-[#0EA5E9]/50 focus:bg-white/[0.04] transition-all duration-300"
                       placeholder="••••••••" />
                     <button type="button" onClick={() => setShowPw(!showPw)}
                       className="absolute right-4 top-1/2 -translate-y-1/2 text-[#525252] hover:text-white transition-colors">
@@ -161,7 +161,7 @@ export default function LoginPage() {
                 </div>
 
                 <button type="submit" disabled={isLoading || isGoogleLoading}
-                  className="group relative w-full overflow-hidden rounded-xl bg-gradient-to-r from-[#E11D48] to-[#9F1239] py-4 text-sm font-bold text-white uppercase tracking-widest transition-all duration-300 hover:shadow-[0_0_30px_rgba(225,29,72,0.3)] disabled:opacity-70 disabled:cursor-not-allowed mt-2">
+                  className="group relative w-full overflow-hidden rounded-xl bg-gradient-to-r from-[#0EA5E9] to-[#9F1239] py-4 text-sm font-bold text-white uppercase tracking-widest transition-all duration-300 hover:shadow-[0_0_30px_rgba(225,29,72,0.3)] disabled:opacity-70 disabled:cursor-not-allowed mt-2">
                   <span className="relative z-10 flex items-center justify-center gap-2">
                     {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <>Enter Arena <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" /></>}
                   </span>
@@ -195,7 +195,7 @@ export default function LoginPage() {
 
               <p className="mt-8 text-center text-xs text-[#737373]">
                 New to Vikings?{" "}
-                <Link href="/register" className="text-white font-bold tracking-wide hover:text-[#E11D48] transition-colors border-b border-white/20 hover:border-[#E11D48]/50 pb-0.5">Create Account</Link>
+                <Link href="/register" className="text-white font-bold tracking-wide hover:text-[#0EA5E9] transition-colors border-b border-white/20 hover:border-[#0EA5E9]/50 pb-0.5">Create Account</Link>
               </p>
             </div>
           </div>

@@ -24,22 +24,22 @@ export function InstagramGallery() {
 
   return (
     <section className="section-padding bg-black relative overflow-hidden">
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#C62828]/30 to-transparent" />
+      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#0EA5E9]/30 to-transparent" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeading badge="Social" title="Follow the Tribe" subtitle="Real warriors, real results. See what happens at Vikings Gym every day." />
         
         {/* Instagram Profile Header */}
         <Reveal>
           <a href={GYM_INFO.instagram} target="_blank" rel="noopener noreferrer"
-            className="group flex items-center gap-6 p-6 sm:p-8 mb-10 rounded-[2rem] glass-card max-w-lg mx-auto hover:border-[#C62828]/30 transition-all duration-500"
+            className="group flex items-center gap-6 p-6 sm:p-8 mb-10 rounded-[2rem] glass-card max-w-lg mx-auto hover:border-[#0EA5E9]/30 transition-all duration-500"
           >
             <div className="relative shrink-0">
-              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#C62828] via-purple-500 to-yellow-500 p-[3px]">
+              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#0EA5E9] via-purple-500 to-yellow-500 p-[3px]">
                 <div className="w-full h-full rounded-full bg-black flex items-center justify-center overflow-hidden">
                   <span className="text-3xl font-black text-white">V</span>
                 </div>
               </div>
-              <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[#C62828] flex items-center justify-center shadow-lg">
+              <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[#0EA5E9] flex items-center justify-center shadow-lg">
                 <InstagramIcon />
               </div>
             </div>
@@ -58,7 +58,7 @@ export function InstagramGallery() {
               <p className="text-[#A3A3A3] text-xs mt-1 truncate">Vikings Gym — Unleash The Warrior Within</p>
             </div>
             <div className="shrink-0">
-              <span className="inline-flex items-center px-5 py-2 rounded-xl bg-[#C62828] text-white text-[10px] font-bold tracking-wider uppercase hover:bg-[#A32020] transition-colors shadow-lg">
+              <span className="inline-flex items-center px-5 py-2 rounded-xl bg-[#0EA5E9] text-white text-[10px] font-bold tracking-wider uppercase hover:bg-[#A32020] transition-colors shadow-lg">
                 Follow
               </span>
             </div>
@@ -69,7 +69,7 @@ export function InstagramGallery() {
         <StaggerContainer className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
           {posts.map((post) => (
             <motion.div key={post.caption} variants={staggerItem}
-              className="group relative aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-[#0A0A0A] to-[#161616] border border-white/5 hover:border-[#C62828]/40 transition-all duration-500 cursor-pointer"
+              className="group relative aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-[#0A0A0A] to-[#161616] border border-white/5 hover:border-[#0EA5E9]/40 transition-all duration-500 cursor-pointer"
             >
               <div className="absolute inset-0 flex items-center justify-center">
                 <span className="text-5xl sm:text-6xl opacity-30 group-hover:opacity-50 transition-opacity group-hover:scale-110 transition-transform duration-500">
@@ -79,7 +79,7 @@ export function InstagramGallery() {
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
                 <div className="flex items-center gap-1.5 mb-1">
-                  <svg viewBox="0 0 24 24" fill="#C62828" className="w-3.5 h-3.5">
+                  <svg viewBox="0 0 24 24" fill="#0EA5E9" className="w-3.5 h-3.5">
                     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                   </svg>
                   <span className="text-white text-[10px] font-bold">{post.likes}</span>
@@ -92,7 +92,7 @@ export function InstagramGallery() {
 
         <Reveal className="text-center mt-10">
           <a href={GYM_INFO.instagram} target="_blank" rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-gradient-to-r from-[#C62828] to-purple-600 text-white text-xs font-bold tracking-widest uppercase hover:scale-105 transition-all duration-500 shadow-xl shadow-[#C62828]/20"
+            className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-gradient-to-r from-[#0EA5E9] to-purple-600 text-white text-xs font-bold tracking-widest uppercase hover:scale-105 transition-all duration-500 shadow-xl shadow-[#0EA5E9]/20"
           >
             <InstagramIcon />
             Follow on Instagram

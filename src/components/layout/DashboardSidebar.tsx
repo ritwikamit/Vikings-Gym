@@ -84,18 +84,18 @@ export default function DashboardSidebar({ isMobileOpen, onMobileClose }: Dashbo
         <div className="flex items-center justify-between h-20 px-6 border-b border-white/5 shrink-0">
           {!isCollapsed && (
             <Link href="/admin/dashboard" className="flex items-center gap-3 group">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#C62828] to-[#8E0000] flex items-center justify-center shadow-lg shadow-[#C62828]/20 group-hover:scale-105 transition-transform">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#0EA5E9] to-[#8E0000] flex items-center justify-center shadow-lg shadow-[#0EA5E9]/20 group-hover:scale-105 transition-transform">
                 <span className="text-white font-black text-lg">V</span>
               </div>
               <div className="flex flex-col">
                 <h1 className="text-sm font-black text-white tracking-tighter leading-none">VIKINGS</h1>
-                <p className="text-[10px] text-[#C62828] font-bold uppercase tracking-[0.2em] mt-1 leading-none">ADMIN</p>
+                <p className="text-[10px] text-[#0EA5E9] font-bold uppercase tracking-[0.2em] mt-1 leading-none">ADMIN</p>
               </div>
             </Link>
           )}
           {isCollapsed && (
             <Link href="/admin/dashboard" className="mx-auto group">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#C62828] to-[#8E0000] flex items-center justify-center shadow-lg shadow-[#C62828]/20 group-hover:scale-110 transition-transform">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#0EA5E9] to-[#8E0000] flex items-center justify-center shadow-lg shadow-[#0EA5E9]/20 group-hover:scale-110 transition-transform">
                 <span className="text-white font-black text-lg">V</span>
               </div>
             </Link>
@@ -122,18 +122,18 @@ export default function DashboardSidebar({ isMobileOpen, onMobileClose }: Dashbo
                   'flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 group relative',
                   isCollapsed ? 'justify-center px-0 h-11' : '',
                   isActive 
-                    ? 'bg-[#C62828]/10 text-[#C62828]' 
+                    ? 'bg-[#0EA5E9]/10 text-[#0EA5E9]' 
                     : 'text-[#737373] hover:text-white hover:bg-white/[0.03]'
                 )}
               >
                 <Magnetic strength={0.2}>
-                  <Icon size={isActive ? 20 : 18} className={cn('shrink-0 transition-transform group-hover:scale-110', isActive ? 'text-[#C62828]' : '')} />
+                  <Icon size={isActive ? 20 : 18} className={cn('shrink-0 transition-transform group-hover:scale-110', isActive ? 'text-[#0EA5E9]' : '')} />
                 </Magnetic>
                 {!isCollapsed && (
                   <span className="truncate">{link.name}</span>
                 )}
                 {isActive && !isCollapsed && (
-                  <motion.div layoutId="sidebar-active" className="absolute left-0 w-1 h-5 bg-[#C62828] rounded-r-full" />
+                  <motion.div layoutId="sidebar-active" className="absolute left-0 w-1 h-5 bg-[#0EA5E9] rounded-r-full" />
                 )}
                 {isCollapsed && (
                   <div className="absolute left-full ml-4 px-3 py-2 bg-[#161616] border border-white/10 rounded-xl text-xs font-bold text-white whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 group-hover:translate-x-0 -translate-x-2 transition-all z-50 shadow-2xl">
@@ -159,7 +159,7 @@ export default function DashboardSidebar({ isMobileOpen, onMobileClose }: Dashbo
         <div className={cn('border-t border-white/5 p-4 bg-[#0D0D0D]', isCollapsed && 'p-2')}>
           {!isCollapsed ? (
             <div className="flex items-center gap-3 p-2 rounded-2xl bg-white/[0.02] border border-white/5">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#C62828] to-[#8E0000] flex items-center justify-center shrink-0 shadow-lg">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#0EA5E9] to-[#8E0000] flex items-center justify-center shrink-0 shadow-lg">
                 <span className="text-white font-bold text-sm">NK</span>
               </div>
               <div className="flex-1 min-w-0">
@@ -172,7 +172,7 @@ export default function DashboardSidebar({ isMobileOpen, onMobileClose }: Dashbo
             </div>
           ) : (
             <div className="flex flex-col items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#C62828] to-[#8E0000] flex items-center justify-center shadow-lg">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#0EA5E9] to-[#8E0000] flex items-center justify-center shadow-lg">
                 <span className="text-white font-bold text-sm">NK</span>
               </div>
               <button className="w-8 h-8 flex items-center justify-center rounded-lg text-[#737373] hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-all">

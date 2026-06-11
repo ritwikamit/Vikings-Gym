@@ -24,10 +24,10 @@ export default function Footer() {
   return (
     <footer className="relative bg-[#050505] border-t border-white/5 overflow-hidden">
       {/* Accent line */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#C62828] to-transparent opacity-30" />
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#0EA5E9] to-transparent opacity-30" />
       
       {/* Decorative background element */}
-      <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-[#C62828]/5 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-[#0EA5E9]/5 rounded-full blur-[100px] pointer-events-none" />
 
       <motion.div
         variants={containerVariants}
@@ -40,14 +40,14 @@ export default function Footer() {
           {/* Brand */}
           <motion.div variants={itemVariants} className="lg:col-span-1">
             <Link href="/" className="flex items-center gap-3 mb-6 group">
-              <div className="relative w-10 h-10 overflow-hidden rounded-xl border border-white/10 group-hover:border-[#C62828]/50 transition-all shadow-xl">
+              <div className="relative w-10 h-10 overflow-hidden rounded-xl border border-white/10 group-hover:border-[#0EA5E9]/50 transition-all shadow-xl">
                 <Image src="/logo.png" alt="Vikings Gym" fill className="object-contain p-0.5 transition-transform duration-500 group-hover:scale-110" />
               </div>
               <div className="flex flex-col">
                 <span className="text-xl font-black tracking-tighter text-white leading-none">
                   VIKINGS
                 </span>
-                <span className="text-[10px] font-bold tracking-[0.3em] text-[#C62828] leading-none mt-1">
+                <span className="text-[10px] font-bold tracking-[0.3em] text-[#0EA5E9] leading-none mt-1">
                   GYM
                 </span>
               </div>
@@ -60,7 +60,7 @@ export default function Footer() {
                 href={GYM_INFO.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 text-white hover:text-[#C62828] hover:border-[#C62828]/30 hover:bg-[#C62828]/5 transition-all duration-300"
+                className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 text-white hover:text-[#0EA5E9] hover:border-[#0EA5E9]/30 hover:bg-[#0EA5E9]/5 transition-all duration-300"
               >
                 <Instagram className="w-5 h-5" />
               </a>
@@ -80,7 +80,7 @@ export default function Footer() {
                     href={link.href}
                     className="group flex items-center gap-3 text-[#737373] hover:text-white transition-all duration-300 text-sm font-semibold"
                   >
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#C62828] scale-0 group-hover:scale-100 transition-transform duration-300 shadow-[0_0_8px_#C62828]" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#0EA5E9] scale-0 group-hover:scale-100 transition-transform duration-300 shadow-[0_0_8px_#0EA5E9]" />
                     <span className="group-hover:translate-x-1 transition-transform duration-300">{link.name}</span>
                   </Link>
                 </li>
@@ -95,8 +95,8 @@ export default function Footer() {
             </h3>
             <ul className="space-y-6">
               <li className="flex items-start gap-4 group">
-                <div className="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center shrink-0 group-hover:bg-[#C62828]/10 transition-colors">
-                  <Phone className="w-4 h-4 text-[#C62828]" />
+                <div className="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center shrink-0 group-hover:bg-[#0EA5E9]/10 transition-colors">
+                  <Phone className="w-4 h-4 text-[#0EA5E9]" />
                 </div>
                 <div className="flex flex-col">
                   <span className="text-[10px] font-bold text-[#444] uppercase tracking-widest mb-1">Phone</span>
@@ -104,8 +104,8 @@ export default function Footer() {
                 </div>
               </li>
               <li className="flex items-start gap-4 group">
-                <div className="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center shrink-0 group-hover:bg-[#C62828]/10 transition-colors">
-                  <Mail className="w-4 h-4 text-[#C62828]" />
+                <div className="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center shrink-0 group-hover:bg-[#0EA5E9]/10 transition-colors">
+                  <Mail className="w-4 h-4 text-[#0EA5E9]" />
                 </div>
                 <div className="flex flex-col">
                   <span className="text-[10px] font-bold text-[#444] uppercase tracking-widest mb-1">Email</span>
@@ -123,7 +123,7 @@ export default function Footer() {
             <div className="space-y-6">
               <div className="flex items-start gap-4">
                 <div className="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center shrink-0">
-                  <Clock className="w-4 h-4 text-[#C62828]" />
+                  <Clock className="w-4 h-4 text-[#0EA5E9]" />
                 </div>
                 <div>
                   <p className="text-[#A3A3A3] text-sm font-bold tracking-tight">Weekdays</p>
@@ -132,7 +132,7 @@ export default function Footer() {
               </div>
               <div className="flex items-start gap-4">
                 <div className="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center shrink-0">
-                  <Clock className="w-4 h-4 text-[#C62828]" />
+                  <Clock className="w-4 h-4 text-[#0EA5E9]" />
                 </div>
                 <div>
                   <p className="text-[#A3A3A3] text-sm font-bold tracking-tight">Weekends</p>
@@ -150,7 +150,7 @@ export default function Footer() {
           </p>
           <div className="flex items-center gap-6">
             <span className="text-[#444] text-[10px] font-black uppercase tracking-[0.2em]">Aurangabad, Bihar</span>
-            <div className="w-2 h-2 rounded-full bg-[#C62828] animate-pulse shadow-[0_0_8px_#C62828]" />
+            <div className="w-2 h-2 rounded-full bg-[#0EA5E9] animate-pulse shadow-[0_0_8px_#0EA5E9]" />
           </div>
         </motion.div>
       </motion.div>

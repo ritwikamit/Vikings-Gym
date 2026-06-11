@@ -39,7 +39,7 @@ export default function PaymentsPage() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold text-white">Payments</h1>
-          <p className="text-sm text-gray-400">Manage transactions and revenues.</p>
+          <p className="text-sm text-slate-400">Manage transactions and revenues.</p>
         </div>
         <div className="flex items-center gap-3">
           <button 
@@ -61,7 +61,7 @@ export default function PaymentsPage() {
               <IndianRupee className="w-6 h-6 text-yellow-500" />
             </div>
             <div>
-              <p className="text-sm text-gray-400">Total Transactions</p>
+              <p className="text-sm text-slate-400">Total Transactions</p>
               <h3 className="text-2xl font-bold text-white">{pagination.total}</h3>
             </div>
           </div>
@@ -72,7 +72,7 @@ export default function PaymentsPage() {
               <TrendingUp className="w-6 h-6 text-green-500" />
             </div>
             <div>
-              <p className="text-sm text-gray-400">Total Revenue (All Time)</p>
+              <p className="text-sm text-slate-400">Total Revenue (All Time)</p>
               <h3 className="text-2xl font-bold text-white">{formatCurrency(totalRevenue)}</h3>
             </div>
           </div>
@@ -82,16 +82,16 @@ export default function PaymentsPage() {
       <div className="glass rounded-xl p-6">
         <div className="flex flex-col sm:flex-row justify-between gap-4 mb-6">
           <div className="relative w-full sm:w-64">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <input
               type="text"
               placeholder="Search member or invoice..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-[#1A1A1A] border border-[#333] rounded-lg pl-10 pr-4 py-2 text-sm text-white focus:outline-none focus:border-red-500"
+              className="w-full bg-[slate-800] border border-[slate-700] rounded-lg pl-10 pr-4 py-2 text-sm text-white focus:outline-none focus:border-sky-500"
             />
           </div>
-          <button className="flex items-center gap-2 px-4 py-2 bg-[#1A1A1A] border border-[#333] rounded-lg text-sm text-white hover:bg-[#222]">
+          <button className="flex items-center gap-2 px-4 py-2 bg-[slate-800] border border-[slate-700] rounded-lg text-sm text-white hover:bg-[slate-800]">
             <Filter className="w-4 h-4" /> Filter
           </button>
         </div>
@@ -100,7 +100,7 @@ export default function PaymentsPage() {
           {isLoading ? (
             <div className="flex flex-col items-center justify-center py-20">
               <div className="w-10 h-10 border-4 border-[#DC2626] border-t-transparent rounded-full animate-spin mb-4" />
-              <p className="text-[#737373] text-sm">Loading payments...</p>
+              <p className="text-[slate-400] text-sm">Loading payments...</p>
             </div>
           ) : (
             <table className="data-table">
@@ -118,7 +118,7 @@ export default function PaymentsPage() {
               <tbody>
                 {filteredPayments.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="text-center py-8 text-gray-500">No payments found.</td>
+                    <td colSpan={7} className="text-center py-8 text-slate-500">No payments found.</td>
                   </tr>
                 ) : (
                   filteredPayments.map((payment: any) => (
@@ -149,21 +149,21 @@ export default function PaymentsPage() {
         {/* Pagination */}
         {pagination.totalPages > 1 && (
           <div className="flex items-center justify-between mt-6 px-2">
-            <p className="text-xs text-[#737373]">
+            <p className="text-xs text-[slate-400]">
               Page {currentPage} of {pagination.totalPages}
             </p>
             <div className="flex items-center gap-2">
               <button
                 disabled={currentPage === 1}
                 onClick={() => setCurrentPage(p => p - 1)}
-                className="p-2 rounded-lg bg-[#1A1A1A] border border-[#333333] text-[#737373] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="p-2 rounded-lg bg-[slate-800] border border-[slate-700333] text-[slate-400] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 <ChevronLeft size={16} />
               </button>
               <button
                 disabled={currentPage === pagination.totalPages}
                 onClick={() => setCurrentPage(p => p + 1)}
-                className="p-2 rounded-lg bg-[#1A1A1A] border border-[#333333] text-[#737373] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="p-2 rounded-lg bg-[slate-800] border border-[slate-700333] text-[slate-400] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 <ChevronRight size={16} />
               </button>

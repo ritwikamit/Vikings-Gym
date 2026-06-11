@@ -17,11 +17,11 @@ const fadeUp = { initial: { opacity: 0, y: 24 }, animate: { opacity: 1, y: 0 }, 
 
 export default function TransformationsPage() {
   return (
-    <div className="pt-28 pb-20 bg-[#000000] min-h-screen">
+    <div className="pt-28 pb-20 bg-[#0F172A] min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div {...fadeUp} className="text-center max-w-3xl mx-auto mb-16">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight mb-6">
-            Real People, <span className="gradient-text-fire">Real Results</span>
+            Real People, <span className="gradient-text-violet">Real Results</span>
           </h1>
           <p className="text-xl text-[#666]">Witness the incredible journeys of our members. Your story could be next.</p>
         </motion.div>
@@ -34,7 +34,7 @@ export default function TransformationsPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1, ease: "easeOut" }}
-              className="bg-[#0A0A0A] border border-white/[0.04] rounded-2xl overflow-hidden group hover:border-[#C62828]/30 transition-all duration-500 card-hover"
+              className="bg-[#0A0A0A] border border-white/[0.04] rounded-2xl overflow-hidden group hover:border-[#0EA5E9]/30 transition-all duration-500 card-hover"
             >
               <div className="relative h-64 bg-gradient-to-br from-[#1A1A1A] to-[#0A0A0A] flex items-center justify-center">
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] to-transparent z-10" />
@@ -46,7 +46,7 @@ export default function TransformationsPage() {
                     <span className="text-neutral-600 font-bold uppercase rotate-[-90deg] text-sm tracking-widest">After</span>
                   </div>
                 </div>
-                <div className="absolute top-4 right-4 z-20 bg-[#C62828] text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
+                <div className="absolute top-4 right-4 z-20 bg-[#0EA5E9] text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
                   {t.weightLost}
                 </div>
               </div>
@@ -54,14 +54,14 @@ export default function TransformationsPage() {
                 <div className="flex justify-between items-start mb-4">
                   <div>
                     <h3 className="text-xl font-bold text-white mb-1">{t.name}</h3>
-                    <div className="flex items-center text-[#C62828] text-sm font-medium">
+                    <div className="flex items-center text-[#0EA5E9] text-sm font-medium">
                       <Calendar className="w-4 h-4 mr-1" />
                       {t.duration}
                     </div>
                   </div>
                   <div className="flex gap-0.5">
                     {[...Array(t.rating)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-[#C62828] text-[#C62828]" />
+                      <Star key={i} className="w-4 h-4 fill-[#0EA5E9] text-[#0EA5E9]" />
                     ))}
                   </div>
                 </div>
@@ -73,7 +73,7 @@ export default function TransformationsPage() {
 
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
           className="relative rounded-2xl p-8 md:p-12 text-center overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-[#C62828] to-[#8E0000]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0EA5E9] to-[#0284C7]" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.1),transparent_60%)]" />
           <div className="relative z-10">
             <h2 className="text-3xl font-extrabold text-white mb-4">Ready to Start Your Journey?</h2>
@@ -81,7 +81,7 @@ export default function TransformationsPage() {
               Join Vikings Gym today and get a personalized workout and nutrition plan designed for your goals.
             </p>
             <Link href="/register"
-              className="inline-flex items-center gap-2 bg-white text-[#C62828] px-8 py-4 rounded-xl font-bold hover:bg-neutral-100 transition-all duration-300">
+              className="inline-flex items-center gap-2 bg-white text-[#0EA5E9] px-8 py-4 rounded-xl font-bold hover:bg-neutral-100 transition-all duration-300">
               Start Your Transformation <ArrowRight className="w-5 h-5" />
             </Link>
           </div>

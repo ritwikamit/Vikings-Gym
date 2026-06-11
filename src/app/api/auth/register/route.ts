@@ -92,8 +92,9 @@ export async function POST(req: Request) {
         memberId: user.member?.id,
       },
     });
-  } catch (error) {
-    console.error("Register error:", error);
-    return NextResponse.json({ error: "Registration failed" }, { status: 500 });
-  }
+   } catch (error) {
+     const errorMsg = error instanceof Error ? error.message : JSON.stringify(error);
+     console.error("Register error:", errorMsg);
+     return NextResponse.json({ error: errorMsg || "Registration failed" }, { status: 500 });
+   }
 }

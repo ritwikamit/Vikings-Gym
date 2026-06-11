@@ -8,14 +8,14 @@ export default function AdminNotificationsPage() {
         <p className="text-[#A3A3A3]">Manage automated and manual notifications for members.</p>
       </div>
 
-      <Card className="bg-[#1A1A1A] border-white/[0.06] text-white">
+      <Card className="bg-[slate-800] border-white/[0.06] text-white">
         <CardHeader>
           <CardTitle>Notification Templates</CardTitle>
           <CardDescription className="text-[#A3A3A3]">Configure email and in-app alerts.</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="h-64 flex items-center justify-center border border-dashed border-white/[0.1] rounded-lg">
-            <p className="text-[#737373]">Notification Manager Coming Soon</p>
+            <p className="text-[slate-400]">Notification Manager Coming Soon</p>
           </div>
         </CardContent>
       </Card>

@@ -8,12 +8,12 @@ const fadeUp = { initial: { opacity: 0, y: 24 }, animate: { opacity: 1, y: 0 }, 
 
 export default function AboutPage() {
   return (
-    <main className="min-h-screen bg-[#000000] pt-28 pb-16">
+    <main className="min-h-screen bg-[#0F172A] pt-28 pb-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Hero */}
         <div className="text-center max-w-3xl mx-auto mb-20">
           <motion.h1 {...fadeUp} className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight mb-6">
-            About <span className="gradient-text-fire">Vikings Gym</span>
+            About <span className="gradient-text-violet">Vikings Gym</span>
           </motion.h1>
           <motion.p {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.1 }} className="text-[#666] text-lg leading-relaxed">
             Founded in 2024 in Aurangabad, Bihar, Vikings Gym isn&apos;t just a fitness center — it&apos;s a forging ground for champions.
@@ -39,11 +39,11 @@ export default function AboutPage() {
             </p>
             <div className="grid grid-cols-2 gap-6 pt-6 border-t border-white/[0.06]">
               <div>
-                <h4 className="text-4xl font-extrabold text-[#C62828] mb-2">500+</h4>
+                <h4 className="text-4xl font-extrabold text-[#0EA5E9] mb-2">500+</h4>
                 <p className="text-sm text-[#666] uppercase tracking-wider font-medium">Active Members</p>
               </div>
               <div>
-                <h4 className="text-4xl font-extrabold text-[#C62828] mb-2">10,000</h4>
+                <h4 className="text-4xl font-extrabold text-[#0EA5E9] mb-2">10,000</h4>
                 <p className="text-sm text-[#666] uppercase tracking-wider font-medium">Sq. Ft Facility</p>
               </div>
             </div>
@@ -63,9 +63,9 @@ export default function AboutPage() {
               { icon: Trophy, title: "Uncompromising Quality", desc: "From our imported equipment to our certified trainers, we never compromise on the quality of your fitness experience." },
             ].map((v, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="glass-card p-8 rounded-2xl hover:border-[#C62828]/20 transition-all duration-300">
-                <div className="w-14 h-14 bg-[#C62828]/10 rounded-xl flex items-center justify-center mb-6">
-                  <v.icon className="w-7 h-7 text-[#C62828]" />
+                className="glass-card p-8 rounded-2xl hover:border-[#0EA5E9]/20 transition-all duration-300">
+                <div className="w-14 h-14 bg-[#0EA5E9]/10 rounded-xl flex items-center justify-center mb-6">
+                  <v.icon className="w-7 h-7 text-[#0EA5E9]" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-3">{v.title}</h3>
                 <p className="text-[#666] leading-relaxed">{v.desc}</p>

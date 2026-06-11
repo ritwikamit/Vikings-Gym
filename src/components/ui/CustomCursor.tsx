@@ -54,14 +54,14 @@ export function CustomCursor() {
       y: mousePosition.y - 16,
       scale: 1,
       backgroundColor: "transparent",
-      border: "1px solid rgba(220, 38, 38, 0.5)", // Red-500 semi-transparent
+      border: "1px solid rgba(14, 165, 233, 0.5)",
     },
     hover: {
       x: mousePosition.x - 16,
       y: mousePosition.y - 16,
       scale: 1.5,
-      backgroundColor: "rgba(220, 38, 38, 0.1)",
-      border: "1px solid rgba(220, 38, 38, 0.8)",
+      backgroundColor: "rgba(14, 165, 233, 0.1)",
+      border: "1px solid rgba(14, 165, 233, 0.8)",
     }
   };
 
@@ -74,7 +74,7 @@ export function CustomCursor() {
         transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.5 }}
       />
       <motion.div
-        className="fixed top-0 left-0 w-1.5 h-1.5 bg-[#DC2626] rounded-full pointer-events-none z-[9999] hidden md:block"
+        className="fixed top-0 left-0 w-1.5 h-1.5 bg-[#0EA5E9] rounded-full pointer-events-none z-[9999] hidden md:block"
         animate={{
           x: mousePosition.x - 3,
           y: mousePosition.y - 3,

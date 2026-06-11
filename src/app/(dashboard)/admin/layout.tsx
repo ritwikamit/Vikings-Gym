@@ -12,7 +12,7 @@ export default function AdminLayout({
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#0A0A0A]">
+    <div className="flex h-screen overflow-hidden bg-[slate-900]">
       {/* Sidebar */}
       <DashboardSidebar
         isMobileOpen={isMobileOpen}

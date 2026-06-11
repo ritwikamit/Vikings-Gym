@@ -17,11 +17,11 @@ const fadeUp = { initial: { opacity: 0, y: 24 }, animate: { opacity: 1, y: 0 }, 
 
 export default function BlogPage() {
   return (
-    <div className="pt-28 pb-20 bg-[#000000] min-h-screen">
+    <div className="pt-28 pb-20 bg-[#0F172A] min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div {...fadeUp} className="text-center max-w-3xl mx-auto mb-16">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight mb-6">
-            Fitness <span className="gradient-text-fire">Blog</span>
+            Fitness <span className="gradient-text-violet">Blog</span>
           </h1>
           <p className="text-xl text-[#666]">Expert advice, training tips, and nutritional guidance from our certified trainers.</p>
         </motion.div>
@@ -34,10 +34,10 @@ export default function BlogPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1, ease: "easeOut" }}
-              className="bg-[#0A0A0A] border border-white/[0.04] rounded-2xl overflow-hidden hover:border-[#C62828]/30 transition-all group flex flex-col h-full card-hover"
+              className="bg-[#0A0A0A] border border-white/[0.04] rounded-2xl overflow-hidden hover:border-[#0EA5E9]/30 transition-all group flex flex-col h-full card-hover"
             >
               <div className="relative h-48 bg-gradient-to-br from-[#1A1A1A] to-[#0A0A0A] flex items-center justify-center overflow-hidden">
-                <div className="absolute top-4 left-4 bg-[#C62828]/90 text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider z-10">
+                <div className="absolute top-4 left-4 bg-[#0EA5E9]/90 text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider z-10">
                   {post.category}
                 </div>
                 <div className="absolute inset-0 nordic-pattern opacity-10 group-hover:scale-110 transition-transform duration-500" />
@@ -47,9 +47,9 @@ export default function BlogPage() {
                   <span className="flex items-center gap-1"><Calendar className="w-3 h-3" /> {post.date}</span>
                   <span className="flex items-center gap-1"><User className="w-3 h-3" /> {post.author}</span>
                 </div>
-                <h3 className="text-xl font-bold text-white mb-3 group-hover:text-[#C62828] transition-colors">{post.title}</h3>
+                <h3 className="text-xl font-bold text-white mb-3 group-hover:text-[#0EA5E9] transition-colors">{post.title}</h3>
                 <p className="text-[#666] text-sm mb-6 flex-grow leading-relaxed">{post.excerpt}</p>
-                <Link href={`/blog`} className="inline-flex items-center text-[#C62828] font-bold text-sm hover:text-[#E53935] transition-colors">
+                <Link href={`/blog`} className="inline-flex items-center text-[#0EA5E9] font-bold text-sm hover:text-[#E53935] transition-colors">
                   Read Article <ArrowRight className="w-4 h-4 ml-2" />
                 </Link>
               </div>

@@ -22,15 +22,15 @@ export function TestimonialsSection() {
                 transition={{ duration: 0.5, delay: i * 0.1, ease: "easeOut" }}
                 className="w-[320px] sm:w-[340px] shrink-0 p-6 rounded-2xl glass-card hover:bg-white/[0.03] transition-all duration-300"
               >
-                <Quote className="w-8 h-8 text-[#C62828]/20 mb-4" />
+                <Quote className="w-8 h-8 text-[#0EA5E9]/20 mb-4" />
                 <p className="text-[#A3A3A3] text-sm leading-relaxed mb-6">&ldquo;{t.content}&rdquo;</p>
                 <div className="flex items-center gap-0.5 mb-4">
                   {Array.from({ length: 5 }).map((_, j) => (
-                    <Star key={j} className={cn('w-4 h-4', j < t.rating ? 'text-[#C62828] fill-[#C62828]' : 'text-white/[0.06]')} />
+                    <Star key={j} className={cn('w-4 h-4', j < t.rating ? 'text-[#0EA5E9] fill-[#0EA5E9]' : 'text-white/[0.06]')} />
                   ))}
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#C62828] to-[#8E0000] flex items-center justify-center text-white text-sm font-bold">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#0EA5E9] to-[#8E0000] flex items-center justify-center text-white text-sm font-bold">
                     {getInitials(t.name)}
                   </div>
                   <div>

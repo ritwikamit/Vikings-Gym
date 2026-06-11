@@ -125,7 +125,7 @@ export default function TrainerClientsPage() {
       >
         <div>
           <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-            <Users className="w-6 h-6 text-red-500" />
+            <Users className="w-6 h-6 text-sky-500" />
             My Clients
           </h1>
           <p className="text-[#A3A3A3] text-sm mt-1">
@@ -145,13 +145,13 @@ export default function TrainerClientsPage() {
         className="flex flex-col sm:flex-row gap-3"
       >
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#737373]" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[slate-400]" />
           <input
             type="text"
             placeholder="Search clients..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg pl-10 pr-4 py-2.5 text-white text-sm placeholder:text-[#737373] outline-none focus:border-red-500/50 transition-colors"
+            className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg pl-10 pr-4 py-2.5 text-white text-sm placeholder:text-[slate-400] outline-none focus:border-sky-500/50 transition-colors"
           />
         </div>
         <div className="flex gap-2">
@@ -162,7 +162,7 @@ export default function TrainerClientsPage() {
               className={cn(
                 'px-4 py-2.5 rounded-lg text-sm font-medium transition-all',
                 statusFilter === status
-                  ? 'bg-red-600/10 text-red-500 border border-red-500/30'
+                  ? 'bg-sky-600/10 text-sky-500 border border-sky-500/30'
                   : 'bg-white/[0.04] text-[#A3A3A3] border border-white/[0.08] hover:bg-white/[0.06] hover:text-white'
               )}
             >
@@ -184,42 +184,42 @@ export default function TrainerClientsPage() {
           >
             {/* Top Section */}
             <div className="flex items-start gap-3.5 mb-4">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-red-600/30 to-red-800/30 flex items-center justify-center text-red-500 font-bold text-sm flex-shrink-0 ring-1 ring-red-500/20">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-sky-600/30 to-red-800/30 flex items-center justify-center text-sky-500 font-bold text-sm flex-shrink-0 ring-1 ring-sky-500/20">
                 {getInitials(client.name)}
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="text-white font-semibold text-sm group-hover:text-red-400 transition-colors truncate">
                   {client.name}
                 </h3>
-                <p className="text-[#737373] text-xs truncate">{client.email}</p>
+                <p className="text-[slate-400] text-xs truncate">{client.email}</p>
                 <div className="flex items-center gap-2 mt-1.5">
                   <span
                     className={cn(
                       'text-[10px] font-semibold px-2 py-0.5 rounded-full uppercase',
                       client.membershipStatus === 'ACTIVE'
                         ? 'bg-green-500/10 text-green-500'
-                        : 'bg-red-500/10 text-red-500'
+                        : 'bg-sky-500/10 text-sky-500'
                     )}
                   >
                     {client.membershipStatus}
                   </span>
                 </div>
               </div>
-              <ChevronRight className="w-4 h-4 text-[#737373] group-hover:text-white transition-colors flex-shrink-0 mt-1" />
+              <ChevronRight className="w-4 h-4 text-[slate-400] group-hover:text-white transition-colors flex-shrink-0 mt-1" />
             </div>
 
             {/* Details */}
             <div className="grid grid-cols-2 gap-3 mb-4">
               <div className="flex items-center gap-2">
-                <Target className="w-3.5 h-3.5 text-[#737373]" />
+                <Target className="w-3.5 h-3.5 text-[slate-400]" />
                 <span className="text-xs text-[#A3A3A3] truncate">{client.fitnessGoal}</span>
               </div>
               <div className="flex items-center gap-2">
-                <Dumbbell className="w-3.5 h-3.5 text-[#737373]" />
+                <Dumbbell className="w-3.5 h-3.5 text-[slate-400]" />
                 <span className="text-xs text-[#A3A3A3]">{client.weight}</span>
               </div>
               <div className="flex items-center gap-2">
-                <Calendar className="w-3.5 h-3.5 text-[#737373]" />
+                <Calendar className="w-3.5 h-3.5 text-[slate-400]" />
                 <span className="text-xs text-[#A3A3A3]">
                   Last: {new Date(client.lastWorkout).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
                 </span>
@@ -229,7 +229,7 @@ export default function TrainerClientsPage() {
             {/* Progress Bar */}
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <span className="text-xs text-[#737373] flex items-center gap-1">
+                <span className="text-xs text-[slate-400] flex items-center gap-1">
                   <TrendingUp className="w-3 h-3" />
                   Progress
                 </span>
@@ -240,7 +240,7 @@ export default function TrainerClientsPage() {
                   initial={{ width: 0 }}
                   animate={{ width: `${client.progress}%` }}
                   transition={{ duration: 1, delay: 0.3 + index * 0.1 }}
-                  className="h-full bg-gradient-to-r from-red-600 to-red-500 rounded-full"
+                  className="h-full bg-gradient-to-r from-sky-600 to-sky-500 rounded-full"
                 />
               </div>
             </div>

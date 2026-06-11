@@ -135,8 +135,8 @@ export function QRScannerModal({ isOpen, onClose }: QRScannerModalProps) {
             
             <div className="p-6 border-b border-white/5 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#C62828]/10 flex items-center justify-center">
-                  <Camera className="w-5 h-5 text-[#C62828]" />
+                <div className="w-10 h-10 rounded-xl bg-[#0EA5E9]/10 flex items-center justify-center">
+                  <Camera className="w-5 h-5 text-[#0EA5E9]" />
                 </div>
                 <div>
                   <h3 className="font-bold text-white tracking-tight">QR Scanner</h3>
@@ -153,14 +153,14 @@ export function QRScannerModal({ isOpen, onClose }: QRScannerModalProps) {
 
             <div className="p-6 flex flex-col items-center justify-center min-h-[400px] relative">
               {scanStatus === 'idle' && (
-                <div className="w-full relative rounded-2xl overflow-hidden border-2 border-dashed border-[#C62828]/30">
+                <div className="w-full relative rounded-2xl overflow-hidden border-2 border-dashed border-[#0EA5E9]/30">
                   <div id="qr-reader" className="w-full" />
                 </div>
               )}
 
               {scanStatus === 'loading' && (
                 <div className="flex flex-col items-center justify-center text-center">
-                  <div className="w-16 h-16 border-4 border-[#C62828] border-t-transparent rounded-full animate-spin mb-4" />
+                  <div className="w-16 h-16 border-4 border-[#0EA5E9] border-t-transparent rounded-full animate-spin mb-4" />
                   <p className="text-white font-medium">Verifying member...</p>
                 </div>
               )}

@@ -41,7 +41,7 @@ function useDashboardStats() {
       .then(res => {
         if (res.data) {
           const d = res.data;
-          const colors = ['#3B82F6', '#22C55E', '#F59E0B', '#E11D48'];
+           const colors = ['#0EA5E9', '#22C55E', '#F59E0B', '#8B5CF6'];
           setData({
             stats: d.stats,
             monthlyRevenue: d.charts.monthlyRevenue,
@@ -89,7 +89,7 @@ function StatCard({ title, value, change, trend, icon: Icon, color, isCurrency }
         <div className="text-3xl lg:text-4xl font-black text-white mb-1 tracking-tighter">
           {isCurrency ? formatCurrency(value) : value?.toLocaleString('en-IN') ?? '-'}
         </div>
-        <p className="text-[10px] font-bold text-[#737373] uppercase tracking-[0.2em]">{title}</p>
+        <p className="text-[10px] font-bold text-[slate-400] uppercase tracking-[0.2em]">{title}</p>
       </div>
     </div>
   );
@@ -98,8 +98,8 @@ function StatCard({ title, value, change, trend, icon: Icon, color, isCurrency }
 function CustomTooltip({ active, payload, label, isCurrency }: { active?: boolean; payload?: any[]; label?: string; isCurrency?: boolean }) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="bg-[#0A0A0A] border border-white/10 rounded-xl p-4 shadow-2xl backdrop-blur-md">
-      <p className="text-[10px] font-bold text-[#737373] uppercase tracking-widest mb-2 border-b border-white/5 pb-2">{label}</p>
+    <div className="bg-[slate-900] border border-white/10 rounded-xl p-4 shadow-2xl backdrop-blur-md">
+      <p className="text-[10px] font-bold text-[slate-400] uppercase tracking-widest mb-2 border-b border-white/5 pb-2">{label}</p>
       {payload.map((entry: any, i: number) => (
         <div key={i} className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full" style={{ backgroundColor: entry.color }} />
@@ -127,15 +127,30 @@ export default function AdminDashboardPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="w-8 h-8 border-2 border-[#E11D48] border-t-transparent rounded-full animate-spin" />
-      </div>
+      <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {[...Array(8)].map((_, i) => (
+            <motion.div key={i} variants={itemVariants}>
+              <div className="glass rounded-2xl p-5 lg:p-6 border-white/5">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="w-12 h-12 rounded-xl bg-white/5 animate-pulse" />
+                  <div className="w-16 h-6 rounded-full bg-white/5 animate-pulse" />
+                </div>
+                <div className="space-y-2">
+                  <div className="h-8 bg-white/5 rounded animate-pulse w-24" />
+                  <div className="h-4 bg-white/5 rounded animate-pulse w-32" />
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
     );
   }
 
   if (error || !data) {
     return (
-      <div className="flex flex-col items-center justify-center h-64 text-[#737373]">
+      <div className="flex flex-col items-center justify-center h-64 text-[slate-400]">
         <AlertTriangle className="w-10 h-10 mb-3 text-[#EF4444]" />
         <p className="text-sm">{error || 'Failed to load'}</p>
       </div>
@@ -187,7 +202,7 @@ export default function AdminDashboardPage() {
           <div className="flex items-center justify-between mb-8">
             <div>
               <h3 className="text-xl font-bold text-white tracking-tight">Monthly Revenue</h3>
-              <p className="text-xs font-bold text-[#737373] uppercase tracking-widest mt-1">Growth Overview</p>
+              <p className="text-xs font-bold text-[slate-400] uppercase tracking-widest mt-1">Growth Overview</p>
             </div>
           </div>
           <div className="h-[300px]">
@@ -200,8 +215,8 @@ export default function AdminDashboardPage() {
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.03)" vertical={false} />
-                <XAxis dataKey="month" stroke="#737373" fontSize={10} fontWeight="bold" tickLine={false} axisLine={false} tick={{ dy: 10 }} />
-                <YAxis stroke="#737373" fontSize={10} fontWeight="bold" tickLine={false} axisLine={false} tickFormatter={(v) => `₹${(v / 1000).toFixed(0)}k`} />
+                <XAxis dataKey="month" stroke="slate-400" fontSize={10} fontWeight="bold" tickLine={false} axisLine={false} tick={{ dy: 10 }} />
+                <YAxis stroke="slate-400" fontSize={10} fontWeight="bold" tickLine={false} axisLine={false} tickFormatter={(v) => `₹${(v / 1000).toFixed(0)}k`} />
                 <Tooltip content={<CustomTooltip isCurrency />} cursor={{ stroke: '#C62828', strokeWidth: 1, strokeDasharray: '4 4' }} />
                 <Area type="monotone" dataKey="revenue" stroke="#C62828" strokeWidth={3} fill="url(#revGrad)" animationDuration={1500} />
               </AreaChart>
@@ -213,15 +228,15 @@ export default function AdminDashboardPage() {
           <div className="flex items-center justify-between mb-8">
             <div>
               <h3 className="text-xl font-bold text-white tracking-tight">New Members</h3>
-              <p className="text-xs font-bold text-[#737373] uppercase tracking-widest mt-1">Acquisition Metrics</p>
+              <p className="text-xs font-bold text-[slate-400] uppercase tracking-widest mt-1">Acquisition Metrics</p>
             </div>
           </div>
           <div className="h-[300px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={newMembers}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.03)" vertical={false} />
-                <XAxis dataKey="month" stroke="#737373" fontSize={10} fontWeight="bold" tickLine={false} axisLine={false} tick={{ dy: 10 }} />
-                <YAxis stroke="#737373" fontSize={10} fontWeight="bold" tickLine={false} axisLine={false} />
+                <XAxis dataKey="month" stroke="slate-400" fontSize={10} fontWeight="bold" tickLine={false} axisLine={false} tick={{ dy: 10 }} />
+                <YAxis stroke="slate-400" fontSize={10} fontWeight="bold" tickLine={false} axisLine={false} />
                 <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.03)' }} />
                 <Bar dataKey="members" fill="#C62828" radius={[6, 6, 0, 0]} barSize={32} animationDuration={1500} />
               </BarChart>
@@ -246,9 +261,9 @@ export default function AdminDashboardPage() {
                   if (!active || !payload?.length) return null;
                   const d = payload[0].payload;
                   return (
-                    <div className="bg-[#0A0A0A] border border-white/10 rounded-xl p-4 shadow-2xl">
+                    <div className="bg-[slate-900] border border-white/10 rounded-xl p-4 shadow-2xl">
                       <p className="text-xs font-bold text-white uppercase tracking-widest">{d.name}</p>
-                      <p className="text-xl font-black text-[#C62828] mt-1">{d.value} <span className="text-[10px] text-[#737373] font-bold">WARRIORS</span></p>
+                      <p className="text-xl font-black text-[#C62828] mt-1">{d.value} <span className="text-[10px] text-[slate-400] font-bold">WARRIORS</span></p>
                     </div>
                   );
                 }} />
@@ -269,11 +284,11 @@ export default function AdminDashboardPage() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-bold text-white truncate">{a.description}</p>
-                  <p className="text-[10px] text-[#737373] font-bold uppercase tracking-widest flex items-center gap-2 mt-1">
+                  <p className="text-[10px] text-[slate-400] font-bold uppercase tracking-widest flex items-center gap-2 mt-1">
                     <Clock size={10} className="text-[#C62828]" />{a.time}
                   </p>
                 </div>
-                <ArrowRight size={14} className="text-[#333] group-hover:text-white transition-colors" />
+                <ArrowRight size={14} className="text-[slate-700] group-hover:text-white transition-colors" />
               </div>
             ))}
           </div>
@@ -294,7 +309,7 @@ export default function AdminDashboardPage() {
               <div className="w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:rotate-3 shadow-2xl" style={{ backgroundColor: action.bg, border: `1px solid ${action.color}30` }}>
                 <action.icon size={24} color={action.color} />
               </div>
-              <span className="text-[10px] font-black text-[#737373] group-hover:text-white transition-colors text-center uppercase tracking-[0.2em]">{action.label}</span>
+              <span className="text-[10px] font-black text-[slate-400] group-hover:text-white transition-colors text-center uppercase tracking-[0.2em]">{action.label}</span>
             </Link>
           ))}
         </div>

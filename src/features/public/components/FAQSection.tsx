@@ -22,13 +22,13 @@ export function FAQSection() {
                 <button onClick={() => setOpenIndex(isOpen ? null : i)}
                   className={cn(
                     'w-full text-left p-6 sm:p-8 rounded-[1.5rem] border transition-all duration-500 overflow-hidden relative group',
-                    isOpen ? 'bg-[#C62828]/5 border-[#C62828]/30 shadow-2xl shadow-[#C62828]/5' : 'bg-white/[0.02] border-white/5 hover:border-white/10 hover:bg-white/[0.04]'
+                    isOpen ? 'bg-[#0EA5E9]/5 border-[#0EA5E9]/30 shadow-2xl shadow-[#0EA5E9]/5' : 'bg-white/[0.02] border-white/5 hover:border-white/10 hover:bg-white/[0.04]'
                   )}>
                   <div className="flex items-center justify-between gap-6 relative z-10">
                     <h3 className={cn('font-bold text-base sm:text-lg transition-colors duration-500', isOpen ? 'text-white' : 'text-[#A3A3A3] group-hover:text-white')}>
                       {faq.question}
                     </h3>
-                    <div className={cn('w-10 h-10 rounded-full flex items-center justify-center transition-all duration-500', isOpen ? 'bg-[#C62828] text-white rotate-180' : 'bg-white/5 text-[#666]')}>
+                    <div className={cn('w-10 h-10 rounded-full flex items-center justify-center transition-all duration-500', isOpen ? 'bg-[#0EA5E9] text-white rotate-180' : 'bg-white/5 text-[#666]')}>
                       {isOpen ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
                     </div>
                   </div>

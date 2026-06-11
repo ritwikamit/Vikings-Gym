@@ -125,11 +125,11 @@ export default function PortalSidebar({
               className={cn(
                 'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200',
                 isActive
-                  ? 'bg-red-500/10 text-red-500 border-l-2 border-red-500'
+                  ? 'bg-sky-500/10 text-sky-500 border-l-2 border-sky-500'
                   : 'text-[#A3A3A3] hover:bg-white/[0.05] hover:text-white'
               )}
             >
-              <Icon className={cn('w-[18px] h-[18px] flex-shrink-0', isActive ? 'text-red-500' : '')} />
+              <Icon className={cn('w-[18px] h-[18px] flex-shrink-0', isActive ? 'text-sky-500' : '')} />
               {!isCollapsed && <span>{link.name}</span>}
             </Link>
           );
@@ -155,7 +155,7 @@ export default function PortalSidebar({
       {/* User Info */}
       <div className="p-4 border-t border-white/[0.06]">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-sky-600 to-red-800 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
             {initials}
           </div>
           {!isCollapsed && (
@@ -169,7 +169,7 @@ export default function PortalSidebar({
           {!isCollapsed && (
             <Link
               href="/login"
-              className="text-[#737373] hover:text-red-500 transition-colors"
+              className="text-[#737373] hover:text-sky-500 transition-colors"
               title="Sign Out"
             >
               <LogOut className="w-4 h-4" />
@@ -206,7 +206,7 @@ export default function PortalSidebar({
           </span>
             </div>
           </div>
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center text-white text-xs font-bold">
+          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-sky-600 to-red-800 flex items-center justify-center text-white text-xs font-bold">
             {initials}
           </div>
         </div>

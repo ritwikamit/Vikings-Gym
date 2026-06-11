@@ -8,14 +8,14 @@ export default function MemberProgressPage() {
         <p className="text-[#A3A3A3]">Track your body measurements and fitness milestones.</p>
       </div>
 
-      <Card className="bg-[#1A1A1A] border-white/[0.06] text-white">
+      <Card className="bg-[slate-800] border-white/[0.06] text-white">
         <CardHeader>
           <CardTitle>Body Metrics</CardTitle>
           <CardDescription className="text-[#A3A3A3]">Monitor your weight, BMI, and other measurements.</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="h-64 flex items-center justify-center border border-dashed border-white/[0.1] rounded-lg">
-            <p className="text-[#737373]">Progress Charts Component Coming Soon</p>
+            <p className="text-[slate-400]">Progress Charts Component Coming Soon</p>
           </div>
         </CardContent>
       </Card>

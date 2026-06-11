@@ -17,11 +17,11 @@ export default function ContactPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#000000] pt-28 pb-16">
+    <main className="min-h-screen bg-[#0F172A] pt-28 pb-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <motion.h1 {...fadeLeft} className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight mb-6">
-            Contact <span className="gradient-text-fire">Us</span>
+            Contact <span className="gradient-text-violet">Us</span>
           </motion.h1>
           <motion.p {...fadeLeft} transition={{ ...fadeLeft.transition, delay: 0.1 }} className="text-[#666] text-lg">
             Have questions? We&apos;re here to help you start your fitness journey.
@@ -41,8 +41,8 @@ export default function ContactPage() {
                   { icon: Clock, label: "Hours", value: "Mon - Sat: 5:00 AM - 10:00 PM\nSunday: 6:00 AM - 12:00 PM" },
                 ].map((item) => (
                   <div key={item.label} className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-[#C62828]/10 rounded-xl flex items-center justify-center shrink-0">
-                      <item.icon className="w-5 h-5 text-[#C62828]" />
+                    <div className="w-12 h-12 bg-[#0EA5E9]/10 rounded-xl flex items-center justify-center shrink-0">
+                      <item.icon className="w-5 h-5 text-[#0EA5E9]" />
                     </div>
                     <div>
                       <h4 className="text-white font-medium mb-1">{item.label}</h4>
@@ -73,32 +73,32 @@ export default function ContactPage() {
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-[#A3A3A3]">First Name</label>
                   <input type="text" required
-                    className="w-full bg-white/[0.03] border border-white/[0.06] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#C62828]/50 transition-colors"
+                    className="w-full bg-white/[0.03] border border-white/[0.06] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#0EA5E9]/50 transition-colors"
                     placeholder="John" />
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-[#A3A3A3]">Last Name</label>
                   <input type="text" required
-                    className="w-full bg-white/[0.03] border border-white/[0.06] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#C62828]/50 transition-colors"
+                    className="w-full bg-white/[0.03] border border-white/[0.06] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#0EA5E9]/50 transition-colors"
                     placeholder="Doe" />
                 </div>
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-[#A3A3A3]">Email Address</label>
                 <input type="email" required
-                  className="w-full bg-white/[0.03] border border-white/[0.06] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#C62828]/50 transition-colors"
+                  className="w-full bg-white/[0.03] border border-white/[0.06] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#0EA5E9]/50 transition-colors"
                   placeholder="john@example.com" />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-[#A3A3A3]">Phone Number</label>
                 <input type="tel" required
-                  className="w-full bg-white/[0.03] border border-white/[0.06] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#C62828]/50 transition-colors"
+                  className="w-full bg-white/[0.03] border border-white/[0.06] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#0EA5E9]/50 transition-colors"
                   placeholder="+91 98765 43210" />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-[#A3A3A3]">Message</label>
                 <textarea required rows={4}
-                  className="w-full bg-white/[0.03] border border-white/[0.06] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#C62828]/50 transition-colors resize-none"
+                  className="w-full bg-white/[0.03] border border-white/[0.06] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#0EA5E9]/50 transition-colors resize-none"
                   placeholder="How can we help you?" />
               </div>
               <button type="submit" disabled={isSubmitting}

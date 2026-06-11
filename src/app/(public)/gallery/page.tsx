@@ -19,11 +19,11 @@ const fadeUp = { initial: { opacity: 0, y: 24 }, animate: { opacity: 1, y: 0 }, 
 
 export default function GalleryPage() {
   return (
-    <div className="pt-28 pb-20 bg-[#000000] min-h-screen">
+    <div className="pt-28 pb-20 bg-[#0F172A] min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div {...fadeUp} className="text-center max-w-3xl mx-auto mb-16">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight mb-6">
-            Facility <span className="gradient-text-fire">Gallery</span>
+            Facility <span className="gradient-text-violet">Gallery</span>
           </h1>
           <p className="text-xl text-[#666]">
             Take a virtual tour of our state-of-the-art 10,000 sq ft fitness facility.
@@ -44,9 +44,9 @@ export default function GalleryPage() {
               <div className="absolute inset-0 flex items-center justify-center text-[#333] font-bold uppercase tracking-widest text-2xl rotate-[-45deg] opacity-20">
                 Vikings Gym
               </div>
-              <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center">
+              <div className="absolute inset-0 bg-slate-900/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center">
                 <Maximize2 className="w-8 h-8 text-white mb-3" />
-                <span className="text-[#C62828] font-medium text-sm mb-1 uppercase tracking-wider">{img.category}</span>
+                <span className="text-[#0EA5E9] font-medium text-sm mb-1 uppercase tracking-wider">{img.category}</span>
                 <h3 className="text-white text-xl font-bold">{img.title}</h3>
               </div>
             </motion.div>

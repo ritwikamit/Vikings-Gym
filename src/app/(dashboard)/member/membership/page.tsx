@@ -26,58 +26,58 @@ export default function MemberMembershipPage() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold text-white">Membership Details</h1>
-          <p className="text-sm text-gray-400">Manage your subscription and billing.</p>
+          <p className="text-sm text-slate-400">Manage your subscription and billing.</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="glass rounded-xl p-6 lg:col-span-2 relative overflow-hidden group">
-          <div className="absolute inset-0 bg-gradient-to-br from-red-600/20 to-black z-0 pointer-events-none"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-sky-600/20 to-black z-0 pointer-events-none"></div>
           <div className="relative z-10 flex flex-col h-full">
             <div className="flex justify-between items-start mb-6">
               <div>
                 <h2 className="text-2xl font-bold text-white mb-2">{MEMBERSHIP.plan}</h2>
                 <div className="flex items-center gap-2">
                   <span className="bg-green-500/20 text-green-500 px-2 py-1 rounded text-xs font-medium border border-green-500/20">Active</span>
-                  <span className="text-sm text-gray-400">Since {formatDate(MEMBERSHIP.startDate)}</span>
+                  <span className="text-sm text-slate-400">Since {formatDate(MEMBERSHIP.startDate)}</span>
                 </div>
               </div>
               <div className="text-right">
                 <p className="text-3xl font-bold text-white">{formatCurrency(MEMBERSHIP.amount)}</p>
-                <p className="text-xs text-gray-400">per year</p>
+                <p className="text-xs text-slate-400">per year</p>
               </div>
             </div>
 
             <div className="mb-6 flex-1">
-              <h3 className="text-sm font-semibold text-gray-400 mb-3">Included Benefits:</h3>
+              <h3 className="text-sm font-semibold text-slate-400 mb-3">Included Benefits:</h3>
               <ul className="space-y-2">
                 {MEMBERSHIP.features.map((feature, i) => (
                   <li key={i} className="flex items-center gap-2 text-sm text-gray-300">
-                    <CheckCircle className="w-4 h-4 text-red-500" /> {feature}
+                    <CheckCircle className="w-4 h-4 text-sky-500" /> {feature}
                   </li>
                 ))}
               </ul>
             </div>
 
-            <div className="bg-[#1A1A1A] border border-[#333] p-4 rounded-lg mt-auto">
+            <div className="bg-[slate-800] border border-[slate-700] p-4 rounded-lg mt-auto">
               <div className="flex justify-between text-sm mb-2">
-                <span className="text-gray-400">Current Period</span>
+                <span className="text-slate-400">Current Period</span>
                 <span className="text-white font-medium">{daysLeft} days remaining</span>
               </div>
-              <div className="w-full bg-[#222] rounded-full h-2 mb-2">
-                <div className="bg-red-600 h-2 rounded-full" style={{ width: `${progress}%` }}></div>
+              <div className="w-full bg-[slate-800] rounded-full h-2 mb-2">
+                <div className="bg-sky-600 h-2 rounded-full" style={{ width: `${progress}%` }}></div>
               </div>
-              <div className="flex justify-between text-xs text-gray-500">
+              <div className="flex justify-between text-xs text-slate-500">
                 <span>{formatDate(MEMBERSHIP.startDate)}</span>
                 <span>{formatDate(MEMBERSHIP.endDate)}</span>
               </div>
             </div>
             
             <div className="mt-6 flex gap-4">
-              <button className="px-6 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition">
+              <button className="px-6 py-2 bg-sky-600 text-white rounded-lg text-sm font-medium hover:bg-sky-700 transition">
                 Renew Now
               </button>
-              <button className="px-6 py-2 bg-[#1A1A1A] border border-[#333] text-white rounded-lg text-sm font-medium hover:bg-[#222] transition">
+              <button className="px-6 py-2 bg-[slate-800] border border-[slate-700] text-white rounded-lg text-sm font-medium hover:bg-[slate-800] transition">
                 Change Plan
               </button>
             </div>
@@ -86,19 +86,19 @@ export default function MemberMembershipPage() {
 
         <div className="glass rounded-xl p-6">
           <h3 className="text-lg font-bold text-white mb-6">Payment Method</h3>
-          <div className="bg-[#1A1A1A] border border-[#333] rounded-lg p-4 mb-6">
+          <div className="bg-[slate-800] border border-[slate-700] rounded-lg p-4 mb-6">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-gray-800 rounded flex items-center justify-center">
-                  <CreditCard className="w-5 h-5 text-gray-400" />
+                  <CreditCard className="w-5 h-5 text-slate-400" />
                 </div>
                 <div>
                   <p className="text-sm font-medium text-white">UPI Autopay</p>
-                  <p className="text-xs text-gray-500">Ends in ****1234</p>
+                  <p className="text-xs text-slate-500">Ends in ****1234</p>
                 </div>
               </div>
             </div>
-            <button className="w-full py-2 text-sm text-red-500 hover:bg-red-500/10 rounded transition">
+            <button className="w-full py-2 text-sm text-sky-500 hover:bg-sky-500/10 rounded transition">
               Update Payment Method
             </button>
           </div>

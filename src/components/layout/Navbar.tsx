@@ -43,19 +43,23 @@ export default function Navbar() {
           scrolled ? 'glass-nav-scrolled' : 'bg-transparent'
         )}
       >
+        {/* Scroll progress indicator */}
+        {scrolled && (
+          <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#0EA5E9] via-[#8B5CF6] to-transparent opacity-60" />
+        )}
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-20">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-3 group">
-              <div className="relative w-10 h-10 overflow-hidden rounded-xl border border-white/10 group-hover:border-[#C62828]/50 transition-all duration-500 shadow-2xl">
+              <div className="relative w-10 h-10 overflow-hidden rounded-xl border border-white/10 group-hover:border-[#0EA5E9]/50 transition-all duration-500 shadow-2xl">
                 <Image src="/logo.png" alt="Vikings Gym" fill className="object-contain p-0.5 transition-transform duration-700 group-hover:scale-110" />
-                <div className="absolute inset-0 bg-gradient-to-tr from-[#C62828]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-tr from-[#0EA5E9]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               </div>
               <div className="flex flex-col">
-                <span className="text-xl font-black tracking-tighter text-white leading-none group-hover:text-[#C62828] transition-colors duration-300">
+                <span className="text-xl font-black tracking-tighter text-white leading-none group-hover:text-[#0EA5E9] transition-colors duration-300">
                   VIKINGS
                 </span>
-                <span className="text-[10px] font-bold tracking-[0.3em] text-[#C62828] leading-none mt-1">
+                <span className="text-[10px] font-bold tracking-[0.3em] text-[#0EA5E9] leading-none mt-1">
                   GYM
                 </span>
               </div>
@@ -78,7 +82,7 @@ export default function Navbar() {
                     {isActive && (
                       <motion.div
                         layoutId="nav-bg"
-                        className="absolute inset-0 bg-[#C62828] z-0"
+                        className="absolute inset-0 bg-[#0EA5E9] z-0"
                         transition={{ type: 'spring', stiffness: 350, damping: 30 }}
                       />
                     )}
@@ -94,14 +98,14 @@ export default function Navbar() {
             <div className="flex items-center gap-3">
               <Link
                 href="/plans"
-                className="hidden lg:inline-flex items-center gap-2 px-6 py-3 text-[11px] font-bold tracking-widest uppercase text-white bg-[#C62828] hover:bg-[#A32020] rounded-xl transition-all duration-300 shadow-lg shadow-[#C62828]/20 hover:shadow-[#C62828]/40 hover:-translate-y-0.5"
+                className="hidden lg:inline-flex items-center gap-2 px-6 py-3 text-[11px] font-bold tracking-widest uppercase text-white bg-[#0EA5E9] hover:bg-[#A32020] rounded-xl transition-all duration-300 shadow-lg shadow-[#0EA5E9]/20 hover:shadow-[#0EA5E9]/40 hover:-translate-y-0.5"
               >
                 Join Now
                 <ArrowUpRight className="w-3.5 h-3.5" />
               </Link>
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="lg:hidden relative w-10 h-10 flex items-center justify-center rounded-xl glass border border-white/10 text-white hover:text-[#C62828] transition-all duration-300"
+                className="lg:hidden relative w-10 h-10 flex items-center justify-center rounded-xl glass border border-white/10 text-white hover:text-[#0EA5E9] transition-all duration-300"
                 aria-label={isOpen ? 'Close menu' : 'Open menu'}
               >
                 <div className="w-5 h-4 relative flex flex-col justify-between">
@@ -133,7 +137,7 @@ export default function Navbar() {
                     <Image src="/logo.png" alt="Vikings Gym" fill className="object-contain p-0.5" />
                   </div>
                   <span className="text-base font-bold tracking-tight text-white">
-                    VIKINGS <span className="text-[#C62828]">GYM</span>
+                    VIKINGS <span className="text-[#0EA5E9]">GYM</span>
                   </span>
                 </Link>
                 <button onClick={() => setIsOpen(false)} className="p-2 text-white/60 hover:text-white transition-colors">
@@ -159,7 +163,7 @@ export default function Navbar() {
                           onClick={() => setIsOpen(false)}
                           className={cn(
                             'block font-podium text-4xl sm:text-5xl text-white uppercase transition-colors duration-300',
-                            isActive ? 'text-[#C62828]' : 'hover:text-white/70'
+                            isActive ? 'text-[#0EA5E9]' : 'hover:text-white/70'
                           )}
                         >
                           {link.name}

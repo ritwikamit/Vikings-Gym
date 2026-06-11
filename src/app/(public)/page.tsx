@@ -14,10 +14,11 @@ import { FAQSection } from '@/features/public/components/FAQSection';
 import { BlogPreview } from '@/features/public/components/BlogPreview';
 import { ContactSection } from '@/features/public/components/ContactSection';
 import { FreeTrialCTA } from '@/features/public/components/FreeTrialCTA';
+import { PageTransition } from '@/components/ui/PageTransition';
 
 export default function HomePage() {
   return (
-    <>
+    <PageTransition>
       <HeroSection />
       <BrandHeritage />
       <WhyChooseUs />
@@ -32,6 +33,6 @@ export default function HomePage() {
       <BlogPreview />
       <ContactSection />
       <FreeTrialCTA />
-    </>
+    </PageTransition>
   );
 }

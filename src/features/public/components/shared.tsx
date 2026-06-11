@@ -46,7 +46,7 @@ export const staggerItem = {
 export function SectionBadge({ children }: { children: React.ReactNode }) {
   return (
     <div className="section-badge">
-      <span className="w-1.5 h-1.5 rounded-full bg-[#C62828]" />
+      <span className="w-1.5 h-1.5 rounded-full bg-[#0EA5E9]" />
       {children}
     </div>
   );

@@ -33,7 +33,7 @@ export default function InventoryPage() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold text-white">Inventory</h1>
-          <p className="text-sm text-gray-400">Manage supplements, merchandise, and equipment.</p>
+          <p className="text-sm text-slate-400">Manage supplements, merchandise, and equipment.</p>
         </div>
         <button 
           onClick={() => setIsAddModalOpen(true)}
@@ -52,18 +52,18 @@ export default function InventoryPage() {
               <Package className="w-6 h-6 text-blue-500" />
             </div>
             <div>
-              <p className="text-sm text-gray-400">Total Items</p>
+              <p className="text-sm text-slate-400">Total Items</p>
               <h3 className="text-2xl font-bold text-white">{items.length}</h3>
             </div>
           </div>
         </div>
-        <div className="glass rounded-xl p-6 border border-transparent hover:border-red-500/30 transition-colors">
+        <div className="glass rounded-xl p-6 border border-transparent hover:border-sky-500/30 transition-colors">
           <div className="flex items-center gap-4">
-            <div className="bg-red-500/10 p-3 rounded-full">
-              <AlertTriangle className="w-6 h-6 text-red-500" />
+            <div className="bg-sky-500/10 p-3 rounded-full">
+              <AlertTriangle className="w-6 h-6 text-sky-500" />
             </div>
             <div>
-              <p className="text-sm text-gray-400">Low Stock Alerts</p>
+              <p className="text-sm text-slate-400">Low Stock Alerts</p>
               <h3 className="text-2xl font-bold text-white">{lowStockItems.length}</h3>
             </div>
           </div>
@@ -73,16 +73,16 @@ export default function InventoryPage() {
       <div className="glass rounded-xl p-6">
         <div className="flex flex-col sm:flex-row justify-between gap-4 mb-6">
           <div className="relative w-full sm:w-64">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <input
               type="text"
               placeholder="Search items..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-[#1A1A1A] border border-[#333] rounded-lg pl-10 pr-4 py-2 text-sm text-white focus:outline-none focus:border-red-500"
+              className="w-full bg-[slate-800] border border-[slate-700] rounded-lg pl-10 pr-4 py-2 text-sm text-white focus:outline-none focus:border-sky-500"
             />
           </div>
-          <button className="flex items-center gap-2 px-4 py-2 bg-[#1A1A1A] border border-[#333] rounded-lg text-sm text-white hover:bg-[#222]">
+          <button className="flex items-center gap-2 px-4 py-2 bg-[slate-800] border border-[slate-700] rounded-lg text-sm text-white hover:bg-[slate-800]">
             <Filter className="w-4 h-4" /> Filter
           </button>
         </div>
@@ -91,7 +91,7 @@ export default function InventoryPage() {
           {isLoading ? (
             <div className="flex flex-col items-center justify-center py-20">
               <div className="w-10 h-10 border-4 border-[#DC2626] border-t-transparent rounded-full animate-spin mb-4" />
-              <p className="text-[#737373] text-sm">Loading inventory...</p>
+              <p className="text-[slate-400] text-sm">Loading inventory...</p>
             </div>
           ) : (
             <table className="data-table">
@@ -109,7 +109,7 @@ export default function InventoryPage() {
               <tbody>
                 {filteredItems.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="text-center py-8 text-gray-500">No items found.</td>
+                    <td colSpan={7} className="text-center py-8 text-slate-500">No items found.</td>
                   </tr>
                 ) : (
                   filteredItems.map((item: any) => (
@@ -123,22 +123,22 @@ export default function InventoryPage() {
                       <td className="text-white">{item.price ? formatCurrency(item.price) : '-'}</td>
                       <td>
                         <div className="flex items-center gap-2">
-                          <span className={`font-bold ${item.quantity <= item.minQuantity ? 'text-red-500' : 'text-white'}`}>
+                          <span className={`font-bold ${item.quantity <= item.minQuantity ? 'text-sky-500' : 'text-white'}`}>
                             {item.quantity}
                           </span>
                           {item.quantity <= item.minQuantity && (
-                            <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" title="Low stock" />
+                            <span className="w-2 h-2 rounded-full bg-sky-500 animate-pulse" title="Low stock" />
                           )}
                         </div>
                       </td>
-                      <td className="text-gray-400 text-sm">{item.supplier || '-'}</td>
-                      <td className="text-gray-400 text-sm">{formatDate(item.updatedAt)}</td>
+                      <td className="text-slate-400 text-sm">{item.supplier || '-'}</td>
+                      <td className="text-slate-400 text-sm">{formatDate(item.updatedAt)}</td>
                       <td>
                         <div className="flex items-center gap-2">
-                          <button className="p-1.5 rounded-lg text-[#737373] hover:text-[#3B82F6] hover:bg-[#3B82F6]/10 transition-colors" title="Edit">
+                          <button className="p-1.5 rounded-lg text-[slate-400] hover:text-[#3B82F6] hover:bg-[#3B82F6]/10 transition-colors" title="Edit">
                             <Pencil size={15} />
                           </button>
-                          <button className="p-1.5 rounded-lg text-[#737373] hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors" title="Delete">
+                          <button className="p-1.5 rounded-lg text-[slate-400] hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors" title="Delete">
                             <Trash2 size={15} />
                           </button>
                         </div>

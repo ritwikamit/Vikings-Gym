@@ -19,9 +19,9 @@ export default function AdminTrainersPage() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold text-white">Trainers</h1>
-          <p className="text-sm text-gray-400">Manage your coaching staff.</p>
+          <p className="text-sm text-slate-400">Manage your coaching staff.</p>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition">
+        <button className="flex items-center gap-2 px-4 py-2 bg-sky-600 text-white rounded-lg text-sm font-medium hover:bg-sky-700 transition">
           <Plus className="w-4 h-4" /> Add Trainer
         </button>
       </div>
@@ -33,7 +33,7 @@ export default function AdminTrainersPage() {
               <Users className="w-6 h-6 text-blue-500" />
             </div>
             <div>
-              <p className="text-sm text-gray-400">Total Trainers</p>
+              <p className="text-sm text-slate-400">Total Trainers</p>
               <h3 className="text-2xl font-bold text-white">{MOCK_TRAINERS.length}</h3>
             </div>
           </div>
@@ -44,7 +44,7 @@ export default function AdminTrainersPage() {
               <Star className="w-6 h-6 text-yellow-500" />
             </div>
             <div>
-              <p className="text-sm text-gray-400">Avg Rating</p>
+              <p className="text-sm text-slate-400">Avg Rating</p>
               <h3 className="text-2xl font-bold text-white">4.7</h3>
             </div>
           </div>
@@ -52,50 +52,50 @@ export default function AdminTrainersPage() {
       </div>
 
       <div className="relative w-full sm:w-64 mb-6">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
         <input
           type="text"
           placeholder="Search trainers..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full bg-[#1A1A1A] border border-[#333] rounded-lg pl-10 pr-4 py-2 text-sm text-white focus:outline-none focus:border-red-500"
+          className="w-full bg-[slate-800] border border-[slate-700] rounded-lg pl-10 pr-4 py-2 text-sm text-white focus:outline-none focus:border-sky-500"
         />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {MOCK_TRAINERS.filter(t => t.name.toLowerCase().includes(searchTerm.toLowerCase())).map((trainer) => (
           <div key={trainer.id} className="glass rounded-xl overflow-hidden flex flex-col">
-            <div className="h-32 bg-[#1A1A1A] relative flex items-center justify-center border-b border-[#333]">
-               <div className="w-20 h-20 rounded-full bg-red-500/20 text-red-500 flex items-center justify-center text-xl font-bold absolute -bottom-10 border-4 border-[#111]">
+            <div className="h-32 bg-[slate-800] relative flex items-center justify-center border-b border-[slate-700]">
+               <div className="w-20 h-20 rounded-full bg-sky-500/20 text-sky-500 flex items-center justify-center text-xl font-bold absolute -bottom-10 border-4 border-[#111]">
                  {trainer.name.split(" ").map(n => n[0]).join("")}
                </div>
             </div>
             <div className="pt-12 p-6 text-center flex-1">
               <h3 className="text-lg font-bold text-white">{trainer.name}</h3>
-              <p className="text-red-500 text-sm font-medium mb-4">{trainer.specialization}</p>
+              <p className="text-sky-500 text-sm font-medium mb-4">{trainer.specialization}</p>
               
               <div className="grid grid-cols-2 gap-4 mb-4 text-left">
                 <div>
-                  <p className="text-xs text-gray-500 flex items-center gap-1"><Award className="w-3 h-3"/> Experience</p>
+                  <p className="text-xs text-slate-500 flex items-center gap-1"><Award className="w-3 h-3"/> Experience</p>
                   <p className="text-sm text-white font-medium">{trainer.experience}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500 flex items-center gap-1"><Users className="w-3 h-3"/> Clients</p>
+                  <p className="text-xs text-slate-500 flex items-center gap-1"><Users className="w-3 h-3"/> Clients</p>
                   <p className="text-sm text-white font-medium">{trainer.clients}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500 flex items-center gap-1"><Star className="w-3 h-3"/> Rating</p>
+                  <p className="text-xs text-slate-500 flex items-center gap-1"><Star className="w-3 h-3"/> Rating</p>
                   <p className="text-sm text-white font-medium">{trainer.rating} / 5.0</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500 flex items-center gap-1"><CreditCard className="w-3 h-3"/> Salary</p>
+                  <p className="text-xs text-slate-500 flex items-center gap-1"><CreditCard className="w-3 h-3"/> Salary</p>
                   <p className="text-sm text-white font-medium">{formatCurrency(trainer.salary)}</p>
                 </div>
               </div>
             </div>
-            <div className="border-t border-[#333] p-4 flex gap-2">
-              <button className="flex-1 py-2 bg-[#1A1A1A] text-white rounded text-sm hover:bg-[#222]">Edit</button>
-              <button className="flex-1 py-2 bg-red-500/10 text-red-500 rounded text-sm hover:bg-red-500/20">View</button>
+            <div className="border-t border-[slate-700] p-4 flex gap-2">
+              <button className="flex-1 py-2 bg-[slate-800] text-white rounded text-sm hover:bg-[slate-800]">Edit</button>
+              <button className="flex-1 py-2 bg-sky-500/10 text-sky-500 rounded text-sm hover:bg-sky-500/20">View</button>
             </div>
           </div>
         ))}

@@ -9,7 +9,7 @@ export default function TrainerLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-[#0A0A0A]">
+    <div className="min-h-screen bg-[slate-900]">
       <PortalSidebar
         links={DASHBOARD_SIDEBAR_LINKS.trainer}
         role="trainer"

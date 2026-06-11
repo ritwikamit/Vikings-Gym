@@ -27,8 +27,8 @@ const variantStyles = {
     iconColor: 'text-white',
   },
   red: {
-    iconBg: 'bg-red-500/10',
-    iconColor: 'text-red-500',
+    iconBg: 'bg-sky-500/10',
+    iconColor: 'text-sky-500',
   },
   green: {
     iconBg: 'bg-green-500/10',
@@ -70,7 +70,7 @@ export default function StatsCard({
       ? change > 0
         ? 'text-green-500'
         : change < 0
-        ? 'text-red-500'
+        ? 'text-sky-500'
         : 'text-[#A3A3A3]'
       : '';
 
@@ -84,34 +84,37 @@ export default function StatsCard({
       <TiltCard intensity={8} className="h-full">
         <div
           className={cn(
-            'bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] rounded-xl p-5 hover:border-[#DC2626]/30 transition-all duration-300 h-full flex flex-col justify-between group',
+            'glass rounded-2xl p-6 border-white/5 hover:border-white/10 transition-all duration-500 h-full flex flex-col justify-between group relative overflow-hidden',
             className
           )}
         >
-          <div className="flex items-start justify-between">
+          {/* Gradient glow on hover */}
+          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#0EA5E9]/10 to-transparent rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 -mr-16 -mt-16" />
+          
+          <div className="flex items-start justify-between relative z-10">
             <div className="flex-1">
-              <p className="text-[#A3A3A3] text-sm font-medium mb-1 group-hover:text-white transition-colors">{title}</p>
-              <p className="text-2xl font-bold text-white">{value}</p>
+              <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-2 group-hover:text-white/80 transition-colors">{title}</p>
+              <p className="text-3xl lg:text-4xl font-black text-white mb-3 tracking-tighter">{value}</p>
               {change !== undefined && (
-                <div className={cn('flex items-center gap-1 mt-2 text-xs font-medium', trendColor)}>
-                  {TrendIcon && <TrendIcon className="w-3.5 h-3.5" />}
+                <div className={cn('flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest', trendColor)}>
+                  {TrendIcon && <TrendIcon className="w-4 h-4" />}
                   <span>
                     {change > 0 ? '+' : ''}
                     {change}%
                   </span>
                   {changeLabel && (
-                    <span className="text-[#737373] ml-1">{changeLabel}</span>
+                    <span className="text-slate-500 ml-1 font-medium">{changeLabel}</span>
                   )}
                 </div>
               )}
             </div>
             <div
               className={cn(
-                'w-11 h-11 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300',
+                'w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-all duration-500 shadow-lg',
                 styles.iconBg
               )}
             >
-              <Icon className={cn('w-5 h-5', styles.iconColor)} />
+              <Icon className={cn('w-6 h-6', styles.iconColor)} />
             </div>
           </div>
         </div>
