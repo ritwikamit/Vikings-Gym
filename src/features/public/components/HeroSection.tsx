@@ -56,17 +56,17 @@ export function HeroSection() {
 
           {/* Main Heading */}
           <div className="animate-reveal-1">
-            <h1 className="font-podium text-[clamp(3.5rem,12vw,8.5rem)] text-white mb-2 tracking-tighter leading-[0.85]">
+            <h1 className="font-podium text-[clamp(2.8rem,8vw,6rem)] text-white mb-3 tracking-tighter leading-[1.05]">
               Forge Your
             </h1>
-            <h1 className="font-podium text-[clamp(3.5rem,12vw,8.5rem)] gradient-text-violet tracking-tighter leading-[0.85]">
+            <h1 className="font-podium text-[clamp(2.8rem,8vw,6rem)] gradient-text-violet tracking-tighter leading-[1.05]">
               STRENGTH
             </h1>
           </div>
 
           {/* Subtext */}
           <div className="animate-reveal-2">
-            <p className="text-slate-300 text-base sm:text-lg lg:text-xl font-medium leading-relaxed max-w-2xl mt-8 lg:mt-10">
+            <p className="text-slate-300 text-sm sm:text-base lg:text-lg font-medium leading-relaxed max-w-xl mt-6 lg:mt-8">
               Transform your body, conquer your limits. Join the most{" "}
               <span className="text-white font-bold border-b-2 border-sky-400">premier fitness destination</span> in the city.
             </p>
