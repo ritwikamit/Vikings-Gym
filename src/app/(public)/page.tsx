@@ -15,24 +15,35 @@ import { BlogPreview } from '@/features/public/components/BlogPreview';
 import { ContactSection } from '@/features/public/components/ContactSection';
 import { FreeTrialCTA } from '@/features/public/components/FreeTrialCTA';
 import { PageTransition } from '@/components/ui/PageTransition';
+import { SectionDivider } from '@/components/ui/SectionDivider';
+import { ScrollReveal } from '@/components/ui/FramerParallax';
+
+const sections = [
+  { Component: BrandHeritage },
+  { Component: WhyChooseUs },
+  { Component: ServicesSection },
+  { Component: MembershipPlans },
+  { Component: TrainerShowcase },
+  { Component: Transformations },
+  { Component: TestimonialsSection },
+  { Component: InstagramGallery },
+  { Component: BMICalculator },
+  { Component: FAQSection },
+  { Component: BlogPreview },
+  { Component: ContactSection },
+  { Component: FreeTrialCTA },
+];
 
 export default function HomePage() {
   return (
     <PageTransition>
       <HeroSection />
-      <BrandHeritage />
-      <WhyChooseUs />
-      <ServicesSection />
-      <MembershipPlans />
-      <TrainerShowcase />
-      <Transformations />
-      <TestimonialsSection />
-      <InstagramGallery />
-      <BMICalculator />
-      <FAQSection />
-      <BlogPreview />
-      <ContactSection />
-      <FreeTrialCTA />
+      {sections.map(({ Component }, i) => (
+        <ScrollReveal key={i}>
+          <Component />
+          {i < sections.length - 1 && <SectionDivider variant="glow" />}
+        </ScrollReveal>
+      ))}
     </PageTransition>
   );
 }
